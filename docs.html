@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CASA-AI Documentation — Quick Start, API Reference, Config, Helm Chart.">
+<title>CASA-AI — Documentation | Quick Start, API Reference, Config</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000508'/%3E%3Cpolygon points='16,3.5 27,9.5 27,22 16,28 5,22 5,9.5' fill='none' stroke='%2300ffd1' stroke-width='1.4'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%23000508' stroke='%2300ffd1' stroke-width='1.4'/%3E%3Cline x1='12.5' y1='12.5' x2='19.5' y2='19.5' stroke='%2300ffd1' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --void:#000508;--deep:#030c15;--surf:#071520;--surf2:#0b1f33;
+  --teal:#00ffd1;--blue:#0057ff;--violet:#7b61ff;
+  --red:#ff2d55;--amber:#ffb800;--green:#00d68f;
+  --tx1:#ddeeff;--tx2:#6b8fa8;--tx3:#2d4a5e;--tx4:#142030;
+  --b1:rgba(0,255,209,.06);--b2:rgba(0,255,209,.16);--b3:rgba(0,255,209,.40);
+  --f-display:'Syne',sans-serif;--f-mono:'JetBrains Mono',monospace;--f-body:'Inter',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--tx1);font-family:var(--f-body);line-height:1.6}
+::selection{background:rgba(0,255,209,.18);color:var(--teal)}
+a{color:inherit;text-decoration:none}
+
+.si{max-width:1400px;margin:0 auto;padding:0 2rem}
+.sp{padding:5rem 0}
+.ey{font-family:var(--f-mono);font-size:.68rem;font-weight:600;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.ey::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b3),transparent);max-width:90px}
+.tg{background:linear-gradient(120deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.fi{opacity:0;transform:translateY(20px);transition:.6s ease}
+.fi.on{opacity:1;transform:translateY(0)}
+
+/* Syntax colors */
+.ck{color:var(--teal)}.cs{color:var(--green)}.cc{color:var(--tx3)}.cn{color:var(--amber)}.cv{color:var(--violet)}.cr{color:var(--red)}.cw{color:#c8deff}
+
+/* =====================================================
+   DOCS SECTION SHELL
+   ===================================================== */
+.docs-s{
+  background:var(--void);
+  border-top:1px solid var(--b1);
+  min-height:100vh;
+}
+
+/* Section header above the hub */
+.docs-header{padding:4rem 0 2rem;border-bottom:1px solid var(--b1);background:var(--deep)}
+.docs-header-inner{display:flex;align-items:flex-end;flex-wrap:wrap;gap:1.5rem}
+.docs-title{font-family:var(--f-display);font-weight:800;font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:-.04em;line-height:1.05}
+
+
+/* ── MAIN LAYOUT: sidebar + content ── */
+.docs-layout{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:0;
+  min-height:calc(100vh - 140px);
+}
+
+/* ── SIDEBAR ── */
+.docs-sidebar{
+  background:var(--deep);
+  border-right:1px solid var(--b1);
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:var(--tx4) transparent;
+}
+.docs-sidebar::-webkit-scrollbar{width:3px}
+.docs-sidebar::-webkit-scrollbar-thumb{background:var(--tx4);border-radius:2px}
+
+.dsb-group{padding:.75rem 0}
+.dsb-group+.dsb-group{border-top:1px solid var(--b1)}
+.dsb-group-label{
+  font-family:var(--f-mono);font-size:.58rem;font-weight:700;
+  color:var(--tx3);letter-spacing:.12em;text-transform:uppercase;
+  padding:.5rem 1.25rem .25rem;
+}
+.dsb-item{
+  display:flex;align-items:center;gap:9px;
+  padding:.55rem 1.25rem;
+  font-size:.82rem;color:var(--tx2);
+  cursor:pointer;transition:.15s;
+  border-left:2px solid transparent;
+  position:relative;
+}
+.dsb-item:hover{color:var(--tx1);background:rgba(0,255,209,.03)}
+.dsb-item.on{
+  color:var(--teal);
+  background:rgba(0,255,209,.05);
+  border-left-color:var(--teal);
+  font-weight:600;
+}
+.dsb-item-icon{
+  width:16px;height:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  opacity:.6;
+}
+.dsb-item.on .dsb-item-icon{opacity:1}
+.dsb-badge{
+  margin-left:auto;
+  padding:1px 6px;border-radius:3px;
+  font-family:var(--f-mono);font-size:.55rem;font-weight:700;
+  letter-spacing:.04em;flex-shrink:0;
+}
+.badge-get{background:rgba(0,214,143,.12);color:var(--green)}
+.badge-post{background:rgba(0,87,255,.14);color:#7baff5}
+.badge-new{background:rgba(0,255,209,.1);color:var(--teal)}
+
+/* ── CONTENT AREA ── */
+.docs-content{
+  background:var(--void);
+  overflow-y:auto;
+}
+.dpanel{display:none;padding:3rem 3.5rem;max-width:900px;animation:panelIn .25s ease}
+.dpanel.on{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+
+/* Breadcrumb */
+.dp-crumb{
+  font-family:var(--f-mono);font-size:.65rem;color:var(--tx3);
+  display:flex;align-items:center;gap:6px;margin-bottom:1.75rem;
+}
+.dp-crumb span{color:var(--teal)}
+
+/* Page title */
+.dp-h1{
+  font-family:var(--f-display);font-weight:800;
+  font-size:clamp(1.6rem,3vw,2.2rem);
+  letter-spacing:-.04em;line-height:1.1;
+  margin-bottom:.75rem;
+}
+.dp-desc{
+  font-size:.95rem;color:var(--tx2);
+  line-height:1.85;max-width:680px;
+  margin-bottom:2.5rem;
+  padding-bottom:2rem;
+  border-bottom:1px solid var(--b1);
+}
+
+/* Section heading */
+.dp-h2{
+  font-family:var(--f-display);font-weight:800;
+  font-size:1.1rem;letter-spacing:-.03em;
+  margin:2.25rem 0 .875rem;
+  display:flex;align-items:center;gap:10px;
+}
+.dp-h2::before{content:'#';color:var(--teal);font-family:var(--f-mono);font-size:.75rem;font-weight:600}
+.dp-h3{
+  font-family:var(--f-display);font-weight:700;
+  font-size:.95rem;margin:1.5rem 0 .5rem;color:var(--tx1);
+}
+.dp-p{font-size:.88rem;color:var(--tx2);line-height:1.85;margin-bottom:1rem}
+.dp-p strong{color:var(--tx1);font-weight:600}
+.dp-p code{
+  font-family:var(--f-mono);font-size:.82em;
+  background:rgba(0,255,209,.06);
+  padding:2px 6px;border-radius:3px;color:var(--teal);
+}
+
+/* Code block */
+.cb{background:#000d18;border:1px solid var(--b1);border-radius:10px;overflow:hidden;margin:1rem 0}
+.cb-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 15px;background:var(--surf);border-bottom:1px solid var(--b1);
+}
+.cb-lang{font-family:var(--f-mono);font-size:.6rem;color:var(--tx3)}
+.cb-file{font-family:var(--f-mono);font-size:.6rem;color:var(--tx2)}
+.cb-copy{
+  font-family:var(--f-mono);font-size:.58rem;color:var(--tx3);
+  padding:2px 8px;border:1px solid var(--b1);border-radius:3px;
+  cursor:pointer;transition:.15s;background:none;
+}
+.cb-copy:hover{color:var(--teal);border-color:var(--b3)}
+.cb-body{
+  padding:1.4rem 1.5rem;font-family:var(--f-mono);font-size:.74rem;
+  line-height:1.9;overflow-x:auto;white-space:pre;color:#c8deff;
+}
+
+/* Info / warn / tip callouts */
+.callout{
+  display:flex;gap:12px;padding:1rem 1.25rem;
+  border-radius:8px;margin:1.25rem 0;
+  font-size:.85rem;line-height:1.7;
+}
+.callout-tip{background:rgba(0,255,209,.05);border:1px solid rgba(0,255,209,.18);color:var(--tx2)}
+.callout-tip strong{color:var(--teal)}
+.callout-warn{background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.18);color:var(--tx2)}
+.callout-warn strong{color:var(--amber)}
+.callout-info{background:rgba(0,87,255,.05);border:1px solid rgba(0,87,255,.2);color:var(--tx2)}
+.callout-info strong{color:#7baff5}
+.callout-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+
+/* Step list */
+.step-list{display:flex;flex-direction:column;gap:.75rem;margin:1.25rem 0}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step-num{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:rgba(0,255,209,.08);border:1px solid var(--b3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-mono);font-size:.65rem;font-weight:700;color:var(--teal);
+}
+.step-body{font-size:.87rem;color:var(--tx2);line-height:1.75;padding-top:3px}
+.step-body strong{color:var(--tx1)}
+
+/* API endpoint block */
+.api-endpoint{
+  display:flex;align-items:center;gap:12px;
+  padding:1rem 1.25rem;
+  background:var(--surf);border:1px solid var(--b2);
+  border-radius:10px;margin:1rem 0;font-family:var(--f-mono);
+}
+.api-method{
+  padding:4px 10px;border-radius:5px;
+  font-size:.65rem;font-weight:800;letter-spacing:.06em;flex-shrink:0;
+}
+.method-get{background:rgba(0,214,143,.12);color:var(--green)}
+.method-post{background:rgba(0,87,255,.14);color:#7baff5}
+.api-path{font-size:.82rem;color:var(--tx1);flex:1}
+.api-desc{font-size:.72rem;color:var(--tx3)}
+
+/* Response table */
+.resp-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.81rem}
+.resp-table th{
+  text-align:left;padding:8px 12px;
+  border-bottom:1px solid var(--b2);
+  font-family:var(--f-mono);font-size:.6rem;color:var(--tx3);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.resp-table td{padding:9px 12px;border-bottom:1px solid var(--b1);color:var(--tx2);vertical-align:top;line-height:1.5}
+.resp-table td:first-child{font-family:var(--f-mono);font-size:.74rem;color:var(--teal)}
+.resp-table td:nth-child(2){font-family:var(--f-mono);font-size:.72rem;color:var(--amber)}
+.resp-table tr:last-child td{border-bottom:none}
+
+/* Proof box */
+.proof{
+  display:flex;align-items:flex-start;gap:9px;
+  padding:.875rem 1rem;
+  background:rgba(0,214,143,.05);border:1px solid rgba(0,214,143,.15);
+  border-radius:8px;margin:1.25rem 0;
+  font-family:var(--f-mono);font-size:.67rem;color:var(--green);line-height:1.6;
+}
+
+/* Nav pills at bottom of panel */
+.dp-nav{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--b1);
+}
+.dp-nav-btn{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--f-display);font-size:.82rem;font-weight:700;
+  color:var(--tx2);padding:.625rem 1rem;border:1px solid var(--b1);
+  border-radius:8px;background:var(--surf);cursor:pointer;transition:.2s;
+}
+.dp-nav-btn:hover{border-color:var(--b3);color:var(--teal)}
+
+/* Config table */
+.cfg-table{width:100%;border-collapse:collapse;margin:1rem 0}
+.cfg-table th{text-align:left;padding:8px 12px;border-bottom:1px solid var(--b2);font-family:var(--f-mono);font-size:.6rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em}
+.cfg-table td{padding:9px 12px;border-bottom:1px solid var(--b1);color:var(--tx2);font-size:.81rem;vertical-align:top}
+.cfg-table td:first-child{font-family:var(--f-mono);font-size:.73rem;color:var(--teal)}
+.cfg-table td:nth-child(2){font-family:var(--f-mono);font-size:.7rem;color:var(--amber)}
+.cfg-table tr:last-child td{border-bottom:none}
+
+/* Responsive */
+@media(max-width:1024px){
+  .docs-layout{grid-template-columns:200px 1fr}
+  .dpanel{padding:2rem 1.75rem}
+}
+@media(max-width:768px){
+  .docs-layout{grid-template-columns:1fr}
+  .docs-sidebar{position:relative;height:auto;display:flex;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--b1)}
+  .dsb-group{display:flex;flex-wrap:wrap;gap:0}
+  .dsb-group-label{display:none}
+  .dsb-item{min-width:140px;border-left:none;border-bottom:2px solid transparent}
+  .dsb-item.on{border-left-color:transparent;border-bottom-color:var(--teal)}
+  .dpanel{padding:1.5rem}
+}
+
+
+
+/* ── Docs sidebar: sticky below header nav, not behind it ── */
+.docs-sidebar{
+  top:64px !important;
+  height:calc(100vh - 64px) !important;
+  position:sticky !important;
+}
+/* ── Content column must not shrink ── */
+.docs-content{
+  overflow-x:hidden !important;
+  overflow-y:visible !important;
+  min-width:0 !important;
+}
+/* ── Panels fill their column ── */
+.dpanel{
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  word-break:break-word !important;
+}
+.dp-h1{
+  font-size:clamp(1.2rem,2.2vw,1.9rem) !important;
+  word-break:break-word !important;
+}
+.docs-layout{
+  align-items:start !important;
+}
+
+
+#main-nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:rgba(3,12,21,.95);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(0,255,209,.1);
+}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;
+  display:flex;align-items:center;height:64px;gap:2rem;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
+  letter-spacing:-.03em;color:#ddeeff;}
+.nav-brand span{color:#00ffd1;}
+.nav-links{display:flex;gap:.25rem;flex:1;justify-content:center;}
+.nav-a{padding:8px 14px;border-radius:8px;font-size:.84rem;font-weight:600;
+  color:#6b8fa8;transition:.2s;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif;}
+.nav-a:hover{color:#ddeeff;background:rgba(0,255,209,.06);}
+.nav-a.active{color:#00ffd1 !important;background:rgba(0,255,209,.08);}
+.nav-right{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.nav-gh{display:flex;align-items:center;gap:6px;padding:8px 14px;
+  border:1px solid rgba(0,255,209,.12);border-radius:8px;
+  font-size:.8rem;color:#6b8fa8;text-decoration:none;transition:.2s;}
+.nav-gh:hover{border-color:rgba(0,255,209,.35);color:#ddeeff;}
+.nav-cta{display:inline-flex;align-items:center;padding:10px 22px;
+  background:#00ffd1;color:#000 !important;border-radius:8px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;
+  letter-spacing:0;line-height:1;text-decoration:none;transition:.2s;white-space:nowrap;}
+.nav-cta:hover{background:#33ffe0;transform:translateY(-1px);}
+body{padding-top:64px !important;}
+body{animation:pgIn .3s ease;}
+@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* Force all scroll-animated elements visible immediately */
+.fi{opacity:1 !important;transform:none !important;transition:none !important;}
+.fi.on{opacity:1 !important;transform:none !important;}
+
+</style>
+</head>
+<body>
+<header id="main-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="34" height="34" viewBox="0 0 120 120" fill="none">
+      <polygon points="60,14 101,36 101,80 60,102 19,80 19,36" fill="rgba(0,255,209,.07)" stroke="#00ffd1" stroke-width="1.8"/>
+      <polygon points="60,28 88,44 88,72 60,88 32,72 32,44" fill="rgba(0,255,209,.06)" stroke="rgba(0,255,209,.35)" stroke-width="1"/>
+      <line x1="32" y1="60" x2="20" y2="60" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="88" y1="60" x2="100" y2="60" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+      <polygon points="100,60 94,57 94,63" fill="#00ffd1"/>
+      <circle cx="43" cy="60" r="2.5" fill="#00ffd1" opacity=".9"/>
+      <circle cx="50" cy="60" r="2" fill="#00ffd1" opacity=".5"/>
+      <circle cx="60" cy="60" r="13" fill="#000508" stroke="#00ffd1" stroke-width="1.8"/>
+      <line x1="51" y1="51" x2="69" y2="69" stroke="#00ffd1" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+      <span class="nav-brand">CASA<span>-AI</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-a">Home</a>
+      <a href="architecture.html" class="nav-a">Architecture</a>
+      <a href="features.html" class="nav-a">Features</a>
+      <a href="compliance.html" class="nav-a">Compliance</a>
+      <a href="pricing.html" class="nav-a">Pricing</a>
+      <a href="docs.html" class="nav-a active">Docs</a>
+      <a href="test-results.html" class="nav-a">Test Results</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://github.com/shivangace/casa-ai-core" target="_blank" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+      <a href="pricing.html" class="nav-cta">Get License →</a>
+    </div>
+  </div>
+</header>
+<section class="docs-s" id="docs">
+
+  <!-- Header -->
+  <div class="docs-header">
+    <div class="si">
+      <div class="docs-header-inner fi">
+        <div>
+          <div class="ey">Documentation</div>
+          <div class="docs-title">CASA-AI <span class="tg">Reference</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Hub layout -->
+  <div class="si" style="padding:0;max-width:100%">
+  <div class="docs-layout">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="docs-sidebar">
+
+      <div class="dsb-group">
+        <div class="dsb-group-label">Getting Started</div>
+        <div class="dsb-item on" onclick="showDoc('quickstart',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Quick Start
+        </div>
+        <div class="dsb-item" onclick="showDoc('config',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M6 1v1.5M6 9.5V11M1 6h1.5M9.5 6H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          Configuration
+        </div>
+        <div class="dsb-item" onclick="showDoc('license',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2" y="5" width="8" height="6" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 5V3.5a2 2 0 014 0V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          License Setup
+          <span class="dsb-badge badge-new">KEY</span>
+        </div>
+      </div>
+
+      <div class="dsb-group">
+        <div class="dsb-group-label">API Reference</div>
+        <div class="dsb-item" onclick="showDoc('api-evaluate',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          POST /evaluate
+          <span class="dsb-badge badge-post">POST</span>
+        </div>
+        <div class="dsb-item" onclick="showDoc('api-stream',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          GET /stream
+          <span class="dsb-badge badge-get">GET</span>
+        </div>
+        <div class="dsb-item" onclick="showDoc('api-health',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          GET /healthz
+          <span class="dsb-badge badge-get">GET</span>
+        </div>
+        <div class="dsb-item" onclick="showDoc('api-metrics',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          GET /metrics
+          <span class="dsb-badge badge-get">GET</span>
+        </div>
+      </div>
+
+      <div class="dsb-group">
+        <div class="dsb-group-label">Core Concepts</div>
+        <div class="dsb-item" onclick="showDoc('audit',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 4h4M4 6h3M4 8h3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          Audit Log
+        </div>
+        <div class="dsb-item" onclick="showDoc('helm',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1.5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+          Helm Chart
+        </div>
+        <div class="dsb-item" onclick="showDoc('cluster',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="3" r="1.5" stroke="currentColor" stroke-width="1.2"/><circle cx="2" cy="9" r="1.5" stroke="currentColor" stroke-width="1.2"/><circle cx="10" cy="9" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 4.5v2L3.2 8M6 6.5l2.8 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          Multi-Cluster
+        </div>
+        <div class="dsb-item" onclick="showDoc('compliance',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 3.5V7c0 2.5-2 4-5 5C3 11 1 9.5 1 7V3.5L6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+          Compliance Profiles
+        </div>
+      </div>
+
+      <div class="dsb-group">
+        <div class="dsb-group-label">Development</div>
+        <div class="dsb-item" onclick="showDoc('localdev',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 11h4M6 9v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          Local Dev
+        </div>
+        <div class="dsb-item" onclick="showDoc('custom-rego',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 3L2 6l2 3M8 3l2 3-2 3M6 2v8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          Custom Rego
+        </div>
+        <div class="dsb-item" onclick="showDoc('vs-others',this)">
+          <div class="dsb-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9l4-6 4 6M4.5 7h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          Why CASA-AI
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- ── CONTENT ── -->
+    <div class="docs-content">
+
+      <!-- ══════════════════════════════════════════
+           QUICK START
+           ══════════════════════════════════════════ -->
+      <div class="dpanel on" id="dp-quickstart">
+        <div class="dp-crumb">Docs / <span>Quick Start</span></div>
+        <h1 class="dp-h1">Deploy CASA-AI in 60 seconds</h1>
+        <p class="dp-desc">
+          CASA-AI is a single Docker container. Point your agent's LLM API base URL at the
+          container. One environment variable change — no SDK modifications, no agent code changes.
+          The engine intercepts, evaluates, and enforces from the first token.
+        </p>
+
+        <h2 class="dp-h2">Prerequisites</h2>
+        <div class="step-list">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Docker 24+</strong> or Kubernetes 1.28+ in your private VPC</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><strong>A valid CASA_LICENSE_KEY</strong> — issued within minutes of Razorpay payment confirmation</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Your LLM provider endpoint</strong> — any OpenAI-compatible API (OpenAI, Anthropic, Bedrock, local Ollama)</div></div>
+        </div>
+
+        <h2 class="dp-h2">Run with Docker</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Terminal</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># Pull the CASA-AI engine image</span>
+docker pull ghcr.io/shivangace/casa-ai-core:latest
+
+<span class="cc"># Run with your license key and LLM target</span>
+docker run -d \
+  --name casa-ai \
+  -p 8088:8088 \
+  -e <span class="ck">CASA_LICENSE_KEY</span>=<span class="cs">"your_signed_license_key_here"</span> \
+  -e <span class="ck">LLM_UPSTREAM</span>=<span class="cs">"https://api.openai.com"</span> \
+  -e <span class="ck">LOG_LEVEL</span>=<span class="cs">"info"</span> \
+  -v $(pwd)/policies:/policies \
+  -v $(pwd)/logs:/var/log/casa-ai \
+  ghcr.io/shivangace/casa-ai-core:latest
+
+<span class="cc"># Verify the engine is live</span>
+curl http://localhost:8088/healthz
+<span class="cc"># → {"status":"ok","engine":"running","license_tier":"BASIC","agents_active":0}</span></div>
+        </div>
+
+        <h2 class="dp-h2">Point your agent at CASA-AI</h2>
+        <p class="dp-p">Change one environment variable. Your agent now routes all LLM calls through CASA-AI automatically — no SDK changes, no code modifications.</p>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Agent environment</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># Before — direct to LLM provider (CASA-AI sees nothing)</span>
+OPENAI_API_BASE=<span class="cr">https://api.openai.com</span>
+
+<span class="cc"># After — routed through CASA-AI (full interception active)</span>
+OPENAI_API_BASE=<span class="cs">http://casa-ai:8088</span>
+
+<span class="cc"># All existing agent code continues to work identically.
+# CASA-AI transparently proxies clean traffic to the LLM.
+# LangChain, AutoGen, CrewAI, custom agents — all compatible.</span></div>
+        </div>
+
+        <h2 class="dp-h2">Test the interception</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Verify PII detection is active</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># Send a test evaluation with a PAN card in the payload</span>
+curl -X POST http://localhost:8088/evaluate \
+  -H <span class="cs">"Content-Type: application/json"</span> \
+  -d <span class="cs">'{
+    "session_id": "test-001",
+    "ai_system_id": "my-agent-v1",
+    "agent_payload": { "prompt": "Customer PAN: ABCDE1234F — process refund" },
+    "reasoning_chain": [],
+    "tool_calls": []
+  }'</span>
+
+<span class="cc"># Expected response — breach detected, stream would be severed</span>
+{
+  <span class="ck">"allow"</span>: <span class="cn">false</span>,
+  <span class="ck">"violations"</span>: [<span class="cs">"PII_LEAK_DETECTED: sensitive identifier pattern found"</span>],
+  <span class="ck">"trigger_circuit_breaker"</span>: <span class="cn">true</span>,
+  <span class="ck">"eval_latency_us"</span>: <span class="cn">1284</span>
+}</div>
+        </div>
+
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <div><strong>Happy path latency:</strong> Clean requests pass through with &lt;2ms overhead.
+          <code>TestEvaluate_LatencyBudget</code> confirms 1.28ms policy evaluation — well within the 3ms production target.</div>
+        </div>
+
+        <div class="dp-nav">
+          <div></div>
+          <button class="dp-nav-btn" onclick="showDoc('config', document.querySelector('[onclick*=config]'))">
+            Configuration →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           CONFIGURATION
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-config">
+        <div class="dp-crumb">Docs / <span>Configuration</span></div>
+        <h1 class="dp-h1">casa.yaml — Full Configuration Reference</h1>
+        <p class="dp-desc">
+          All CASA-AI configuration lives in a single <code>casa.yaml</code> file mounted at
+          <code>/configs/casa.yaml</code> inside the container. The engine watches this file —
+          changes to compliance profiles and policy paths are hot-reloaded without a container restart.
+        </p>
+
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">yaml</span><span class="cb-file">configs/casa.yaml — full annotated example</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># CASA-AI Engine Configuration</span>
+<span class="cc"># Hot-reloaded on change — no container restart required</span>
+
+<span class="ck">server</span>:
+  <span class="ck">port</span>: <span class="cn">8088</span>
+  <span class="ck">log_level</span>: <span class="cs">"info"</span>            <span class="cc"># debug | info | warn | error</span>
+  <span class="ck">read_timeout_s</span>: <span class="cn">30</span>
+  <span class="ck">write_timeout_s</span>: <span class="cn">60</span>
+
+<span class="ck">upstream</span>:
+  <span class="ck">llm_base_url</span>: <span class="cs">"https://api.openai.com"</span>   <span class="cc"># Any OpenAI-compat endpoint</span>
+  <span class="ck">timeout_ms</span>: <span class="cn">30000</span>
+
+<span class="ck">engine</span>:
+  <span class="ck">policy_dir</span>: <span class="cs">"/policies"</span>            <span class="cc"># Directory watched for .rego files</span>
+  <span class="ck">eval_timeout_ms</span>: <span class="cn">3</span>                <span class="cc"># Circuit-break eval if over budget</span>
+  <span class="ck">session_ttl_minutes</span>: <span class="cn">60</span>           <span class="cc"># Evict idle sessions after N minutes</span>
+  <span class="ck">max_token_budget</span>: <span class="cn">50000</span>           <span class="cc"># Per session (BASIC), 500K (ENT), unlimited (BIG)</span>
+
+<span class="ck">compliance_profiles</span>:
+  <span class="ck">nist_ai_rmf</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>                   <span class="cc"># Active on all tiers</span>
+    <span class="ck">policy_path</span>: <span class="cs">"policies/nist_ai_rmf.rego"</span>
+  <span class="ck">rbi_ai</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>                   <span class="cc"># ENTERPRISE+ only</span>
+    <span class="ck">policy_path</span>: <span class="cs">"policies/rbi_ai_governance.rego"</span>
+  <span class="ck">dpdp</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>
+    <span class="ck">policy_path</span>: <span class="cs">"policies/dpdp_act.rego"</span>
+  <span class="ck">eu_ai_act</span>:
+    <span class="ck">enabled</span>: <span class="cn">false</span>                  <span class="cc"># Toggle per deployment region</span>
+    <span class="ck">policy_path</span>: <span class="cs">"policies/eu_ai_act.rego"</span>
+  <span class="ck">custom</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>                   <span class="cc"># ENTERPRISE+: mount your own .rego</span>
+    <span class="ck">policy_path</span>: <span class="cs">"policies/my_corporate_policy.rego"</span>
+
+<span class="ck">sovereignty</span>:
+  <span class="ck">strict_mode</span>: <span class="cn">true</span>                 <span class="cc"># Block all non-IN providers (RBI Control 3)</span>
+  <span class="ck">allowed_countries</span>: [<span class="cs">"IN"</span>, <span class="cs">"SG"</span>, <span class="cs">"AE"</span>]
+
+<span class="ck">approved_tools</span>:                      <span class="cc"># MCP tool allowlist — block everything else</span>
+  - <span class="cs">"read_file"</span>
+  - <span class="cs">"search_web"</span>
+  - <span class="cs">"query_database"</span>
+  - <span class="cs">"send_email"</span>
+  <span class="cc"># Add your approved MCP tools here</span>
+
+<span class="ck">audit</span>:
+  <span class="ck">log_path</span>: <span class="cs">"/var/log/casa-ai/audit.jsonl"</span>
+  <span class="ck">export</span>:
+    <span class="ck">enabled</span>: <span class="cn">false</span>                  <span class="cc"># Off by default — data stays in VPC</span>
+    <span class="ck">target</span>: <span class="cs">"s3://your-bucket/casa-ai-audit/"</span>
+    <span class="ck">object_lock</span>: <span class="cn">true</span>
+
+<span class="ck">webhooks</span>:                            <span class="cc"># ENTERPRISE+</span>
+  <span class="ck">breach_url</span>: <span class="cs">"https://hooks.slack.com/..."</span>
+  <span class="ck">hmac_secret</span>: <span class="cs">"your-hmac-secret"</span>   <span class="cc"># Used to sign webhook payloads
+
+# Cloud credential revocation targets</span>
+<span class="ck">breaker</span>:
+  <span class="ck">aws</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>
+    <span class="ck">role_arn</span>: <span class="cs">"arn:aws:iam::123456789:role/casa-ai-breaker"</span>
+  <span class="ck">gcp</span>:
+    <span class="ck">enabled</span>: <span class="cn">false</span>
+    <span class="ck">service_account</span>: <span class="cs">"casa-ai@project.iam.gserviceaccount.com"</span>
+  <span class="ck">azure</span>:
+    <span class="ck">enabled</span>: <span class="cn">false</span>
+    <span class="ck">tenant_id</span>: <span class="cs">"your-azure-tenant-id"</span></div>
+        </div>
+
+        <h2 class="dp-h2">Key configuration fields</h2>
+        <table class="cfg-table">
+          <thead><tr><th>Field</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>server.port</td><td>8088</td><td>Engine listening port. Map to host port of your choice.</td></tr>
+            <tr><td>engine.eval_timeout_ms</td><td>3</td><td>OPA evaluation budget per request. Exceeding this returns DENY immediately.</td></tr>
+            <tr><td>engine.session_ttl_minutes</td><td>60</td><td>Idle sessions are evicted. Reduces memory footprint on long-running containers.</td></tr>
+            <tr><td>engine.max_token_budget</td><td>50000</td><td>Per-session token limit enforced by license tier. BASIC: 50K, ENTERPRISE: 500K, BIG INFRA: unlimited.</td></tr>
+            <tr><td>sovereignty.strict_mode</td><td>false</td><td>When true, blocks all tool calls to providers outside allowed_countries. Required for RBI Control 3.</td></tr>
+            <tr><td>audit.export.enabled</td><td>false</td><td>Off by default — all audit data stays in VPC. Enable only to push to your own S3/GCS/Azure Blob.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Hot-reload scope:</strong> compliance_profiles, approved_tools, webhooks, and sovereignty settings hot-reload. server.port and breaker configuration require a container restart.</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           LICENSE SETUP
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-license">
+        <div class="dp-crumb">Docs / <span>License Setup</span></div>
+        <h1 class="dp-h1">License Key — Setup & Validation</h1>
+        <p class="dp-desc">
+          CASA-AI uses an Ed25519-signed JWT-like license payload. The public key is compiled
+          into the binary at build time. Validation makes zero outbound network calls —
+          fully air-gap compatible by architecture. The key is passed as a single environment variable.
+        </p>
+
+        <h2 class="dp-h2">Obtaining your license key</h2>
+        <div class="step-list">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Pay via <strong>Razorpay</strong> on the pricing page — UPI, NEFT, cards, net banking accepted</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">Razorpay fires <code>subscription.activated</code> webhook to our license server</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">License server generates an Ed25519-signed payload for your <code>tenant_id</code> and tier</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body">Signed key emailed to your account within <strong>minutes of payment confirmation</strong></div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-body">Pass as <code>CASA_LICENSE_KEY</code> environment variable — engine validates on startup</div></div>
+        </div>
+
+        <h2 class="dp-h2">Setting the license key</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Docker — environment variable</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body">docker run -d \
+  -e <span class="ck">CASA_LICENSE_KEY</span>=<span class="cs">"eyJwYXlsb2FkIjp7InRlbmFudF9pZCI6IndzbC1wcm9kIiwidGllciI6Ik..."</span> \
+  ghcr.io/shivangace/casa-ai-core:latest</div>
+        </div>
+
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">yaml</span><span class="cb-file">Kubernetes secret + deployment</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># Create secret</span>
+kubectl create secret generic casa-ai-license \
+  --from-literal=<span class="ck">CASA_LICENSE_KEY</span>=<span class="cs">"your_signed_key"</span>
+
+<span class="cc"># Reference in deployment</span>
+<span class="ck">env</span>:
+  - <span class="ck">name</span>: CASA_LICENSE_KEY
+    <span class="ck">valueFrom</span>:
+      <span class="ck">secretKeyRef</span>:
+        <span class="ck">name</span>: casa-ai-license
+        <span class="ck">key</span>: CASA_LICENSE_KEY</div>
+        </div>
+
+        <h2 class="dp-h2">What the license payload contains</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">Decoded license payload (example)</span></div>
+          <div class="cb-body">{
+  <span class="ck">"payload"</span>: {
+    <span class="ck">"tenant_id"</span>:  <span class="cs">"wsl-prod-tenant"</span>,
+    <span class="ck">"tier"</span>:       <span class="cs">"ENTERPRISE"</span>,      <span class="cc">// BASIC | ENTERPRISE | BIG_INFRA | CUSTOM</span>
+    <span class="ck">"max_agents"</span>: <span class="cn">15</span>,               <span class="cc">// 2 | 15 | -1 (unlimited)</span>
+    <span class="ck">"features"</span>:   [<span class="cs">"custom_rego"</span>, <span class="cs">"webhooks"</span>, <span class="cs">"rbi"</span>, <span class="cs">"dpdp"</span>],
+    <span class="ck">"issued_at"</span>:  <span class="cs">"2026-07-04T00:00:00Z"</span>,
+    <span class="ck">"expires_at"</span>: <span class="cs">"2027-07-04T00:00:00Z"</span>
+  },
+  <span class="ck">"signature"</span>: <span class="cs">"Ed25519-base64-signature-over-payload..."</span>
+}</div>
+        </div>
+
+        <div class="callout callout-info">
+          <span class="callout-icon">🔒</span>
+          <div><strong>Air-gap proof:</strong> The engine was tested with <code>iptables DROP ALL</code> outbound rules applied. License validation completed correctly — zero outbound network calls made. <code>ForgeryAttack_WrongKey_Rejected</code> and <code>ForgeryAttack_ModifiedPayload_Rejected</code> — both PASS.</div>
+        </div>
+
+        <h2 class="dp-h2">Tier enforcement</h2>
+        <p class="dp-p">The engine reads <code>max_agents</code> from the decoded payload and enforces it at the session registry level. A BASIC tier key with <code>max_agents: 2</code> attempting to register a third agent session receives HTTP 429:</p>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">HTTP 429 — agent limit exceeded</span></div>
+          <div class="cb-body">{
+  <span class="ck">"error"</span>: <span class="cs">"agent_limit_exceeded"</span>,
+  <span class="ck">"message"</span>: <span class="cs">"BASIC tier allows max 2 concurrent agents. Current: 2."</span>,
+  <span class="ck">"upgrade_url"</span>: <span class="cs">"https://casa-ai.in/#pricing"</span>
+}</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           POST /evaluate
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-api-evaluate">
+        <div class="dp-crumb">Docs / API Reference / <span>POST /evaluate</span></div>
+        <h1 class="dp-h1">POST /evaluate</h1>
+        <p class="dp-desc">
+          Synchronous policy evaluation endpoint. Submit an agent's current prompt,
+          reasoning chain snapshot, and tool calls. Returns an allow/deny verdict
+          with structured violation messages in under 2ms. Used for non-streaming
+          agents and batch evaluation workflows.
+        </p>
+
+        <div class="api-endpoint">
+          <span class="api-method method-post">POST</span>
+          <span class="api-path">http://casa-ai:8088/evaluate</span>
+          <span class="api-desc">Content-Type: application/json</span>
+        </div>
+
+        <h2 class="dp-h2">Request body</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">Request — full schema</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body">{
+  <span class="ck">"session_id"</span>:      <span class="cs">"agent-prod-42"</span>,          <span class="cc">// Required — unique per agent session</span>
+  <span class="ck">"ai_system_id"</span>:    <span class="cs">"crm-agent-v2"</span>,           <span class="cc">// Required — registered model ID</span>
+  <span class="ck">"agent_payload"</span>: {
+    <span class="ck">"prompt"</span>:          <span class="cs">"Fetch customer record for account 8821"</span>
+  },
+  <span class="ck">"reasoning_chain"</span>: [                          <span class="cc">// TAO steps so far this session</span>
+    { <span class="ck">"type"</span>: <span class="cs">"Thought"</span>,     <span class="ck">"content"</span>: <span class="cs">"I need to look up account 8821"</span> },
+    { <span class="ck">"type"</span>: <span class="cs">"Action"</span>,      <span class="ck">"content"</span>: <span class="cs">"read_file('/crm/8821.json')"</span> },
+    { <span class="ck">"type"</span>: <span class="cs">"Observation"</span>, <span class="ck">"content"</span>: <span class="cs">"name: Rajesh Kumar, PAN: ABCDE1234F"</span> }
+  ],
+  <span class="ck">"tool_calls"</span>: [                                <span class="cc">// MCP tool calls being made</span>
+    { <span class="ck">"tool_name"</span>: <span class="cs">"read_file"</span>, <span class="ck">"provider_country"</span>: <span class="cs">"IN"</span>, <span class="ck">"external"</span>: <span class="cn">false</span> }
+  ],
+  <span class="ck">"compliance_profile"</span>: {
+    <span class="ck">"strict_sovereignty"</span>: <span class="cn">true</span>
+  }
+}</div>
+        </div>
+
+        <h2 class="dp-h2">Response — DENY (breach detected)</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">HTTP 200 — DENY verdict</span></div>
+          <div class="cb-body">{
+  <span class="ck">"allow"</span>:                  <span class="cn">false</span>,
+  <span class="ck">"violations"</span>: [
+    <span class="cs">"PII_LEAK_DETECTED: sensitive identifier pattern found in agent traffic"</span>
+  ],
+  <span class="ck">"trigger_circuit_breaker"</span>: <span class="cn">true</span>,
+  <span class="ck">"eval_latency_us"</span>:         <span class="cn">1284</span>,
+  <span class="ck">"session_id"</span>:             <span class="cs">"agent-prod-42"</span>,
+  <span class="ck">"audit_entry_seq"</span>:         <span class="cn">47</span>
+}</div>
+        </div>
+
+        <h2 class="dp-h2">Response — ALLOW (clean)</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">HTTP 200 — ALLOW verdict</span></div>
+          <div class="cb-body">{
+  <span class="ck">"allow"</span>:                  <span class="cn">true</span>,
+  <span class="ck">"violations"</span>:             [],
+  <span class="ck">"trigger_circuit_breaker"</span>: <span class="cn">false</span>,
+  <span class="ck">"eval_latency_us"</span>:         <span class="cn">847</span>,
+  <span class="ck">"session_id"</span>:             <span class="cs">"agent-prod-42"</span>,
+  <span class="ck">"audit_entry_seq"</span>:         <span class="cn">46</span>
+}</div>
+        </div>
+
+        <h2 class="dp-h2">Response fields</h2>
+        <table class="resp-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>allow</td><td>bool</td><td>True if all 5 detection layers cleared. False if any violation fired.</td></tr>
+            <tr><td>violations</td><td>string[]</td><td>Structured violation messages. Empty array on ALLOW. Directly usable in EU AI Act Article 13 transparency reports.</td></tr>
+            <tr><td>trigger_circuit_breaker</td><td>bool</td><td>True when PII, injection, or exfiltration detected. Engine fires breaker synchronously before returning.</td></tr>
+            <tr><td>eval_latency_us</td><td>int</td><td>OPA evaluation time in microseconds. p99 target: &lt;2000μs (2ms).</td></tr>
+            <tr><td>audit_entry_seq</td><td>int</td><td>Sequence number of the audit log entry written for this evaluation.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           GET /stream
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-api-stream">
+        <div class="dp-crumb">Docs / API Reference / <span>GET /stream</span></div>
+        <h1 class="dp-h1">GET /stream — SSE Interception Proxy</h1>
+        <p class="dp-desc">
+          The primary interface for streaming LLM agents. CASA-AI acts as a transparent
+          SSE proxy — all token chunks pass through while the engine evaluates each
+          reassembled reasoning step. On breach, the stream is severed mid-flight and
+          a <code>casa_breach</code> event is injected. The agent never receives another token.
+        </p>
+
+        <div class="api-endpoint">
+          <span class="api-method method-get">GET</span>
+          <span class="api-path">http://casa-ai:8088/stream</span>
+          <span class="api-desc">?session_id=&lt;id&gt;&amp;scenario=&lt;clean|leaky|inject&gt;</span>
+        </div>
+
+        <h2 class="dp-h2">How the proxy works</h2>
+        <div class="step-list">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Agent opens SSE connection</strong> to CASA-AI instead of the LLM directly</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><strong>CASA-AI opens upstream connection</strong> to the real LLM provider and begins forwarding chunks</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Each chunk buffered and reassembled</strong> into complete TAO steps (PAN across 3 chunks → caught at reassembly)</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Completed step evaluated</strong> against all 5 detection layers in &lt;2ms via embedded OPA</div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Clean steps forwarded</strong> to agent unchanged — invisible on the happy path</div></div>
+          <div class="step"><div class="step-num">6</div><div class="step-body"><strong>Violation: stream severed</strong>, circuit-breaker fires, <code>event: casa_breach</code> sent to agent</div></div>
+        </div>
+
+        <h2 class="dp-h2">Breach event payload</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">text</span><span class="cb-file">SSE stream — breach severance</span></div>
+          <div class="cb-body">data: <span class="ck">Thought</span>: I need to fetch the customer record...
+data: <span class="ck">Action</span>: read_file(path="/crm/customer_8821.json")
+data: <span class="ck">Observation</span>: Found — PAN: ABCDE12<span class="cr">█ [STREAM CUT]</span>
+
+<span class="cn">event</span>: casa_breach
+data: {
+  <span class="ck">"violation"</span>: <span class="cs">"PII_LEAK_IN_REASONING"</span>,
+  <span class="ck">"session_id"</span>: <span class="cs">"agent-prod-42"</span>,
+  <span class="ck">"action"</span>: <span class="cs">"freeze_session"</span>,
+  <span class="ck">"circuit_breaker"</span>: <span class="cn">true</span>
+}
+
+<span class="cn">event</span>: done
+data: stream terminated by CASA-AI · session frozen</div>
+        </div>
+
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <div><strong>LangChain integration:</strong> Set <code>openai.base_url = "http://casa-ai:8088"</code> in your LangChain ChatOpenAI constructor. All streaming calls automatically route through CASA-AI. Zero LangChain code changes required.</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           GET /healthz
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-api-health">
+        <div class="dp-crumb">Docs / API Reference / <span>GET /healthz</span></div>
+        <h1 class="dp-h1">GET /healthz — Health Check</h1>
+        <p class="dp-desc">
+          Kubernetes liveness and readiness probe endpoint. Returns engine status,
+          license tier, active session count, and policy version SHA-256.
+          Used by load balancers, orchestrators, and uptime monitors.
+          Responds in &lt;1ms — no policy evaluation involved.
+        </p>
+
+        <div class="api-endpoint">
+          <span class="api-method method-get">GET</span>
+          <span class="api-path">http://casa-ai:8088/healthz</span>
+          <span class="api-desc">No auth required · &lt;1ms response</span>
+        </div>
+
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">HTTP 200 — healthy response</span></div>
+          <div class="cb-body">{
+  <span class="ck">"status"</span>:           <span class="cs">"ok"</span>,
+  <span class="ck">"engine"</span>:           <span class="cs">"running"</span>,
+  <span class="ck">"version"</span>:          <span class="cs">"1.0.0"</span>,
+  <span class="ck">"license_tier"</span>:     <span class="cs">"ENTERPRISE"</span>,
+  <span class="ck">"license_expires"</span>:  <span class="cs">"2027-07-04T00:00:00Z"</span>,
+  <span class="ck">"agents_active"</span>:    <span class="cn">7</span>,
+  <span class="ck">"agents_max"</span>:       <span class="cn">15</span>,
+  <span class="ck">"policy_version"</span>:   <span class="cs">"sha256:abc123def456..."</span>,
+  <span class="ck">"uptime_s"</span>:         <span class="cn">86400</span>
+}</div>
+        </div>
+
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">yaml</span><span class="cb-file">Kubernetes probe configuration</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="ck">livenessProbe</span>:
+  <span class="ck">httpGet</span>:
+    <span class="ck">path</span>: /healthz
+    <span class="ck">port</span>: <span class="cn">8088</span>
+  <span class="ck">initialDelaySeconds</span>: <span class="cn">5</span>
+  <span class="ck">periodSeconds</span>: <span class="cn">10</span>
+  <span class="ck">failureThreshold</span>: <span class="cn">3</span>
+<span class="ck">readinessProbe</span>:
+  <span class="ck">httpGet</span>:
+    <span class="ck">path</span>: /healthz
+    <span class="ck">port</span>: <span class="cn">8088</span>
+  <span class="ck">initialDelaySeconds</span>: <span class="cn">3</span>
+  <span class="ck">periodSeconds</span>: <span class="cn">5</span></div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           GET /metrics
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-api-metrics">
+        <div class="dp-crumb">Docs / API Reference / <span>GET /metrics</span></div>
+        <h1 class="dp-h1">GET /metrics — Prometheus Endpoint</h1>
+        <p class="dp-desc">
+          Native Prometheus metrics endpoint — 10 metrics, zero external library dependency.
+          Pure stdlib atomic counters and <code>fmt.Fprintf</code>. Scrape with any standard
+          Prometheus deployment. Pre-built Grafana dashboard JSON ships in
+          <code>deployments/grafana/</code> — import one file, instant visibility.
+        </p>
+
+        <div class="api-endpoint">
+          <span class="api-method method-get">GET</span>
+          <span class="api-path">http://casa-ai:8088/metrics</span>
+          <span class="api-desc">Prometheus text format · scrape interval: 15s recommended</span>
+        </div>
+
+        <h2 class="dp-h2">Available metrics</h2>
+        <table class="resp-table">
+          <thead><tr><th>Metric</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>casa_ai_evaluations_total</td><td>Counter</td><td>Total policy evaluations performed since startup</td></tr>
+            <tr><td>casa_ai_denied_total</td><td>Counter</td><td>Evaluations resulting in DENY verdict</td></tr>
+            <tr><td>casa_ai_pii_detections_total</td><td>Counter</td><td>PII patterns matched in agent traffic</td></tr>
+            <tr><td>casa_ai_injection_detections_total</td><td>Counter</td><td>Prompt injection attempts detected</td></tr>
+            <tr><td>casa_ai_breaker_fires_total</td><td>Counter</td><td>Circuit-breaker activations</td></tr>
+            <tr><td>casa_ai_active_sessions</td><td>Gauge</td><td>Currently active agent sessions (vs tier max)</td></tr>
+            <tr><td>casa_ai_sessions_evicted_total</td><td>Counter</td><td>Sessions evicted due to idle TTL expiry</td></tr>
+            <tr><td>casa_ai_eval_latency_micros</td><td>Histogram</td><td>Policy evaluation latency — 7 buckets (500μs to +Inf)</td></tr>
+            <tr><td>casa_ai_cluster_satellites_offline</td><td>Gauge</td><td>Satellite instances offline (BIG INFRA only)</td></tr>
+            <tr><td>casa_ai_uptime_seconds</td><td>Counter</td><td>Engine uptime in seconds</td></tr>
+          </tbody>
+        </table>
+
+        <h2 class="dp-h2">Prometheus scrape config</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">yaml</span><span class="cb-file">prometheus.yml</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="ck">scrape_configs</span>:
+  - <span class="ck">job_name</span>: <span class="cs">"casa-ai"</span>
+    <span class="ck">static_configs</span>:
+      - <span class="ck">targets</span>: [<span class="cs">"casa-ai:8088"</span>]
+    <span class="ck">scrape_interval</span>: <span class="cs">"15s"</span>
+    <span class="ck">metrics_path</span>: <span class="cs">"/metrics"</span></div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           AUDIT LOG
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-audit">
+        <div class="dp-crumb">Docs / Core Concepts / <span>Audit Log</span></div>
+        <h1 class="dp-h1">SHA-256 Chained Audit Log</h1>
+        <p class="dp-desc">
+          Every evaluation, breach, and remediation action is written to an append-only
+          JSONL file with cryptographic hash chaining. Any retrospective edit, deletion,
+          or reordering is mathematically detectable. Run <code>Verify(path)</code> to get
+          an unambiguous tamper status — suitable for regulatory inspection.
+        </p>
+
+        <h2 class="dp-h2">Log entry schema</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">/var/log/casa-ai/audit.jsonl — single entry</span></div>
+          <div class="cb-body">{
+  <span class="ck">"seq"</span>:        <span class="cn">47</span>,
+  <span class="ck">"ts"</span>:         <span class="cs">"2026-07-04T18:46:45.391Z"</span>,
+  <span class="ck">"event"</span>:      <span class="cs">"COMPLIANCE_BREACH"</span>,
+  <span class="ck">"session_id"</span>: <span class="cs">"agent-prod-42"</span>,
+  <span class="ck">"allow"</span>:      <span class="cn">false</span>,
+  <span class="ck">"violations"</span>: [<span class="cs">"PII_LEAK_DETECTED: PAN pattern in observation step 3"</span>],
+  <span class="ck">"latency_us"</span>: <span class="cn">1284</span>,
+  <span class="ck">"prev_hash"</span>:  <span class="cs">"9e451960de03ae37e4a5ec9a9a586d46"</span>,
+  <span class="ck">"hash"</span>:       <span class="cs">"c7d60a1374fc938c4742920af7e9cff8"</span>
+}</div>
+        </div>
+
+        <h2 class="dp-h2">Verifying chain integrity</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Run chain verification</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body">curl -X POST http://localhost:8088/audit/verify
+<span class="cc"># → {"status":"CHAIN_VALID","entries_verified":1847,"first_seq":1,"last_seq":1847}</span>
+
+<span class="cc"># On tamper detected:</span>
+<span class="cc"># → {"status":"CHAIN_BROKEN","broken_at_seq":142,"error":"hash mismatch at entry 142"}</span></div>
+        </div>
+
+        <div class="proof">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          PROVEN: TestLogger_DetectsTamperedEntry (byte flip caught) · TestLogger_DetectsDeletedEntry (seq gap caught) · TestLogger_ContinuesChainOnRestart (restart continuity verified) — all PASS.
+        </div>
+
+        <h2 class="dp-h2">Retention requirements</h2>
+        <table class="cfg-table">
+          <thead><tr><th>Regulation</th><th>Retention</th><th>CASA-AI Mechanism</th></tr></thead>
+          <tbody>
+            <tr><td>RBI Master Direction</td><td>3 years</td><td>S3/GCS/Azure Blob object lock — WORM</td></tr>
+            <tr><td>SEBI Circular</td><td>5 years</td><td>Object lock + Verify() export gate</td></tr>
+            <tr><td>DPDP Act 2023</td><td>As long as consent</td><td>Per-entry consent_token field</td></tr>
+            <tr><td>EU AI Act Article 12</td><td>10 years (high-risk)</td><td>Immutable Blob export + chain hash anchor</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           HELM CHART
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-helm">
+        <div class="dp-crumb">Docs / Core Concepts / <span>Helm Chart</span></div>
+        <h1 class="dp-h1">Kubernetes Deployment — Helm Chart</h1>
+        <p class="dp-desc">
+          A production-ready Helm chart ships in <code>deployments/helm/casa-ai/</code>.
+          One command deploys the engine with correct resource limits, liveness probes,
+          secret handling, and a PodDisruptionBudget to ensure availability during
+          cluster maintenance.
+        </p>
+
+        <h2 class="dp-h2">Install</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Helm install</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># Create namespace and license secret</span>
+kubectl create namespace casa-ai
+kubectl create secret generic casa-ai-license \
+  --namespace casa-ai \
+  --from-literal=CASA_LICENSE_KEY=<span class="cs">"your_signed_key"</span>
+
+<span class="cc"># Install chart</span>
+helm install casa-ai ./deployments/helm/casa-ai \
+  --namespace casa-ai \
+  --set upstream.llmBaseUrl=<span class="cs">"https://api.openai.com"</span> \
+  --set image.tag=<span class="cs">"1.0.0"</span>
+
+<span class="cc"># Verify rollout</span>
+kubectl rollout status deployment/casa-ai -n casa-ai
+kubectl get pods -n casa-ai</div>
+        </div>
+
+        <h2 class="dp-h2">values.yaml — key fields</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">yaml</span><span class="cb-file">deployments/helm/casa-ai/values.yaml</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="ck">image</span>:
+  <span class="ck">repository</span>: ghcr.io/shivangace/casa-ai-core
+  <span class="ck">tag</span>: <span class="cs">"1.0.0"</span>
+  <span class="ck">pullPolicy</span>: IfNotPresent
+
+<span class="ck">replicaCount</span>: <span class="cn">2</span>           <span class="cc"># HA — PDB ensures 1 always up</span>
+
+<span class="ck">resources</span>:
+  <span class="ck">requests</span>:
+    <span class="ck">memory</span>: <span class="cs">"64Mi"</span>
+    <span class="ck">cpu</span>: <span class="cs">"100m"</span>
+  <span class="ck">limits</span>:
+    <span class="ck">memory</span>: <span class="cs">"256Mi"</span>
+    <span class="ck">cpu</span>: <span class="cs">"500m"</span>
+
+<span class="ck">securityContext</span>:
+  <span class="ck">runAsNonRoot</span>: <span class="cn">true</span>
+  <span class="ck">runAsUser</span>: <span class="cn">65532</span>
+  <span class="ck">readOnlyRootFilesystem</span>: <span class="cn">true</span>
+  <span class="ck">allowPrivilegeEscalation</span>: <span class="cn">false</span>
+
+<span class="ck">upstream</span>:
+  <span class="ck">llmBaseUrl</span>: <span class="cs">"https://api.openai.com"</span>
+
+<span class="ck">persistence</span>:
+  <span class="ck">auditLog</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>
+    <span class="ck">storageClass</span>: <span class="cs">"gp3"</span>
+    <span class="ck">size</span>: <span class="cs">"10Gi"</span></div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           MULTI-CLUSTER
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-cluster">
+        <div class="dp-crumb">Docs / Core Concepts / <span>Multi-Cluster</span></div>
+        <h1 class="dp-h1">Multi-Cluster Orchestration — BIG INFRASTRUCTURE</h1>
+        <p class="dp-desc">
+          One central CASA-AI instance acts as the policy server for satellite engine instances
+          across multiple Kubernetes clusters. Satellites heartbeat every 60 seconds, pull
+          updated policy bundles on version mismatch, and are automatically marked stale → offline
+          on missed heartbeats. Fleet-wide metrics visible from the central Prometheus endpoint.
+        </p>
+
+        <div class="callout callout-warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>BIG INFRASTRUCTURE tier required.</strong> Attempting to use cluster endpoints on BASIC or ENTERPRISE keys returns HTTP 403 with <code>"feature_not_available"</code>.</div>
+        </div>
+
+        <h2 class="dp-h2">Satellite registration</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Register satellite at startup</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body">curl -X POST https://central-casa-ai:8088/cluster/register \
+  -H <span class="cs">"Content-Type: application/json"</span> \
+  -d <span class="cs">'{
+    "id": "prod-india-1",
+    "cluster_name": "ap-south-1",
+    "endpoint": "http://10.0.1.5:8088"
+  }'</span>
+
+<span class="cc"># Response</span>
+{ <span class="ck">"status"</span>: <span class="cs">"registered"</span>, <span class="ck">"policy_version"</span>: <span class="cs">"sha256:abc123..."</span> }</div>
+        </div>
+
+        <h2 class="dp-h2">Satellite heartbeat (every 60s)</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Heartbeat + policy sync check</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body">curl -X POST https://central-casa-ai:8088/cluster/heartbeat \
+  -d <span class="cs">'{
+    "satellite_id": "prod-india-1",
+    "policy_version": "sha256:abc123",
+    "active_sessions": 7
+  }'</span>
+
+<span class="cc"># needs_update: true → satellite pulls /cluster/policy immediately</span>
+{ <span class="ck">"status"</span>: <span class="cs">"ok"</span>, <span class="ck">"needs_update"</span>: <span class="cn">true</span>, <span class="ck">"policy_version"</span>: <span class="cs">"sha256:xyz789"</span> }</div>
+        </div>
+
+        <h2 class="dp-h2">Fleet health status</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">GET /cluster/satellites — fleet dashboard</span></div>
+          <div class="cb-body">{
+  <span class="ck">"fleet_summary"</span>: { <span class="ck">"total"</span>: <span class="cn">3</span>, <span class="ck">"healthy"</span>: <span class="cn">3</span>, <span class="ck">"stale"</span>: <span class="cn">0</span>, <span class="ck">"offline"</span>: <span class="cn">0</span> },
+  <span class="ck">"fleet_active_sessions"</span>: <span class="cn">28</span>,
+  <span class="ck">"canonical_policy_version"</span>: <span class="cs">"sha256:xyz789..."</span>,
+  <span class="ck">"satellites"</span>: [
+    { <span class="ck">"id"</span>: <span class="cs">"prod-india-1"</span>, <span class="ck">"status"</span>: <span class="cs">"healthy"</span>, <span class="ck">"active_sessions"</span>: <span class="cn">7</span>, <span class="ck">"region"</span>: <span class="cs">"ap-south-1"</span> },
+    { <span class="ck">"id"</span>: <span class="cs">"prod-us-1"</span>,    <span class="ck">"status"</span>: <span class="cs">"healthy"</span>, <span class="ck">"active_sessions"</span>: <span class="cn">12</span>, <span class="ck">"region"</span>: <span class="cs">"us-east-1"</span> },
+    { <span class="ck">"id"</span>: <span class="cs">"prod-eu-1"</span>,    <span class="ck">"status"</span>: <span class="cs">"healthy"</span>, <span class="ck">"active_sessions"</span>: <span class="cn">9</span>, <span class="ck">"region"</span>: <span class="cs">"eu-west-1"</span> }
+  ]
+}</div>
+        </div>
+
+        <div class="proof">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          PROVEN: TestCluster_UpdateStatuses_MarksStaleAndOffline · TestCluster_OutdatedSatellites_TriggersUpdate · TestCluster_ActiveSessionsFleetTotal (400 goroutines, -race clean) — all PASS.
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           COMPLIANCE PROFILES
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-compliance">
+        <div class="dp-crumb">Docs / Core Concepts / <span>Compliance Profiles</span></div>
+        <h1 class="dp-h1">Compliance Profiles — Activation Reference</h1>
+        <p class="dp-desc">
+          Six built-in compliance profiles. Each is activated with a single flag in
+          <code>casa.yaml</code>. Hot-reload picks up changes without container restart.
+          All six can run simultaneously — the engine evaluates them as a layered stack
+          where core safety controls always run first.
+        </p>
+
+        <table class="cfg-table">
+          <thead><tr><th>Profile Key</th><th>Tier Required</th><th>Framework</th><th>Controls</th></tr></thead>
+          <tbody>
+            <tr><td>nist_ai_rmf</td><td>BASIC+</td><td>NIST AI RMF 1.0</td><td>GOVERN 1.4, MAP 1.1, MANAGE 2.x</td></tr>
+            <tr><td>eu_ai_act</td><td>ENTERPRISE+</td><td>EU AI Act 2024</td><td>Articles 10, 12, 13, 14</td></tr>
+            <tr><td>iso_42001</td><td>ENTERPRISE+</td><td>ISO/IEC 42001:2023</td><td>Clauses 6.1, 8.2, 9.1, Annex A.6.1.4</td></tr>
+            <tr><td>rbi_ai</td><td>ENTERPRISE+</td><td>RBI AI Governance Apr 2024</td><td>Sections 51–57 (5 controls)</td></tr>
+            <tr><td>dpdp</td><td>ENTERPRISE+</td><td>DPDP Act 2023</td><td>Sections 4/6, 8, 9, 16</td></tr>
+            <tr><td>custom</td><td>ENTERPRISE+</td><td>Your Rego policy</td><td>Full OPA v1 — unlimited</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <div><strong>Core 5-layer detection always runs</strong> regardless of which compliance profiles are enabled: PII detection, prompt injection, tool allowlist, data sovereignty, exfiltration destination. Compliance profiles add additional governance controls on top.</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           LOCAL DEV
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-localdev">
+        <div class="dp-crumb">Docs / Development / <span>Local Dev</span></div>
+        <h1 class="dp-h1">Local Development Setup</h1>
+        <p class="dp-desc">
+          Run CASA-AI locally for policy development, testing, and integration.
+          The full engine runs on any Mac or Linux machine with Go 1.22+ and Docker.
+          All 157 tests pass locally — the same suite that runs in CI.
+        </p>
+
+        <h2 class="dp-h2">Clone and run</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Local setup</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="cc"># Clone the repository</span>
+git clone https://github.com/shivangace/casa-ai-core.git
+cd casa-ai-core
+
+<span class="cc"># Run all tests — race detector enabled</span>
+go test ./... -race -v
+<span class="cc"># → 157 tests, 11 packages, 0 failures</span>
+
+<span class="cc"># Set dev license key and start engine</span>
+export CASA_LICENSE_KEY=<span class="cs">"eyJwYXlsb2FkIjp7InRlbmFudF9pZCI6IndzbC1kZXYtdGVzdCIs..."</span>
+go run ./cmd/casa-engine/main.go
+
+<span class="cc"># Engine live at http://localhost:8088</span>
+curl http://localhost:8088/healthz</div>
+        </div>
+
+        <h2 class="dp-h2">Build Docker image locally</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">bash</span><span class="cb-file">Local Docker build</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body">docker build -t casa-ai:local .
+
+<span class="cc"># Verify hardening</span>
+docker inspect casa-ai:local | grep -E "User|Size"
+<span class="cc"># → "User": "65532:65532"</span>
+<span class="cc"># → "Size": 8160000   ← ~8MB distroless</span>
+
+<span class="cc"># Confirm no shell (security verification)</span>
+docker run --rm casa-ai:local /bin/sh
+<span class="cc"># → exec /bin/sh: no such file or directory (correct)</span>
+
+<span class="cc"># Run Trivy CVE scan</span>
+trivy image --exit-code 1 --severity HIGH,CRITICAL casa-ai:local
+<span class="cc"># → 0 HIGH, 0 CRITICAL CVEs</span></div>
+        </div>
+
+        <div class="callout callout-info">
+          <span class="callout-icon">ℹ️</span>
+          <div><strong>Dev license key:</strong> A BASIC-tier development license key is available in the repository README for local testing. It expires 90 days from issue and enforces the 2-agent limit. Production keys are issued via Razorpay.</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           CUSTOM REGO
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-custom-rego">
+        <div class="dp-crumb">Docs / Development / <span>Custom Rego</span></div>
+        <h1 class="dp-h1">Writing Custom Rego Policies — ENTERPRISE+</h1>
+        <p class="dp-desc">
+          Full OPA v1 language access. Mount your <code>.rego</code> files into the
+          <code>/policies</code> directory. The engine watches for changes and
+          atomically hot-swaps the compiled OPA instance — zero sessions dropped,
+          zero downtime. Failed compilations keep the existing policy serving.
+        </p>
+
+        <h2 class="dp-h2">Policy input schema</h2>
+        <p class="dp-p">Your Rego policy receives the following input object on every evaluation:</p>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">json</span><span class="cb-file">input — available in every Rego rule</span></div>
+          <div class="cb-body">{
+  <span class="ck">"session_id"</span>:        <span class="cs">"agent-42"</span>,
+  <span class="ck">"ai_system_id"</span>:      <span class="cs">"crm-agent-v2"</span>,
+  <span class="ck">"agent_payload"</span>:     { <span class="ck">"prompt"</span>: <span class="cs">"..."</span> },
+  <span class="ck">"reasoning_chain"</span>:   [{ <span class="ck">"type"</span>: <span class="cs">"Thought"</span>, <span class="ck">"content"</span>: <span class="cs">"..."</span> }],
+  <span class="ck">"tool_calls"</span>:        [{ <span class="ck">"tool_name"</span>: <span class="cs">"..."</span>, <span class="ck">"provider_country"</span>: <span class="cs">"IN"</span>, <span class="ck">"external"</span>: <span class="cn">false</span> }],
+  <span class="ck">"compliance_profile"</span>:{ <span class="ck">"strict_sovereignty"</span>: <span class="cn">true</span> },
+  <span class="ck">"ai_system_id"</span>:      <span class="cs">"..."</span>,
+  <span class="ck">"ai_risk_level"</span>:     <span class="cs">"HIGH"</span>,
+  <span class="ck">"cost_center"</span>:       <span class="cs">"engineering"</span>,
+  <span class="ck">"data_classification"</span>:<span class="cs">"RESTRICTED"</span>
+}</div>
+        </div>
+
+        <h2 class="dp-h2">Example — corporate policy</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">rego</span><span class="cb-file">policies/my_corporate_policy.rego</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="ck">package</span> my_company.compliance
+<span class="cv">import</span> rego.v1
+
+<span class="cc"># Block agents referencing competitor names</span>
+violation contains msg <span class="cv">if</span> {
+    regex.match(<span class="cs">`(?i)(competitor_x|competitor_y)`</span>, input.agent_payload.prompt)
+    msg := <span class="cs">"CORPORATE: competitor reference in agent prompt — blocked"</span>
+}
+
+<span class="cc"># All agent actions must declare a cost_center tag</span>
+violation contains msg <span class="cv">if</span> {
+    input.cost_center == <span class="cs">""</span>
+    msg := <span class="cs">"CORPORATE: cost_center tag required on all agent sessions"</span>
+}
+
+<span class="cc"># RESTRICTED data cannot be sent to any external tool</span>
+violation contains msg <span class="cv">if</span> {
+    input.data_classification == <span class="cs">"RESTRICTED"</span>
+    <span class="cv">some</span> call <span class="cv">in</span> input.tool_calls
+    call.external == <span class="cn">true</span>
+    msg := sprintf(<span class="cs">"CORPORATE: RESTRICTED data cannot reach external tool '%v'"</span>, [call.tool_name])
+}</div>
+        </div>
+
+        <h2 class="dp-h2">Activate in casa.yaml</h2>
+        <div class="cb">
+          <div class="cb-head"><span class="cb-lang">yaml</span><span class="cb-file">configs/casa.yaml</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="cb-body"><span class="ck">compliance_profiles</span>:
+  <span class="ck">custom</span>:
+    <span class="ck">enabled</span>: <span class="cn">true</span>
+    <span class="ck">policy_path</span>: <span class="cs">"policies/my_corporate_policy.rego"</span>
+<span class="cc"># Save file — engine hot-reloads within ~1 second</span></div>
+        </div>
+
+        <div class="callout callout-warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Safety layer always runs first.</strong> Custom policies run after the core 5-layer engine. They can add additional checks but cannot disable PII detection, injection detection, or the core allow/deny logic.</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           WHY CASA-AI
+           ══════════════════════════════════════════ -->
+      <div class="dpanel" id="dp-vs-others">
+        <div class="dp-crumb">Docs / Development / <span>Why CASA-AI</span></div>
+        <h1 class="dp-h1">Why CASA-AI vs Alternatives</h1>
+        <p class="dp-desc">
+          The core architectural difference: CASA-AI inspects the intermediate reasoning
+          chain — the Thought-Action-Observation loop between the prompt and the response.
+          No competing product does this. Every other tool is either prompt-only or response-only.
+          The reasoning chain is where real data leaks happen in production AI agents.
+        </p>
+
+        <h2 class="dp-h2">The blind spot every competitor has</h2>
+        <div class="callout callout-warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>The invisible leak:</strong> An agent retrieves a document. Its Observation step contains <code>PAN: ABCDE1234F</code>. The final API response is clean. Every existing tool — Lakera, Arthur AI, Guardrails AI — logged zero violations. CASA-AI intercepted the stream at the Observation step and severed the connection before the agent's Action step could exfiltrate it.</div>
+        </div>
+
+        <h2 class="dp-h2">Architectural comparison</h2>
+        <table class="resp-table">
+          <thead><tr><th>Capability</th><th>CASA-AI</th><th>Others</th></tr></thead>
+          <tbody>
+            <tr><td>Reasoning chain inspection</td><td style="color:var(--green)">✓ TAO loop, mid-stream</td><td style="color:var(--tx3)">✗ Prompt/response only</td></tr>
+            <tr><td>Credential revocation (live)</td><td style="color:var(--green)">✓ AWS + GCP + Azure</td><td style="color:var(--tx3)">✗ Alert and continue</td></tr>
+            <tr><td>RBI AI Governance controls</td><td style="color:var(--green)">✓ 5 controls, 6 tests</td><td style="color:var(--tx3)">✗ Not available</td></tr>
+            <tr><td>DPDP Act 2023 controls</td><td style="color:var(--green)">✓ 4 sections, 5 tests</td><td style="color:var(--tx3)">✗ Not available</td></tr>
+            <tr><td>Self-hosted, air-gapped</td><td style="color:var(--green)">✓ Zero outbound calls</td><td style="color:var(--tx3)">✗ SaaS / cloud-dependent</td></tr>
+            <tr><td>Cryptographic audit trail</td><td style="color:var(--green)">✓ SHA-256 chain</td><td style="color:var(--tx3)">✗ Standard logs</td></tr>
+            <tr><td>Distroless container (8MB)</td><td style="color:var(--green)">✓ No shell, UID 65532</td><td style="color:var(--tx3)">✗ Standard containers</td></tr>
+          </tbody>
+        </table>
+
+        <div class="proof">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          157 tests · 11 packages · -race clean · Live AWS IAM tested (account 083334184188) · Air-gap tested (iptables DROP ALL outbound) · Forgery attacks tested — all PASS.
+        </div>
+      </div>
+
+    </div><!-- /docs-content -->
+  </div><!-- /docs-layout -->
+  </div>
+</section>
+<script>
+
+window.addEventListener('scroll',function(){
+  var n=document.getElementById('main-nav');
+  if(n) n.style.background=window.scrollY>40?'rgba(3,12,21,.99)':'rgba(3,12,21,.95)';
+},{passive:true});
+function openModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.add('open');document.body.style.overflow='hidden';}}
+function closeModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.remove('open');document.body.style.overflow='';}}
+function closeModalOnBg(e,n){if(e.target===document.getElementById('modal-'+n))closeModal(n);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['privacy','terms','security'].forEach(closeModal);document.body.style.overflow='';}});
+
+function showDoc(name, clickedEl) {
+  document.querySelectorAll('.dpanel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.dsb-item').forEach(b => b.classList.remove('on'));
+  const panel = document.getElementById('dp-' + name);
+  if (panel) panel.classList.add('on');
+  if (clickedEl) clickedEl.classList.add('on');
+  // scroll content to top
+  const content = document.querySelector('.docs-content');
+  if (content) content.scrollTop = 0;
+}
+
+function copyCode(btn) {
+  const code = btn.closest('.cb').querySelector('.cb-body').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'copied!';
+    setTimeout(() => btn.textContent = 'copy', 2000);
+  });
+}
+function showDoc(name,el){
+  document.querySelectorAll('.dpanel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.dsb-item').forEach(function(b){b.classList.remove('on');});
+  var p=document.getElementById('dp-'+name);
+  if(p) p.classList.add('on');
+  if(el) el.classList.add('on');
+}
+function copyCode(btn){
+  var c=btn.closest('.cb').querySelector('.cb-body').textContent;
+  navigator.clipboard.writeText(c).then(function(){btn.textContent='copied!';setTimeout(function(){btn.textContent='copy';},2000);});
+}
+</script>
+</body>
+</html>

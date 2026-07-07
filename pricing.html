@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Four tiers for Indian enterprise. Annual plans include 2 months free. Razorpay payments.">
+<title>CASA-AI — Pricing | BASIC ₹4K · ENTERPRISE ₹50K · BIG INFRA ₹1.2L</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000508'/%3E%3Cpolygon points='16,3.5 27,9.5 27,22 16,28 5,22 5,9.5' fill='none' stroke='%2300ffd1' stroke-width='1.4'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%23000508' stroke='%2300ffd1' stroke-width='1.4'/%3E%3Cline x1='12.5' y1='12.5' x2='19.5' y2='19.5' stroke='%2300ffd1' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --void:#000508;--deep:#030c15;--surf:#071520;--surf2:#0b1f33;
+  --teal:#00ffd1;--blue:#0057ff;--violet:#7b61ff;
+  --red:#ff2d55;--amber:#ffb800;--green:#00d68f;
+  --tx1:#ddeeff;--tx2:#6b8fa8;--tx3:#2d4a5e;--tx4:#142030;
+  --b1:rgba(0,255,209,.06);--b2:rgba(0,255,209,.16);--b3:rgba(0,255,209,.40);
+  --f-display:'Syne',sans-serif;--f-mono:'JetBrains Mono',monospace;--f-body:'Inter',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--tx1);font-family:var(--f-body);line-height:1.6}
+::selection{background:rgba(0,255,209,.18);color:var(--teal)}
+
+.si{max-width:1200px;margin:0 auto;padding:0 2rem}
+.sp{padding:7rem 0}
+.ey{font-family:var(--f-mono);font-size:.68rem;font-weight:600;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:1.1rem}
+.ey::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b3),transparent);max-width:90px}
+.sh{font-family:var(--f-display);font-weight:800;font-size:clamp(2rem,4.5vw,3.5rem);letter-spacing:-.04em;line-height:1.05;margin-bottom:1.1rem}
+.ss{color:var(--tx2);font-size:1rem;line-height:1.8;max-width:560px}
+.tg{background:linear-gradient(120deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.fi{opacity:0;transform:translateY(24px);transition:.7s ease}
+.fi.on{opacity:1;transform:translateY(0)}
+.fi.d1{transition-delay:.1s}.fi.d2{transition-delay:.2s}.fi.d3{transition-delay:.3s}
+.ck{color:var(--teal)}.cs{color:var(--green)}.cc{color:var(--tx3)}.cn{color:var(--amber)}.cv{color:var(--violet)}.cr{color:var(--red)}
+
+/* =====================================================
+   HOW IT WORKS — TIMELINE
+   ===================================================== */
+.how-s{
+  background:var(--deep);
+  border-top:1px solid var(--b1);
+  border-bottom:1px solid var(--b1);
+}
+
+/* Vertical timeline */
+.timeline{
+  margin-top:4.5rem;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:27px;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,
+    transparent 0%,
+    var(--b3) 8%,
+    var(--b3) 92%,
+    transparent 100%);
+}
+
+.tl-step{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:2rem;
+  padding-bottom:4rem;
+  position:relative;
+}
+.tl-step:last-child{padding-bottom:0}
+
+/* Left — number circle */
+.tl-left{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  position:relative;
+}
+.tl-num{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:var(--surf);
+  border:1px solid var(--b3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-mono);font-size:.85rem;font-weight:700;
+  color:var(--teal);
+  flex-shrink:0;z-index:1;
+  box-shadow:0 0 20px rgba(0,255,209,.1);
+  transition:.3s;
+}
+.tl-step:hover .tl-num{
+  background:rgba(0,255,209,.08);
+  box-shadow:0 0 30px rgba(0,255,209,.2);
+}
+
+/* Right — content */
+.tl-right{padding-top:12px}
+.tl-tag{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:4px;
+  font-family:var(--f-mono);font-size:.6rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:.75rem;
+}
+.tl-h{
+  font-family:var(--f-display);font-weight:800;
+  font-size:1.15rem;letter-spacing:-.03em;
+  margin-bottom:.5rem;line-height:1.3;
+}
+.tl-p{
+  color:var(--tx2);font-size:.9rem;
+  line-height:1.8;max-width:660px;
+  margin-bottom:1.25rem;
+}
+
+/* Terminal / code in timeline */
+.tl-terminal{
+  background:#000d18;
+  border:1px solid var(--b2);
+  border-radius:12px;overflow:hidden;
+  max-width:700px;
+  box-shadow:0 0 40px rgba(0,255,209,.04);
+}
+.tl-term-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;
+  background:var(--surf);border-bottom:1px solid var(--b1);
+}
+.tl-dots{display:flex;gap:5px}
+.td{width:9px;height:9px;border-radius:50%}
+.tl-term-title{font-family:var(--f-mono);font-size:.62rem;color:var(--tx3)}
+.tl-term-body{
+  padding:1.25rem 1.5rem;
+  font-family:var(--f-mono);font-size:.74rem;
+  line-height:1.9;color:#c8deff;
+}
+
+/* Step detail cards */
+.tl-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:.75rem;max-width:700px;margin-top:1.25rem;
+}
+.tl-card{
+  background:var(--surf);border:1px solid var(--b1);
+  border-radius:8px;padding:.875rem 1rem;
+}
+.tl-card-label{
+  font-family:var(--f-mono);font-size:.6rem;
+  color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:.3rem;
+}
+.tl-card-val{
+  font-family:var(--f-mono);font-size:.95rem;
+  font-weight:600;color:var(--teal);
+}
+
+/* Breach cascade visual */
+.breach-cascade{
+  display:flex;flex-direction:column;gap:.5rem;
+  max-width:700px;margin-top:1.25rem;
+}
+.bc-row{
+  display:flex;align-items:center;gap:12px;
+  padding:.75rem 1rem;
+  background:var(--surf);border:1px solid var(--b1);
+  border-radius:8px;
+}
+.bc-step{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-mono);font-size:.6rem;font-weight:700;
+  flex-shrink:0;
+}
+.bc-action{font-family:var(--f-display);font-size:.82rem;font-weight:700;flex:1}
+.bc-detail{font-size:.75rem;color:var(--tx2);font-family:var(--f-mono)}
+.bc-time{
+  font-family:var(--f-mono);font-size:.65rem;
+  padding:2px 8px;border-radius:3px;flex-shrink:0;
+}
+
+/* =====================================================
+   PRICING SECTION
+   ===================================================== */
+.price-s{background:var(--void)}
+
+/* Annual/Monthly toggle */
+.price-toggle-wrap{
+  display:flex;align-items:center;justify-content:center;
+  gap:1rem;margin-top:2.5rem;
+}
+.price-toggle-label{
+  font-size:.88rem;color:var(--tx2);font-weight:500;
+  transition:.2s;
+}
+.price-toggle-label.active{color:var(--tx1);font-weight:600}
+.toggle-track{
+  width:48px;height:26px;
+  background:var(--surf2);border:1px solid var(--b2);
+  border-radius:100px;position:relative;
+  cursor:pointer;transition:.2s;
+}
+.toggle-track.annual{background:rgba(0,255,209,.15);border-color:var(--b3)}
+.toggle-thumb{
+  width:20px;height:20px;
+  background:var(--teal);border-radius:50%;
+  position:absolute;top:2px;left:3px;
+  transition:transform .2s;
+}
+.toggle-track.annual .toggle-thumb{transform:translateX(22px)}
+.price-toggle-badge{
+  padding:3px 10px;
+  background:rgba(0,214,143,.12);color:var(--green);
+  border-radius:4px;font-family:var(--f-mono);font-size:.68rem;font-weight:700;
+}
+
+/* Pricing grid */
+.price-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.25rem;
+  margin-top:3rem;
+  align-items:start;
+}
+
+/* Pricing card */
+.price-card{
+  background:var(--deep);
+  border:1px solid var(--b1);
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+  transition:.3s;
+  display:flex;
+  flex-direction:column;
+}
+.price-card:hover{
+  border-color:var(--b2);
+  transform:translateY(-4px);
+  box-shadow:0 24px 64px rgba(0,0,0,.5);
+}
+.price-card.featured{
+  background:rgba(0,255,209,.03);
+  border-color:var(--b3);
+  box-shadow:0 0 60px rgba(0,255,209,.07),0 0 0 1px rgba(0,255,209,.1);
+}
+.price-card.featured:hover{
+  box-shadow:0 24px 80px rgba(0,0,0,.5),0 0 60px rgba(0,255,209,.12);
+}
+
+/* Popular badge */
+.popular-badge{
+  position:absolute;top:0;left:0;right:0;
+  background:linear-gradient(90deg,var(--teal),var(--blue));
+  padding:7px 12px;
+  text-align:center;
+  font-family:var(--f-mono);font-size:.62rem;font-weight:800;
+  color:#000;letter-spacing:.1em;text-transform:uppercase;
+  line-height:1;
+}
+
+/* Card top section */
+.price-top{
+  padding:1.75rem 1.6rem 1.4rem;
+  border-bottom:1px solid var(--b1);
+  overflow:hidden;
+}
+.price-card.featured .price-top{padding-top:2.5rem}
+
+.price-tier{
+  font-family:var(--f-mono);
+  font-size:.64rem;
+  font-weight:700;
+  color:var(--tx3);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom:.625rem;
+}
+.price-amount{
+  display:flex;
+  align-items:baseline;
+  gap:3px;
+  margin-bottom:.375rem;
+  line-height:1;
+}
+.price-currency{
+  font-family:'Syne',sans-serif;
+  font-size:1.25rem;
+  font-weight:800;
+  color:#ffffff;
+  line-height:1;
+  letter-spacing:-.01em;
+  align-self:flex-start;
+  margin-top:5px;
+  flex-shrink:0;
+}
+.price-num{
+  font-family:'Syne',sans-serif;
+  font-size:2.6rem;
+  font-weight:800;
+  color:#ffffff;
+  letter-spacing:-.04em;
+  line-height:1;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:geometricPrecision;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:100%;
+}
+.price-card.featured .price-num{
+  text-shadow:0 0 40px rgba(0,255,209,.18);
+}
+.price-num.custom{
+  font-size:2rem;
+  letter-spacing:-.03em;
+  align-self:center;
+  margin-top:0;
+  white-space:nowrap;
+}
+.price-cadence{
+  font-family:var(--f-mono);
+  font-size:.69rem;
+  color:var(--tx3);
+  margin-bottom:.625rem;
+  margin-top:.2rem;
+  letter-spacing:0;
+}
+.price-agents{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:6px;
+  font-family:var(--f-mono);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  margin-bottom:.875rem;
+  line-height:1;
+}
+.price-desc{font-size:.84rem;color:var(--tx2);line-height:1.7;margin-top:.25rem}
+
+/* Annual price (shown/hidden) */
+.price-annual{display:none}
+
+/* CTA button */
+.price-cta-wrap{padding:1.1rem 1.6rem}
+.price-cta{
+  width:100%;padding:13px;
+  border-radius:9px;font-family:var(--f-display);
+  font-weight:800;font-size:.88rem;
+  cursor:pointer;border:none;
+  text-align:center;text-decoration:none;
+  display:block;transition:.2s;
+  letter-spacing:0;line-height:1;
+}
+.cta-primary{background:var(--teal);color:#000}
+.cta-primary:hover{background:#33ffe0;box-shadow:0 0 24px rgba(0,255,209,.35)}
+.cta-ghost{
+  background:transparent;color:var(--tx1);
+  border:1px solid var(--b2);
+}
+.cta-ghost:hover{border-color:var(--b3);color:var(--teal)}
+
+/* Feature list */
+.price-features{
+  padding:0 1.6rem 1.6rem;
+  display:flex;flex-direction:column;gap:.5rem;
+  flex:1;
+}
+.pf-section-label{
+  font-family:var(--f-mono);font-size:.58rem;color:var(--tx3);
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.625rem 0 .25rem;
+  border-top:1px solid var(--b1);
+  margin-top:.375rem;
+}
+.pf-section-label:first-child{border-top:none;padding-top:0;margin-top:0}
+.pf{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:.81rem;color:var(--tx2);line-height:1.5;
+}
+.pf-icon{
+  width:16px;height:16px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;font-size:.6rem;font-weight:700;
+}
+.pf-ok{background:rgba(0,214,143,.12);color:var(--green)}
+.pf-no{background:rgba(45,74,94,.3);color:var(--tx4)}
+.pf.dim{opacity:.38}
+.pf-highlight{color:var(--tx1);font-weight:600}
+
+/* Annual savings banner */
+.annual-banner{
+  display:none;
+  margin:0 1.75rem 1.25rem;
+  padding:.75rem 1rem;
+  background:rgba(0,214,143,.06);border:1px solid rgba(0,214,143,.15);
+  border-radius:8px;
+  font-family:var(--f-mono);font-size:.68rem;color:var(--green);
+  text-align:center;
+}
+
+/* Annual note below grid */
+.price-annual-note{
+  text-align:center;
+  margin-top:2rem;
+  font-family:var(--f-mono);font-size:.75rem;color:var(--tx3);
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  flex-wrap:wrap;
+}
+.price-annual-note strong{color:var(--green)}
+
+/* Feature matrix */
+.matrix-wrap{
+  margin-top:4rem;
+  background:var(--deep);border:1px solid var(--b2);
+  border-radius:16px;overflow:hidden;
+}
+.matrix-header{
+  padding:1.5rem 2rem;
+  background:var(--surf);border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.matrix-title{font-family:var(--f-display);font-weight:800;font-size:1.05rem;letter-spacing:-.02em}
+.matrix-sub{font-size:.82rem;color:var(--tx2)}
+.matrix-table{width:100%;border-collapse:collapse}
+.matrix-table th{
+  padding:12px 16px;
+  background:var(--surf2);border-bottom:1px solid var(--b1);
+  font-family:var(--f-mono);font-size:.65rem;color:var(--tx3);
+  text-transform:uppercase;letter-spacing:.06em;text-align:center;
+}
+.matrix-table th:first-child{text-align:left;width:35%}
+.matrix-table th.featured-col{color:var(--teal)}
+.matrix-table td{
+  padding:11px 16px;
+  border-bottom:1px solid var(--b1);
+  text-align:center;
+  font-family:var(--f-mono);font-size:.74rem;
+}
+.matrix-table tr:last-child td{border-bottom:none}
+.matrix-table td:first-child{
+  text-align:left;
+  font-family:var(--f-display);font-size:.82rem;font-weight:600;color:var(--tx1);
+}
+.matrix-table tr.section-row td{
+  background:var(--surf2);
+  font-family:var(--f-mono);font-size:.6rem;color:var(--tx3);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:8px 16px;
+}
+.mx-yes{color:var(--green)}
+.mx-no{color:var(--tx4)}
+.mx-partial{color:var(--amber)}
+.mx-featured{color:var(--teal);font-weight:700}
+.matrix-table tr:hover td{background:rgba(0,255,209,.015)}
+
+/* FAQ */
+.faq-wrap{margin-top:4rem}
+.faq-title{font-family:var(--f-display);font-weight:800;font-size:1.25rem;letter-spacing:-.03em;margin-bottom:1.5rem}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.faq-item{
+  background:var(--deep);border:1px solid var(--b1);
+  border-radius:12px;padding:1.5rem;
+}
+.faq-q{font-family:var(--f-display);font-size:.9rem;font-weight:700;margin-bottom:.5rem;color:var(--tx1)}
+.faq-a{font-size:.83rem;color:var(--tx2);line-height:1.75}
+.faq-a strong{color:var(--teal);font-weight:600}
+
+/* Responsive */
+@media(max-width:1100px){
+  .price-grid{grid-template-columns:repeat(2,1fr)}
+  .tl-cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .tl-step{grid-template-columns:42px 1fr;gap:1.25rem}
+  .tl-num{width:42px;height:42px;font-size:.75rem}
+  .tl-cards{grid-template-columns:1fr 1fr}
+  .price-grid{grid-template-columns:1fr}
+  .faq-grid{grid-template-columns:1fr}
+  .timeline::before{left:21px}
+}
+
+
+#main-nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:rgba(3,12,21,.95);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(0,255,209,.1);
+}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;
+  display:flex;align-items:center;height:64px;gap:2rem;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
+  letter-spacing:-.03em;color:#ddeeff;}
+.nav-brand span{color:#00ffd1;}
+.nav-links{display:flex;gap:.25rem;flex:1;justify-content:center;}
+.nav-a{padding:8px 14px;border-radius:8px;font-size:.84rem;font-weight:600;
+  color:#6b8fa8;transition:.2s;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif;}
+.nav-a:hover{color:#ddeeff;background:rgba(0,255,209,.06);}
+.nav-a.active{color:#00ffd1 !important;background:rgba(0,255,209,.08);}
+.nav-right{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.nav-gh{display:flex;align-items:center;gap:6px;padding:8px 14px;
+  border:1px solid rgba(0,255,209,.12);border-radius:8px;
+  font-size:.8rem;color:#6b8fa8;text-decoration:none;transition:.2s;}
+.nav-gh:hover{border-color:rgba(0,255,209,.35);color:#ddeeff;}
+.nav-cta{display:inline-flex;align-items:center;padding:10px 22px;
+  background:#00ffd1;color:#000 !important;border-radius:8px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;
+  letter-spacing:0;line-height:1;text-decoration:none;transition:.2s;white-space:nowrap;}
+.nav-cta:hover{background:#33ffe0;transform:translateY(-1px);}
+body{padding-top:64px !important;}
+body{animation:pgIn .3s ease;}
+@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* Force all scroll-animated elements visible immediately */
+.fi{opacity:1 !important;transform:none !important;transition:none !important;}
+.fi.on{opacity:1 !important;transform:none !important;}
+
+</style>
+</head>
+<body>
+<header id="main-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="34" height="34" viewBox="0 0 120 120" fill="none">
+      <polygon points="60,14 101,36 101,80 60,102 19,80 19,36" fill="rgba(0,255,209,.07)" stroke="#00ffd1" stroke-width="1.8"/>
+      <polygon points="60,28 88,44 88,72 60,88 32,72 32,44" fill="rgba(0,255,209,.06)" stroke="rgba(0,255,209,.35)" stroke-width="1"/>
+      <line x1="32" y1="60" x2="20" y2="60" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="88" y1="60" x2="100" y2="60" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+      <polygon points="100,60 94,57 94,63" fill="#00ffd1"/>
+      <circle cx="43" cy="60" r="2.5" fill="#00ffd1" opacity=".9"/>
+      <circle cx="50" cy="60" r="2" fill="#00ffd1" opacity=".5"/>
+      <circle cx="60" cy="60" r="13" fill="#000508" stroke="#00ffd1" stroke-width="1.8"/>
+      <line x1="51" y1="51" x2="69" y2="69" stroke="#00ffd1" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+      <span class="nav-brand">CASA<span>-AI</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-a">Home</a>
+      <a href="architecture.html" class="nav-a">Architecture</a>
+      <a href="features.html" class="nav-a">Features</a>
+      <a href="compliance.html" class="nav-a">Compliance</a>
+      <a href="pricing.html" class="nav-a active">Pricing</a>
+      <a href="docs.html" class="nav-a">Docs</a>
+      <a href="test-results.html" class="nav-a">Test Results</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://github.com/shivangace/casa-ai-core" target="_blank" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+      <a href="pricing.html" class="nav-cta">Get License →</a>
+    </div>
+  </div>
+</header>
+<!-- =====================================================
+     HOW IT WORKS
+     ===================================================== -->
+<section class="how-s sp" id="how">
+  <div class="si">
+
+    <div class="fi">
+      <div class="ey">Request Lifecycle</div>
+      <h2 class="sh">From agent request to <span class="tg">verdict in milliseconds.</span></h2>
+      <p class="ss">
+        Every agent action passes through four stages inside CASA-AI — interception,
+        evaluation, enforcement, and pass-through. Clean traffic flows through
+        invisibly. Violations are severed before they reach production.
+      </p>
+    </div>
+
+    <div class="timeline">
+
+      <!-- STEP 01 -->
+      <div class="tl-step fi">
+        <div class="tl-left">
+          <div class="tl-num">01</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-tag" style="background:rgba(0,87,255,.1);color:#7baff5">Interception Layer</div>
+          <h3 class="tl-h">Agent sends a request. CASA-AI intercepts the SSE stream before it reaches the LLM.</h3>
+          <p class="tl-p">
+            One environment variable change points your agent's LLM calls through CASA-AI
+            instead of directly to the provider. No code changes in your agent. Every
+            Server-Sent Events token is captured and buffered for reassembly.
+            The agent's entire Thought-Action-Observation reasoning chain — including
+            all intermediate steps invisible to any API gateway — is now inspected in real-time.
+          </p>
+          <div class="tl-terminal">
+            <div class="tl-term-bar">
+              <div class="tl-dots">
+                <div class="td" style="background:#ff5f57"></div>
+                <div class="td" style="background:#febc2e"></div>
+                <div class="td" style="background:#28c840"></div>
+              </div>
+              <span class="tl-term-title">agent config — one line change</span>
+            </div>
+            <div class="tl-term-body"><span class="cc"># Before: agent calls LLM directly — CASA-AI sees nothing</span>
+OPENAI_API_BASE=<span class="cr">https://api.openai.com</span>
+
+<span class="cc"># After: CASA-AI intercepts every call — zero agent code changes</span>
+OPENAI_API_BASE=<span class="cs">http://casa-ai:8088</span>
+
+<span class="cc"># CASA-AI transparently proxies clean traffic through to the LLM</span>
+<span class="cc"># No agent code changes. No SDK modifications. Just this.</span></div>
+          </div>
+          <div class="tl-cards">
+            <div class="tl-card">
+              <div class="tl-card-label">Protocol</div>
+              <div class="tl-card-val">SSE / HTTP</div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-label">Compatibility</div>
+              <div class="tl-card-val">Any OpenAI-compat</div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-label">Code changes</div>
+              <div class="tl-card-val" style="color:var(--green)">Zero</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 02 -->
+      <div class="tl-step fi">
+        <div class="tl-left">
+          <div class="tl-num">02</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-tag" style="background:rgba(0,255,209,.08);color:var(--teal)">Compliance Engine</div>
+          <h3 class="tl-h">Tokens are reassembled into TAO steps. Intent graph built. OPA evaluates in &lt;2ms.</h3>
+          <p class="tl-p">
+            Each SSE chunk is buffered and reassembled into complete Thought-Action-Observation
+            steps. A PAN number split across 3 chunks is caught during reassembly — not after.
+            Every step is classified and added to the session's live intent graph.
+            The embedded OPA engine evaluates the complete graph against all five
+            detection layers simultaneously — PII, injection, tools, sovereignty,
+            exfiltration — in under 2 milliseconds per evaluation.
+          </p>
+          <div class="tl-terminal">
+            <div class="tl-term-bar">
+              <div class="tl-dots">
+                <div class="td" style="background:#ff5f57"></div>
+                <div class="td" style="background:#febc2e"></div>
+                <div class="td" style="background:#28c840"></div>
+              </div>
+              <span class="tl-term-title">engine eval log — session agent-42</span>
+            </div>
+            <div class="tl-term-body"><span class="cc">[CASA-AI] Intercepting session: agent-42</span>
+<span class="cc">[STEP] Thought: I need the customer record for account 8821</span>
+<span class="cc">[STEP] Action:  read_file(path="/crm/customer_8821.json") → tool_call intercepted</span>
+<span class="cc">[EVAL] Tool: read_file · provider_country: IN · ✓ allowlisted</span>
+<span class="cc">[STEP] Observation: Found record — name: Rajesh Kumar, PAN: ABC</span>
+<span class="cc">         ↳ chunk 1: "ABC" | chunk 2: "DE1" | chunk 3: "234F" → reassembled</span>
+<span class="cn">[EVAL] PII PATTERN MATCH: [A-Z]{5}[0-9]{4}[A-Z] → ABCDE1234F detected</span>
+<span class="cr">[DECISION] DENY — PII_LEAK_IN_REASONING · Latency: 1.28ms</span>
+<span class="cr">[CIRCUIT-BREAKER] Firing synchronously...</span></div>
+          </div>
+          <div class="tl-cards">
+            <div class="tl-card">
+              <div class="tl-card-label">Eval latency</div>
+              <div class="tl-card-val">&lt;2ms p99</div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-label">Detection layers</div>
+              <div class="tl-card-val">5 simultaneous</div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-label">Engine</div>
+              <div class="tl-card-val">Embedded OPA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 03 -->
+      <div class="tl-step fi">
+        <div class="tl-left">
+          <div class="tl-num">03</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-tag" style="background:rgba(255,45,85,.08);color:var(--red)">Circuit-Breaker</div>
+          <h3 class="tl-h">Breach fires. Stream severed. Credentials revoked. Audit written. All synchronous.</h3>
+          <p class="tl-p">
+            When a violation fires, four actions execute synchronously — not advisory,
+            not eventually consistent. The SSE connection is dropped (the agent never
+            receives another token), IAM credentials are invalidated via real cloud APIs,
+            a SHA-256 chained audit entry is written, and a signed webhook alert is
+            dispatched to your incident channel. A failed IAM revocation never
+            prevents session freeze — all steps are independent.
+          </p>
+          <div class="breach-cascade">
+            <div class="bc-row">
+              <div class="bc-step" style="background:rgba(255,45,85,.12);border:1px solid rgba(255,45,85,.25);color:var(--red)">1</div>
+              <div class="bc-action" style="color:var(--red)">Freeze Session + Sever SSE Stream</div>
+              <div class="bc-detail">Agent receives event:&nbsp;casa_breach — no more tokens</div>
+              <div class="bc-time" style="background:rgba(255,45,85,.08);color:var(--red)">~0ms</div>
+            </div>
+            <div class="bc-row">
+              <div class="bc-step" style="background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.25);color:var(--amber)">2</div>
+              <div class="bc-action" style="color:var(--amber)">Revoke IAM / OAuth Credentials</div>
+              <div class="bc-detail">AWS STS PutRolePolicy deny-all · GCP DisableServiceAccount · Azure revokeSignInSessions</div>
+              <div class="bc-time" style="background:rgba(255,184,0,.08);color:var(--amber)">~3s AWS</div>
+            </div>
+            <div class="bc-row">
+              <div class="bc-step" style="background:rgba(0,214,143,.12);border:1px solid rgba(0,214,143,.25);color:var(--green)">3</div>
+              <div class="bc-action" style="color:var(--green)">Write Tamper-Evident Audit Entry</div>
+              <div class="bc-detail">SHA-256 chained JSONL · seq · prev_hash · hash · all violation details</div>
+              <div class="bc-time" style="background:rgba(0,214,143,.08);color:var(--green)">&lt;1ms</div>
+            </div>
+            <div class="bc-row">
+              <div class="bc-step" style="background:rgba(0,255,209,.08);border:1px solid rgba(0,255,209,.2);color:var(--teal)">4</div>
+              <div class="bc-action" style="color:var(--teal)">Dispatch HMAC-Signed Webhook Alert</div>
+              <div class="bc-detail">JSON payload · HMAC-SHA256 signed · POST to your Slack / PagerDuty endpoint</div>
+              <div class="bc-time" style="background:rgba(0,255,209,.06);color:var(--teal)">~200ms</div>
+            </div>
+          </div>
+
+          <div class="tl-terminal" style="margin-top:1.25rem">
+            <div class="tl-term-bar">
+              <div class="tl-dots">
+                <div class="td" style="background:#ff5f57"></div>
+                <div class="td" style="background:#febc2e"></div>
+                <div class="td" style="background:#28c840"></div>
+              </div>
+              <span class="tl-term-title">casa-engine · audit.jsonl — real entries</span>
+            </div>
+            <div class="tl-term-body"><span class="cc">{"seq":3,"ts":"2026-07-04T18:46:45Z","event":"</span><span class="cr">COMPLIANCE_BREACH</span><span class="cc">",</span>
+ <span class="cc">"session":"agent-42","allow":false,</span>
+ <span class="cc">"violations":["</span><span class="cn">PII_LEAK_IN_REASONING: PAN pattern ABCDE1234F in observation step 3</span><span class="cc">"],</span>
+ <span class="cc">"prev_hash":"</span><span class="cs">9e451960de03ae37e4a5ec9a9a586d46</span><span class="cc">",</span>
+ <span class="cc">"hash":"</span><span class="cs">c7d60a1374fc938c4742920af7e9cff8</span><span class="cc">"}
+{"seq":4,"ts":"2026-07-04T18:46:45Z","event":"</span><span class="cn">REMEDIATION_ACTION</span><span class="cc">",</span>
+ <span class="cc">"actions":["</span><span class="ck">freeze_session</span><span class="cc">","</span><span class="ck">revoke_iam_token</span><span class="cc">"],</span>
+ <span class="cc">"prev_hash":"</span><span class="cs">c7d60a1374fc938c4742920af7e9cff8</span><span class="cc">",</span>
+ <span class="cc">"hash":"</span><span class="cs">3ebdee2beb997c7e6f0d760ac9d706df</span><span class="cc">"}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 04 -->
+      <div class="tl-step fi">
+        <div class="tl-left">
+          <div class="tl-num">04</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-tag" style="background:rgba(0,214,143,.08);color:var(--green)">Happy Path</div>
+          <h3 class="tl-h">Clean requests pass through untouched. The engine is invisible when nothing is wrong.</h3>
+          <p class="tl-p">
+            The vast majority of agent traffic is clean. Those requests pass through
+            CASA-AI with less than 2ms of added overhead and zero modification to the
+            token stream. The engine is architected for this — policy evaluation is
+            a single in-memory PreparedEvalQuery lookup against the OPA engine,
+            not a network call, not a database read.
+            It is designed to be completely transparent on the happy path,
+            and decisive the moment it is needed.
+          </p>
+          <div class="tl-terminal">
+            <div class="tl-term-bar">
+              <div class="tl-dots">
+                <div class="td" style="background:#ff5f57"></div>
+                <div class="td" style="background:#febc2e"></div>
+                <div class="td" style="background:#28c840"></div>
+              </div>
+              <span class="tl-term-title">casa-engine · clean session pass-through</span>
+            </div>
+            <div class="tl-term-body"><span class="cc">[CASA-AI] Intercepting session: agent-99</span>
+<span class="cc">[STEP] Thought: I need to check weather in Mumbai for the user</span>
+<span class="cc">[STEP] Action:  search_web(query="Mumbai weather today")</span>
+<span class="cc">[EVAL] Tool: search_web · provider_country: IN · ✓ allowlisted</span>
+<span class="cc">[EVAL] No PII patterns · No injection patterns · No sovereignty violation</span>
+<span class="cs">[DECISION] ALLOW · Latency: 847μs · Passing stream through to LLM →</span>
+<span class="cc">...</span>
+<span class="cc">data: The weather in Mumbai today is partly cloudy, 28°C...</span>
+<span class="cc">data: [DONE]</span>
+<span class="cc">[CASA-AI] Session agent-99 complete · 0 violations · 1 evaluation</span></div>
+          </div>
+          <div class="tl-cards">
+            <div class="tl-card">
+              <div class="tl-card-label">Added latency</div>
+              <div class="tl-card-val" style="color:var(--green)">&lt;2ms</div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-label">Token modification</div>
+              <div class="tl-card-val" style="color:var(--green)">None</div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-label">Network calls</div>
+              <div class="tl-card-val" style="color:var(--green)">Zero</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section>
+
+<!-- =====================================================
+     PRICING
+     ===================================================== -->
+<section class="price-s sp" id="pricing">
+  <div class="si">
+
+    <div class="fi" style="text-align:center">
+      <div class="ey" style="justify-content:center">Pricing</div>
+      <h2 class="sh">Priced for Indian enterprise. <span class="tg">Built for global scale.</span></h2>
+      <p class="ss" style="margin:0 auto">
+        All annual contracts include 2 months free — structurally built into
+        the pricing, not a sales gimmick. License keys issued within minutes
+        of Razorpay payment confirmation.
+      </p>
+    </div>
+
+    <!-- Annual / Monthly toggle -->
+    <div class="price-toggle-wrap fi">
+      <span class="price-toggle-label active" id="lbl-monthly">Monthly</span>
+      <div class="toggle-track" id="priceToggle" onclick="toggleAnnual()">
+        <div class="toggle-thumb"></div>
+      </div>
+      <span class="price-toggle-label" id="lbl-annual">Annual</span>
+      <span class="price-toggle-badge">2 months FREE</span>
+    </div>
+
+    <!-- Cards -->
+    <div class="price-grid">
+
+      <!-- BASIC -->
+      <div class="price-card fi">
+        <div class="price-top">
+          <div class="price-tier">Basic</div>
+          <div class="price-amount">
+            <span class="price-currency">₹</span>
+            <span class="price-num" id="basic-price">4,000</span>
+          </div>
+          <div class="price-cadence" id="basic-cadence">per month · billed monthly</div>
+          <div class="price-agents" style="background:rgba(0,87,255,.1);color:#7baff5">
+            Max 2 Active AI Agents
+          </div>
+          <p class="price-desc">
+            The right starting point for teams evaluating AI agent compliance.
+            Core security controls, NIST AI RMF baseline, and real cloud credential
+            revocation from day one.
+          </p>
+        </div>
+        <div class="annual-banner" id="basic-banner">
+          Annual: ₹40,000 saved · ₹48,000 total (10 months)
+        </div>
+        <div class="price-cta-wrap">
+          <a href="mailto:shivangace001@gmail.com?subject=CASA-AI BASIC Plan Inquiry" class="price-cta cta-ghost">
+            Get Started →
+          </a>
+        </div>
+        <div class="price-features">
+          <div class="pf-section-label">Core Security</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Core PII detection (PAN, Aadhaar, card, email, mobile)</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Prompt injection detection — 16 patterns</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>MCP tool call allowlist enforcement</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Data exfiltration destination detection</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>AWS + GCP + Azure credential revocation</span></div>
+
+          <div class="pf-section-label">Compliance</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">NIST AI RMF 1.0 profile</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">EU AI Act (ENTERPRISE+)</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">RBI AI Governance (ENTERPRISE+)</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">DPDP Act 2023 (ENTERPRISE+)</span></div>
+
+          <div class="pf-section-label">Audit & Observability</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>SHA-256 chained tamper-evident audit log</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Prometheus /metrics endpoint</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>50K token budget per session</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">Webhook alerts (ENTERPRISE+)</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">Custom Rego policies (ENTERPRISE+)</span></div>
+        </div>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="price-card featured fi d1">
+        <div class="popular-badge">Most Popular — Indian BFSI Enterprises</div>
+        <div class="price-top">
+          <div class="price-tier">Enterprise</div>
+          <div class="price-amount">
+            <span class="price-currency">₹</span>
+            <span class="price-num" id="ent-price">50K</span>
+          </div>
+          <div class="price-cadence" id="ent-cadence">per month (₹50,000) · billed monthly</div>
+          <div class="price-agents" style="background:rgba(0,255,209,.08);color:var(--teal)">
+            Max 15 Active AI Agents
+          </div>
+          <p class="price-desc">
+            Production-ready for regulated Indian enterprises. Full six-framework
+            compliance coverage, custom policy engine, HMAC-signed webhook alerts,
+            and hot policy reload — all without container restart.
+          </p>
+        </div>
+        <div class="annual-banner" id="ent-banner">
+          Annual: ₹1,00,000 saved · ₹5,00,000 total (10 months)
+        </div>
+        <div class="price-cta-wrap">
+          <a href="mailto:shivangace001@gmail.com?subject=CASA-AI ENTERPRISE Plan Inquiry" class="price-cta cta-primary">
+            Contact Sales →
+          </a>
+        </div>
+        <div class="price-features">
+          <div class="pf-section-label">Everything in BASIC, plus:</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">Custom Rego policy bundles — full OPA v1</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">HMAC-SHA256 signed webhook alerts</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Hot policy reload — zero container restart</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>500K token budget per session</span></div>
+
+          <div class="pf-section-label">Full Compliance Suite</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">RBI AI Governance — 5 controls</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">DPDP Act 2023 — Sections 4/6, 8, 9, 16</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>EU AI Act — Articles 10, 12, 13, 14</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>ISO/IEC 42001:2023 — Clauses 6.1, 8.2, 9.1</span></div>
+
+          <div class="pf-section-label">Support</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Email SLA support — 24hr response</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Grafana dashboard template</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">Multi-cluster orchestration (BIG INFRA+)</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">PDF auditor reports (BIG INFRA+)</span></div>
+        </div>
+      </div>
+
+      <!-- BIG INFRASTRUCTURE -->
+      <div class="price-card fi d2">
+        <div class="price-top">
+          <div class="price-tier">Big Infrastructure</div>
+          <div class="price-amount">
+            <span class="price-currency">₹</span>
+            <span class="price-num" id="big-price">1.20L</span>
+          </div>
+          <div class="price-cadence" id="big-cadence">per month (₹1,20,000) · billed monthly</div>
+          <div class="price-agents" style="background:rgba(123,97,255,.1);color:var(--violet)">
+            Unlimited Monitored Agents
+          </div>
+          <p class="price-desc">
+            For enterprises running AI agents at scale across multiple Kubernetes
+            clusters. Fleet-wide governance from a single central policy server,
+            automated auditor reports, and 24/7 priority support.
+          </p>
+        </div>
+        <div class="annual-banner" id="big-banner">
+          Annual: ₹2,40,000 saved · ₹12,00,000 total (10 months)
+        </div>
+        <div class="price-cta-wrap">
+          <a href="mailto:shivangace001@gmail.com?subject=CASA-AI BIG INFRASTRUCTURE Plan" class="price-cta cta-ghost">
+            Contact Sales →
+          </a>
+        </div>
+        <div class="price-features">
+          <div class="pf-section-label">Everything in ENTERPRISE, plus:</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">Multi-cluster orchestration — central + satellites</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">Automated auditor-ready PDF reports</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Immutable audit log export — S3/GCS/Azure Blob</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Unlimited token budgets per session</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Prometheus alert rules — 4 pre-built</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>OTel span exporter — Datadog / Dynatrace / NR</span></div>
+
+          <div class="pf-section-label">Support</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">24/7 priority support — 4hr SLA</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Dedicated Slack channel</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">Air-gapped compilation (CUSTOM)</span></div>
+          <div class="pf"><div class="pf-icon pf-no">—</div><span class="dim">Machine fingerprint binding (CUSTOM)</span></div>
+        </div>
+      </div>
+
+      <!-- CUSTOM -->
+      <div class="price-card fi d3">
+        <div class="price-top">
+          <div class="price-tier">Custom</div>
+          <div class="price-amount">
+            <span class="price-num custom">Bespoke</span>
+          </div>
+          <div class="price-cadence">quote · unlimited scale</div>
+          <div class="price-agents" style="background:rgba(255,184,0,.08);color:var(--amber)">
+            Unlimited Scale Profiles
+          </div>
+          <p class="price-desc">
+            For defence, intelligence, regulated financial infrastructure, and
+            enterprises with zero-trust, air-gapped, or classified deployment
+            requirements. Tailored to your legal policy sets and infrastructure.
+          </p>
+        </div>
+        <div class="price-cta-wrap">
+          <a href="mailto:shivangace001@gmail.com?subject=CASA-AI CUSTOM Plan Inquiry" class="price-cta cta-ghost">
+            Talk to Us →
+          </a>
+        </div>
+        <div class="price-features">
+          <div class="pf-section-label">Everything in BIG INFRA, plus:</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">Air-gapped compilation — no internet required</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span class="pf-highlight">Machine fingerprint license binding</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Complete telemetry isolation</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Tailored internal legal policy sets</span></div>
+
+          <div class="pf-section-label">Deployment</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>On-site implementation support</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Custom SLA terms — negotiated</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Multi-year pricing available</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Annual: 2 months free — all plans</span></div>
+
+          <div class="pf-section-label">Support</div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>Named account engineer</span></div>
+          <div class="pf"><div class="pf-icon pf-ok">✓</div><span>White-glove onboarding</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="price-annual-note fi">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#00d68f" stroke-width="1.2"/><path d="M7 4v3l2 2" stroke="#00d68f" stroke-width="1.2" stroke-linecap="round"/></svg>
+      All annual contracts include <strong>2 months free</strong> &nbsp;·&nbsp;
+      Payments via Razorpay &nbsp;·&nbsp;
+      License key issued within minutes of confirmation &nbsp;·&nbsp;
+      <strong>No data leaves your VPC</strong>
+    </p>
+
+    <!-- Full Feature Matrix -->
+    <div class="matrix-wrap fi">
+      <div class="matrix-header">
+        <div>
+          <div class="matrix-title">Full Feature Matrix</div>
+          <div class="matrix-sub">Detailed capability comparison across all tiers</div>
+        </div>
+      </div>
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>BASIC</th>
+            <th class="featured-col">ENTERPRISE</th>
+            <th>BIG INFRA</th>
+            <th>CUSTOM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="5">Core Security Engine</td></tr>
+          <tr>
+            <td>Mid-stream SSE interception</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>PII detection (PAN, Aadhaar, card, email, mobile)</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Prompt injection detection — 16 patterns</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>MCP tool call allowlist enforcement</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Data exfiltration destination detection</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>AWS + GCP + Azure credential revocation</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Max active AI agents</td>
+            <td>2</td><td class="mx-featured">15</td><td class="mx-yes">Unlimited</td><td class="mx-yes">Unlimited</td>
+          </tr>
+
+          <tr class="section-row"><td colspan="5">Compliance Frameworks</td></tr>
+          <tr>
+            <td>NIST AI RMF 1.0</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>EU AI Act 2024 — Articles 10, 12, 13, 14</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>ISO/IEC 42001:2023</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>RBI AI Governance — 5 controls</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>DPDP Act 2023 — Sections 4/6, 8, 9, 16</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Custom Rego policy bundles</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Hot policy reload — zero restart</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+
+          <tr class="section-row"><td colspan="5">Audit & Observability</td></tr>
+          <tr>
+            <td>SHA-256 chained tamper-evident audit log</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Prometheus /metrics — 10 metrics</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>HMAC-signed webhook alerts</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Grafana dashboard template</td>
+            <td class="mx-no">—</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Prometheus alert rules — 4 pre-built</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Automated auditor-ready PDF reports</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Immutable audit log export — S3/GCS/Azure Blob</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>OTel span exporter (Datadog/Dynatrace/NR)</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+
+          <tr class="section-row"><td colspan="5">Scale & Deployment</td></tr>
+          <tr>
+            <td>Token budget per session</td>
+            <td>50K</td><td class="mx-featured">500K</td><td class="mx-yes">Unlimited</td><td class="mx-yes">Unlimited</td>
+          </tr>
+          <tr>
+            <td>Multi-cluster orchestration</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Air-gapped deployment</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Machine fingerprint license binding</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Complete telemetry isolation</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td>
+          </tr>
+
+          <tr class="section-row"><td colspan="5">Support</td></tr>
+          <tr>
+            <td>Email support</td>
+            <td class="mx-partial">Community</td><td class="mx-featured">24hr SLA</td><td class="mx-yes">4hr SLA</td><td class="mx-yes">Dedicated</td>
+          </tr>
+          <tr>
+            <td>24/7 priority support</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Dedicated Slack channel</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>On-site implementation</td>
+            <td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-no">—</td><td class="mx-yes">✓</td>
+          </tr>
+          <tr>
+            <td>Annual — 2 months free</td>
+            <td class="mx-yes">✓</td><td class="mx-featured">✓</td><td class="mx-yes">✓</td><td class="mx-yes">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-wrap fi">
+      <div class="faq-title">Common Questions</div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-q">How does the license key work in an air-gapped environment?</div>
+          <div class="faq-a">The license key is an Ed25519-signed JSON payload passed as an environment variable
+            (<code style="font-family:var(--f-mono);font-size:.85em">CASA_LICENSE_KEY</code>).
+            The engine validates it against a <strong>public key compiled into the binary at build time</strong>.
+            Zero outbound network calls are made at any point during validation — proven by running
+            in a fully network-blocked container with iptables DROP ALL outbound.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Can I switch tiers mid-contract?</div>
+          <div class="faq-a">Yes. Tier upgrades take effect immediately — a new license key is issued reflecting your
+            new tier limits. For annual contracts, the remaining period is prorated. Downgrades
+            take effect at the next billing cycle. <strong>Contact shivangace001@gmail.com</strong> to arrange
+            any tier change.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What payment methods are accepted?</div>
+          <div class="faq-a">All major Indian payment methods via <strong>Razorpay</strong> — UPI, NEFT, IMPS, debit/credit cards,
+            net banking. For enterprise contracts (ENTERPRISE and above), we also accept
+            bank transfer / NEFT directly with a formal purchase order. GST invoice provided
+            for all payments.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How quickly is the license key issued after payment?</div>
+          <div class="faq-a">Razorpay sends a <code style="font-family:var(--f-mono);font-size:.85em">subscription.activated</code> webhook
+            to our license server. The Ed25519-signed key is generated and emailed within
+            <strong>minutes of payment confirmation</strong>. The license-server code
+            (<code style="font-family:var(--f-mono);font-size:.85em">cmd/license-server/</code>) is in the public repository.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Does CASA-AI send any data to your servers?</div>
+          <div class="faq-a">
+            <strong>No.</strong> The engine makes zero outbound network calls in normal operation.
+            License validation uses an embedded public key — no license server check.
+            Audit logs are written to your local filesystem only.
+            The only outbound connection is the webhook URL you configure (default: disabled).
+            We cannot see your prompts, agents, or audit logs. Architecturally impossible.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What does "2 months free" mean exactly?</div>
+          <div class="faq-a">Annual contracts are billed as 10 months instead of 12 —
+            you pay for 10, get 12. <strong>BASIC annual: ₹40,000 total</strong> (vs ₹48,000 monthly).
+            <strong>ENTERPRISE annual: ₹5,00,000 total</strong> (vs ₹6,00,000 monthly).
+            <strong>BIG INFRA annual: ₹12,00,000 total</strong> (vs ₹14,40,000 monthly).
+            Applies to all plans, auto-applied at checkout.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<script>
+
+window.addEventListener('scroll',function(){
+  var n=document.getElementById('main-nav');
+  if(n) n.style.background=window.scrollY>40?'rgba(3,12,21,.99)':'rgba(3,12,21,.95)';
+},{passive:true});
+function openModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.add('open');document.body.style.overflow='hidden';}}
+function closeModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.remove('open');document.body.style.overflow='';}}
+function closeModalOnBg(e,n){if(e.target===document.getElementById('modal-'+n))closeModal(n);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['privacy','terms','security'].forEach(closeModal);document.body.style.overflow='';}});
+
+
+/* Annual/Monthly toggle */
+let isAnnual = false;
+
+const prices = {
+  basic:  { monthly: '4,000', annual: '3,333', saving: '₹40,000 saved · ₹40,000 total (10 months)' },
+  ent:    { monthly: '50K', annual: '41.7K', saving: '₹1,00,000 saved · ₹5,00,000 total (10 months)' },
+  big:    { monthly: '1.20L', annual: '1.00L', saving: '₹2,40,000 saved · ₹12,00,000 total (10 months)' },
+};
+
+function toggleAnnual() {
+  isAnnual = !isAnnual;
+  const track = document.getElementById('priceToggle');
+  track.classList.toggle('annual', isAnnual);
+
+  document.getElementById('lbl-monthly').classList.toggle('active', !isAnnual);
+  document.getElementById('lbl-annual').classList.toggle('active', isAnnual);
+
+  Object.entries(prices).forEach(([key, val]) => {
+    const priceEl = document.getElementById(key + '-price');
+    const cadenceEl = document.getElementById(key + '-cadence');
+    const bannerEl = document.getElementById(key + '-banner');
+    if (priceEl) priceEl.textContent = isAnnual ? val.annual : val.monthly;
+    const fullAmounts = {
+      basic: isAnnual ? '₹3,333' : '₹4,000',
+      ent:   isAnnual ? '₹41,667' : '₹50,000',
+      big:   isAnnual ? '₹1,00,000' : '₹1,20,000',
+    };
+    const fa = fullAmounts[key] || '';
+    if (cadenceEl) cadenceEl.textContent = isAnnual
+      ? `per month (${fa}) · billed annually`
+      : `per month (${fa}) · billed monthly`;
+    if (bannerEl) {
+      bannerEl.style.display = isAnnual ? 'block' : 'none';
+      bannerEl.textContent = 'Annual: ' + val.saving;
+    }
+  });
+}
+
+/* Scroll animations */
+
+
+
+var isAnnual=false;
+var _pr={
+  basic:{monthly:'4,000',annual:'3,333',saving:'₹40,000 saved · ₹40,000 total (10 months)'},
+  ent:  {monthly:'50K',  annual:'41.7K',saving:'₹1,00,000 saved · ₹5,00,000 total (10 months)'},
+  big:  {monthly:'1.20L',annual:'1.00L',saving:'₹2,40,000 saved · ₹12,00,000 total (10 months)'},
+};
+function toggleAnnual(){
+  isAnnual=!isAnnual;
+  var t=document.getElementById('priceToggle');
+  if(t) t.classList.toggle('annual',isAnnual);
+  var lm=document.getElementById('lbl-monthly');var la=document.getElementById('lbl-annual');
+  if(lm) lm.classList.toggle('active',!isAnnual);
+  if(la) la.classList.toggle('active',isAnnual);
+  var fa={
+    basic:{t:'₹4,000',a:'₹3,333'},
+    ent:  {t:'₹50,000',a:'₹41,667'},
+    big:  {t:'₹1,20,000',a:'₹1,00,000'}
+  };
+  ['basic','ent','big'].forEach(function(k){
+    var pe=document.getElementById(k+'-price');
+    var ce=document.getElementById(k+'-cadence');
+    var be=document.getElementById(k+'-banner');
+    var f=isAnnual?(fa[k]?fa[k].a:''):(fa[k]?fa[k].t:'');
+    if(pe) pe.textContent=isAnnual?_pr[k].annual:_pr[k].monthly;
+    if(ce) ce.textContent=isAnnual?'per month ('+f+') · billed annually':'per month ('+f+') · billed monthly';
+    if(be){be.style.display=isAnnual?'block':'none';be.textContent='Annual: '+_pr[k].saving;}
+  });
+}
+
+</script>
+</body>
+</html>

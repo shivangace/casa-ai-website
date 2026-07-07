@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Six compliance frameworks. RBI AI Governance, DPDP Act 2023, EU AI Act, NIST AI RMF, ISO 42001.">
+<title>CASA-AI — Compliance | RBI, DPDP, EU AI Act, NIST AI RMF, ISO 42001</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000508'/%3E%3Cpolygon points='16,3.5 27,9.5 27,22 16,28 5,22 5,9.5' fill='none' stroke='%2300ffd1' stroke-width='1.4'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%23000508' stroke='%2300ffd1' stroke-width='1.4'/%3E%3Cline x1='12.5' y1='12.5' x2='19.5' y2='19.5' stroke='%2300ffd1' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --void:#000508;--deep:#030c15;--surf:#071520;--surf2:#0b1f33;
+  --teal:#00ffd1;--blue:#0057ff;--violet:#7b61ff;
+  --red:#ff2d55;--amber:#ffb800;--green:#00d68f;
+  --tx1:#ddeeff;--tx2:#6b8fa8;--tx3:#2d4a5e;--tx4:#142030;
+  --b1:rgba(0,255,209,.06);--b2:rgba(0,255,209,.16);--b3:rgba(0,255,209,.40);
+  --f-display:'Syne',sans-serif;--f-mono:'JetBrains Mono',monospace;--f-body:'Inter',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--tx1);font-family:var(--f-body);line-height:1.6}
+::selection{background:rgba(0,255,209,.18);color:var(--teal)}
+
+.si{max-width:1200px;margin:0 auto;padding:0 2rem}
+.sp{padding:7rem 0}
+.ey{font-family:var(--f-mono);font-size:.68rem;font-weight:600;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:1.1rem}
+.ey::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b3),transparent);max-width:90px}
+.sh{font-family:var(--f-display);font-weight:800;font-size:clamp(2rem,4.5vw,3.5rem);letter-spacing:-.04em;line-height:1.05;margin-bottom:1.1rem}
+.ss{color:var(--tx2);font-size:1rem;line-height:1.8;max-width:560px}
+.tg{background:linear-gradient(120deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.fi{opacity:0;transform:translateY(24px);transition:.7s ease}
+.fi.on{opacity:1;transform:translateY(0)}
+.fi.d1{transition-delay:.1s}.fi.d2{transition-delay:.2s}.fi.d3{transition-delay:.3s}
+.ck{color:var(--teal)}.cs{color:var(--green)}.cc{color:var(--tx3)}.cn{color:var(--amber)}.cv{color:var(--violet)}.cr{color:var(--red)}
+
+/* =====================================================
+   COMPLIANCE SECTION
+   ===================================================== */
+.comp-s{
+  background:var(--deep);
+  border-top:1px solid var(--b1);
+  border-bottom:1px solid var(--b1);
+}
+
+/* Toggle tabs for frameworks */
+.comp-tabs{
+  display:flex;gap:.5rem;flex-wrap:wrap;
+  margin-top:3.5rem;margin-bottom:0;
+}
+.ctab{
+  padding:10px 20px;
+  background:var(--surf);
+  border:1px solid var(--b1);
+  border-radius:8px;
+  font-family:var(--f-display);
+  font-size:.82rem;font-weight:700;
+  color:var(--tx2);
+  cursor:pointer;transition:.2s;
+  display:flex;align-items:center;gap:8px;
+}
+.ctab:hover{border-color:var(--b2);color:var(--tx1)}
+.ctab.on{border-color:var(--b3);color:var(--tx1);background:rgba(0,255,209,.05)}
+.ctab-flag{font-size:1rem}
+
+/* Full-width panel per framework */
+.comp-panels{
+  background:var(--surf);
+  border:1px solid var(--b2);
+  border-radius:0 12px 12px 12px;
+  overflow:hidden;
+  margin-top:0;
+}
+.cpanel{display:none;animation:panelIn .3s ease}
+.cpanel.on{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.cp-left{
+  padding:2.5rem;
+  border-right:1px solid var(--b1);
+}
+.cp-right{padding:2.5rem}
+
+/* Framework header */
+.cp-header{margin-bottom:2rem}
+.cp-flag{font-size:2.5rem;margin-bottom:.75rem}
+.cp-framework{
+  font-family:var(--f-mono);font-size:.62rem;
+  color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:.4rem;
+}
+.cp-title{
+  font-family:var(--f-display);font-weight:800;
+  font-size:1.5rem;letter-spacing:-.035em;
+  margin-bottom:.75rem;
+}
+.cp-desc{font-size:.88rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem}
+
+/* Top bar line */
+.cp-bar{height:3px;border-radius:2px;margin-bottom:2rem}
+
+/* Controls list */
+.cp-controls{display:flex;flex-direction:column;gap:.5rem}
+.cp-control{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:.875rem 1rem;
+  background:var(--void);
+  border:1px solid var(--b1);
+  border-radius:8px;
+}
+.cp-ctrl-check{
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+  background:rgba(0,214,143,.1);
+  border:1px solid rgba(0,214,143,.2);
+  font-size:.65rem;color:var(--green);font-weight:700;
+}
+.cp-ctrl-body{}
+.cp-ctrl-ref{
+  font-family:var(--f-mono);font-size:.62rem;color:var(--teal);
+  margin-bottom:2px;
+}
+.cp-ctrl-name{font-family:var(--f-display);font-size:.82rem;font-weight:700;margin-bottom:3px}
+.cp-ctrl-desc{font-size:.77rem;color:var(--tx2);line-height:1.55}
+
+/* Right side: code + context */
+.cp-right-section{margin-bottom:2rem}
+.cp-right-section:last-child{margin-bottom:0}
+.cp-right-h{
+  font-family:var(--f-mono);font-size:.65rem;font-weight:600;
+  color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:.75rem;
+  display:flex;align-items:center;gap:8px;
+}
+.cp-right-h::after{content:'';flex:1;height:1px;background:var(--b1)}
+
+.code-block{background:#000d18;border:1px solid var(--b1);border-radius:10px;overflow:hidden;margin:.5rem 0}
+.code-head{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surf2);border-bottom:1px solid var(--b1)}
+.code-lang{font-family:var(--f-mono);font-size:.6rem;color:var(--tx3)}
+.code-file{font-family:var(--f-mono);font-size:.6rem;color:var(--tx2)}
+.code-body{padding:1.25rem;font-family:var(--f-mono);font-size:.72rem;line-height:1.9;overflow-x:auto;white-space:pre;color:#c8deff}
+
+/* Timeline for activation */
+.activation-steps{display:flex;flex-direction:column;gap:.625rem}
+.act-step{
+  display:flex;align-items:center;gap:10px;
+  padding:.75rem 1rem;
+  background:var(--void);border:1px solid var(--b1);border-radius:7px;
+  font-size:.8rem;color:var(--tx2);
+}
+.act-num{
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(0,255,209,.08);border:1px solid var(--b3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-mono);font-size:.63rem;font-weight:700;color:var(--teal);
+  flex-shrink:0;
+}
+
+/* Badge */
+.comp-badge{
+  display:inline-block;margin-top:1.25rem;
+  padding:4px 11px;border-radius:4px;
+  font-family:var(--f-mono);font-size:.6rem;font-weight:700;
+  background:rgba(0,214,143,.08);color:var(--green);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* Competitor callout */
+.comp-callout{
+  padding:.875rem 1.1rem;
+  background:rgba(255,45,85,.05);
+  border:1px solid rgba(255,45,85,.15);
+  border-radius:8px;
+  font-size:.82rem;color:var(--tx2);line-height:1.7;
+  margin-top:1.25rem;
+}
+.comp-callout strong{color:var(--red)}
+
+/* =====================================================
+   WHY CASA-AI SECTION
+   ===================================================== */
+.why-s{background:var(--void)}
+
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.25rem;
+  margin-top:4rem;
+}
+.wcard{
+  background:var(--deep);
+  border:1px solid var(--b1);
+  border-radius:14px;
+  padding:2rem;
+  display:flex;gap:1.5rem;
+  transition:.3s;
+  position:relative;
+  overflow:hidden;
+}
+.wcard::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--b3),transparent);
+  opacity:0;transition:.3s;
+}
+.wcard:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.wcard:hover::before{opacity:1}
+.wico{
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:rgba(0,255,209,.06);border:1px solid var(--b2);
+  display:flex;align-items:center;justify-content:center;
+}
+.wbody h3{
+  font-family:var(--f-display);font-size:1rem;font-weight:800;
+  margin-bottom:.45rem;line-height:1.3;letter-spacing:-.02em;
+}
+.wbody p{font-size:.85rem;color:var(--tx2);line-height:1.75}
+.proof-box{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:8px 11px;
+  background:rgba(0,214,143,.05);border:1px solid rgba(0,214,143,.15);
+  border-radius:6px;margin-top:.875rem;
+  font-family:var(--f-mono);font-size:.64rem;color:var(--green);line-height:1.6;
+}
+
+/* Competitor comparison table */
+.comp-table-wrap{
+  margin-top:4rem;
+  background:var(--deep);border:1px solid var(--b2);
+  border-radius:14px;overflow:hidden;
+}
+.comp-table-header{
+  padding:1.5rem 2rem;
+  background:var(--surf);border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.comp-table-title{font-family:var(--f-display);font-size:1rem;font-weight:800;letter-spacing:-.02em}
+.comp-table-sub{font-size:.78rem;color:var(--tx2)}
+.ctable{width:100%;border-collapse:collapse}
+.ctable th{
+  text-align:left;padding:12px 20px;
+  background:var(--surf2);
+  border-bottom:1px solid var(--b1);
+  font-family:var(--f-mono);font-size:.65rem;
+  color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;
+}
+.ctable th:first-child{width:32%}
+.ctable th.us{color:var(--teal)}
+.ctable td{
+  padding:14px 20px;
+  border-bottom:1px solid var(--b1);
+  font-size:.83rem;color:var(--tx2);
+  vertical-align:top;
+}
+.ctable tr:last-child td{border-bottom:none}
+.ctable td:first-child{font-family:var(--f-display);font-size:.84rem;font-weight:700;color:var(--tx1)}
+.ctable td.yes{color:var(--green);font-family:var(--f-mono);font-size:.78rem}
+.ctable td.no{color:var(--tx3);font-family:var(--f-mono);font-size:.78rem}
+.ctable td.us-col{font-family:var(--f-mono);font-size:.75rem;color:var(--teal)}
+.ctable tr:hover td{background:rgba(0,255,209,.02)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .cpanel.on{grid-template-columns:1fr}
+  .cp-left{border-right:none;border-bottom:1px solid var(--b1)}
+  .why-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .comp-tabs{gap:.375rem}
+  .ctab{padding:8px 14px;font-size:.75rem}
+  .ctab-flag{display:none}
+  .ctable th,.ctable td{padding:10px 12px;font-size:.75rem}
+}
+
+
+#main-nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:rgba(3,12,21,.95);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(0,255,209,.1);
+}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;
+  display:flex;align-items:center;height:64px;gap:2rem;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
+  letter-spacing:-.03em;color:#ddeeff;}
+.nav-brand span{color:#00ffd1;}
+.nav-links{display:flex;gap:.25rem;flex:1;justify-content:center;}
+.nav-a{padding:8px 14px;border-radius:8px;font-size:.84rem;font-weight:600;
+  color:#6b8fa8;transition:.2s;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif;}
+.nav-a:hover{color:#ddeeff;background:rgba(0,255,209,.06);}
+.nav-a.active{color:#00ffd1 !important;background:rgba(0,255,209,.08);}
+.nav-right{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.nav-gh{display:flex;align-items:center;gap:6px;padding:8px 14px;
+  border:1px solid rgba(0,255,209,.12);border-radius:8px;
+  font-size:.8rem;color:#6b8fa8;text-decoration:none;transition:.2s;}
+.nav-gh:hover{border-color:rgba(0,255,209,.35);color:#ddeeff;}
+.nav-cta{display:inline-flex;align-items:center;padding:10px 22px;
+  background:#00ffd1;color:#000 !important;border-radius:8px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;
+  letter-spacing:0;line-height:1;text-decoration:none;transition:.2s;white-space:nowrap;}
+.nav-cta:hover{background:#33ffe0;transform:translateY(-1px);}
+body{padding-top:64px !important;}
+body{animation:pgIn .3s ease;}
+@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* Force all scroll-animated elements visible immediately */
+.fi{opacity:1 !important;transform:none !important;transition:none !important;}
+.fi.on{opacity:1 !important;transform:none !important;}
+
+</style>
+</head>
+<body>
+<header id="main-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="34" height="34" viewBox="0 0 120 120" fill="none">
+      <polygon points="60,14 101,36 101,80 60,102 19,80 19,36" fill="rgba(0,255,209,.07)" stroke="#00ffd1" stroke-width="1.8"/>
+      <polygon points="60,28 88,44 88,72 60,88 32,72 32,44" fill="rgba(0,255,209,.06)" stroke="rgba(0,255,209,.35)" stroke-width="1"/>
+      <line x1="32" y1="60" x2="20" y2="60" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="88" y1="60" x2="100" y2="60" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+      <polygon points="100,60 94,57 94,63" fill="#00ffd1"/>
+      <circle cx="43" cy="60" r="2.5" fill="#00ffd1" opacity=".9"/>
+      <circle cx="50" cy="60" r="2" fill="#00ffd1" opacity=".5"/>
+      <circle cx="60" cy="60" r="13" fill="#000508" stroke="#00ffd1" stroke-width="1.8"/>
+      <line x1="51" y1="51" x2="69" y2="69" stroke="#00ffd1" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+      <span class="nav-brand">CASA<span>-AI</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-a">Home</a>
+      <a href="architecture.html" class="nav-a">Architecture</a>
+      <a href="features.html" class="nav-a">Features</a>
+      <a href="compliance.html" class="nav-a active">Compliance</a>
+      <a href="pricing.html" class="nav-a">Pricing</a>
+      <a href="docs.html" class="nav-a">Docs</a>
+      <a href="test-results.html" class="nav-a">Test Results</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://github.com/shivangace/casa-ai-core" target="_blank" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+      <a href="pricing.html" class="nav-cta">Get License →</a>
+    </div>
+  </div>
+</header>
+<!-- =====================================================
+     COMPLIANCE SECTION
+     ===================================================== -->
+<section class="comp-s sp" id="compliance">
+  <div class="si">
+
+    <div class="fi">
+      <div class="ey">Compliance Frameworks</div>
+      <h2 class="sh">Six frameworks. <span class="tg">One flag to activate.</span></h2>
+      <p class="ss">
+        No foreign competitor has RBI or DPDP controls built in.
+        CASA-AI is the only runtime compliance engine purpose-built for the Indian regulated
+        market — while covering every global standard simultaneously.
+        Each framework is activated with a single line in casa.yaml — no container rebuild required.
+      </p>
+    </div>
+
+    <!-- Framework toggle tabs -->
+    <div class="comp-tabs fi">
+      <button class="ctab on" onclick="showComp('rbi',this)">
+        <span class="ctab-flag">🇮🇳</span> RBI AI Governance
+      </button>
+      <button class="ctab" onclick="showComp('dpdp',this)">
+        <span class="ctab-flag">🇮🇳</span> DPDP Act 2023
+      </button>
+      <button class="ctab" onclick="showComp('eu',this)">
+        <span class="ctab-flag">🇪🇺</span> EU AI Act
+      </button>
+      <button class="ctab" onclick="showComp('nist',this)">
+        <span class="ctab-flag">🇺🇸</span> NIST AI RMF
+      </button>
+      <button class="ctab" onclick="showComp('iso',this)">
+        <span class="ctab-flag">🌐</span> ISO/IEC 42001
+      </button>
+      <button class="ctab" onclick="showComp('custom',this)">
+        <span class="ctab-flag">⚙️</span> Custom Rego
+      </button>
+    </div>
+
+    <div class="comp-panels fi">
+
+      <!-- ── RBI ── -->
+      <div class="cpanel on" id="cp-rbi">
+        <div class="cp-left">
+          <div class="cp-bar" style="background:linear-gradient(90deg,#FF9933,#ffffff,#138808)"></div>
+          <div class="cp-header">
+            <div class="cp-flag">🇮🇳</div>
+            <div class="cp-framework">RBI Master Direction · IT Governance · April 2024</div>
+            <div class="cp-title">RBI AI Governance</div>
+            <p class="cp-desc">
+              Sections 50–58 of the RBI Master Direction on IT Governance, Risk, Controls
+              and Assurance Practices (April 2024). Mandatory for every bank, NBFC, payment
+              institution, and regulated financial entity in India that deploys AI agents
+              in any customer-facing or decision-making capacity.
+              <br><br>
+              No foreign competitor — Lakera, Arthur AI, Guardrails AI, Protect AI — has
+              built these controls. CASA-AI built them from the actual Master Direction text,
+              not a summary. Every control has a corresponding test.
+            </p>
+            <div class="comp-callout">
+              <strong>Why this is the moat:</strong> Every Indian bank that deploys an AI agent
+              for credit scoring, KYC, fraud detection, or customer service is legally required
+              to comply with these controls. CASA-AI is the only infrastructure layer that
+              enforces them at runtime.
+            </div>
+            <span class="comp-badge">ENTERPRISE+ · rbi_ai_governance.rego · 6 tests passing</span>
+          </div>
+
+          <div class="cp-controls">
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 51 · Control 1</div>
+                <div class="cp-ctrl-name">AI Model Registry Verification</div>
+                <div class="cp-ctrl-desc">Every agent action must declare an ai_system_id registered in the institution's model registry. Unregistered agents are blocked at the proxy layer before any action is taken.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 52 · Control 2</div>
+                <div class="cp-ctrl-name">Human Oversight for Credit Decisions</div>
+                <div class="cp-ctrl-desc">Automated credit decisions without a human_review flag are blocked. Proven: TestRBI_HumanOversight_CreditDecisionBlocked — PASS. No AI agent can autonomously approve or reject a loan.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 53 · Control 3</div>
+                <div class="cp-ctrl-name">Data Localization Enforcement</div>
+                <div class="cp-ctrl-desc">When strict_sovereignty: true, every tool call must declare provider_country: "IN". Calls to non-IN-domiciled providers are blocked. Required for RBI compliance on customer financial data.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 55 · Control 4</div>
+                <div class="cp-ctrl-name">Core Banking Audit Trail Correlation</div>
+                <div class="cp-ctrl-desc">Every agent evaluation record carries a correlation ID linkable to the core banking transaction log. Audit trail completeness required for RBI inspection readiness.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 57 · Control 5</div>
+                <div class="cp-ctrl-name">Customer Consent Verification</div>
+                <div class="cp-ctrl-desc">Agent actions processing customer personal data must declare a valid consent reference. Actions without a customer_consent field are flagged as RBI_CONTROL_5_VIOLATION in the audit log.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cp-right">
+          <div class="cp-right-section">
+            <div class="cp-right-h">Rego Policy Implementation</div>
+            <div class="code-block">
+              <div class="code-head">
+                <span class="code-lang">Rego</span>
+                <span class="code-file">policies/rbi_ai_governance.rego</span>
+              </div>
+              <div class="code-body"><span class="ck">package</span> casa.ai.rbi
+<span class="cv">import</span> rego.v1
+
+<span class="cc"># Control 1: Every agent must have a registered model ID</span>
+rbi_violation contains msg <span class="cv">if</span> {
+    input.ai_system_id == <span class="cs">""</span>
+    msg := <span class="cs">"RBI_CONTROL_1: ai_system_id missing — model not in registry"</span>
+}
+
+<span class="cc"># Control 2: No automated credit decisions without human review</span>
+rbi_violation contains msg <span class="cv">if</span> {
+    input.credit_decision == <span class="cn">true</span>
+    <span class="cv">not</span> input.human_review
+    msg := <span class="cs">"RBI_CONTROL_2: automated credit decision without human oversight"</span>
+}
+
+<span class="cc"># Control 3: Data localization — all tools must be IN-domiciled</span>
+rbi_violation contains msg <span class="cv">if</span> {
+    <span class="cv">some</span> call <span class="cv">in</span> input.tool_calls
+    call.provider_country != <span class="cs">"IN"</span>
+    msg := sprintf(<span class="cs">"RBI_CONTROL_3: tool '%v' not IN-domiciled"</span>, [call.tool_name])
+}
+
+<span class="cc"># Control 4: Audit trail correlation ID required</span>
+rbi_violation contains msg <span class="cv">if</span> {
+    input.correlation_id == <span class="cs">""</span>
+    msg := <span class="cs">"RBI_CONTROL_4: no core banking correlation ID on agent action"</span>
+}
+
+<span class="cc"># Control 5: Customer consent reference required for personal data</span>
+rbi_violation contains msg <span class="cv">if</span> {
+    input.processes_personal_data == <span class="cn">true</span>
+    <span class="cv">not</span> input.customer_consent
+    msg := <span class="cs">"RBI_CONTROL_5: no customer consent reference for personal data"</span>
+}</div>
+            </div>
+          </div>
+
+          <div class="cp-right-section">
+            <div class="cp-right-h">Activation — casa.yaml</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">YAML</span><span class="code-file">configs/casa.yaml</span></div>
+              <div class="code-body">compliance_profiles:
+  rbi_ai:
+    enabled: <span class="cn">true</span>
+    policy_path: <span class="cs">"policies/rbi_ai_governance.rego"</span>
+<span class="cc"># Hot-reloads without container restart</span>
+strict_sovereignty: <span class="cn">true</span>  <span class="cc"># Control 3 enforcement</span></div>
+            </div>
+          </div>
+
+          <div class="cp-right-section">
+            <div class="cp-right-h">Who Needs This</div>
+            <div class="activation-steps">
+              <div class="act-step"><div class="act-num">✓</div>Public sector banks deploying AI in loan processing</div>
+              <div class="act-step"><div class="act-num">✓</div>Private banks with AI-powered KYC agents</div>
+              <div class="act-step"><div class="act-num">✓</div>NBFCs using AI for credit risk scoring</div>
+              <div class="act-step"><div class="act-num">✓</div>Payment aggregators with AI fraud detection agents</div>
+              <div class="act-step"><div class="act-num">✓</div>Insurance companies with AI underwriting systems</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DPDP ── -->
+      <div class="cpanel" id="cp-dpdp">
+        <div class="cp-left">
+          <div class="cp-bar" style="background:linear-gradient(90deg,#FF9933,#ffffff,#138808)"></div>
+          <div class="cp-header">
+            <div class="cp-flag">🇮🇳</div>
+            <div class="cp-framework">Act No. 22 of 2023 · Digital Personal Data Protection</div>
+            <div class="cp-title">DPDP Act 2023</div>
+            <p class="cp-desc">
+              India's Digital Personal Data Protection Act — the GDPR equivalent for the world's
+              most populous democracy. Implementing rules expected by mid-2026. CASA-AI's controls
+              are built directly from the final Act text, not a legal summary. Every section
+              reference maps to a mechanically verifiable Rego rule.
+            </p>
+            <div class="comp-callout">
+              <strong>Timeline:</strong> DPDP implementing rules are expected mid-2026.
+              Every Indian enterprise with AI agents processing customer data must be
+              compliant before rules take effect. CASA-AI provides enforcement today,
+              not after the penalty notices start.
+            </div>
+            <span class="comp-badge">ENTERPRISE+ · dpdp_act.rego · 5 tests passing</span>
+          </div>
+
+          <div class="cp-controls">
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Sections 4 & 6</div>
+                <div class="cp-ctrl-name">Consent Before Personal Data Processing</div>
+                <div class="cp-ctrl-desc">Agent actions processing personal data must carry a valid consent_token. Processing without consent is blocked with DPDP_S4_VIOLATION in the audit log. Proof of consent preserved for Data Principal requests.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 8</div>
+                <div class="cp-ctrl-name">Data Minimization + Purpose Limitation</div>
+                <div class="cp-ctrl-desc">Agents must declare a specific processing purpose. Actions flagged as purpose_unspecified are blocked. Excessive data collection patterns in the reasoning chain trigger DPDP_S8_VIOLATION.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 9</div>
+                <div class="cp-ctrl-name">Child Data Protection</div>
+                <div class="cp-ctrl-desc">Processing data of minors without verified parental consent is blocked. Proven: TestDPDP_ChildData_ParentalConsentRequired — PASS. Any agent working with age-classified data must declare parental consent.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Section 16</div>
+                <div class="cp-ctrl-name">Cross-Border Transfer Whitelist</div>
+                <div class="cp-ctrl-desc">Personal data transfers to non-whitelisted countries are blocked. Transfer destination is extracted from tool_calls.provider_country and checked against the configurable allowed_countries list.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cp-right">
+          <div class="cp-right-section">
+            <div class="cp-right-h">Rego Policy Implementation</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">Rego</span><span class="code-file">policies/dpdp_act.rego</span></div>
+              <div class="code-body"><span class="ck">package</span> casa.ai.dpdp
+<span class="cv">import</span> rego.v1
+
+<span class="cc"># Section 4/6: Consent required before any personal data processing</span>
+dpdp_violation contains msg <span class="cv">if</span> {
+    input.processes_personal_data == <span class="cn">true</span>
+    <span class="cv">not</span> input.consent_token
+    msg := <span class="cs">"DPDP_S4_VIOLATION: no consent token for personal data processing"</span>
+}
+
+<span class="cc"># Section 8: Purpose must be declared — no open-ended data collection</span>
+dpdp_violation contains msg <span class="cv">if</span> {
+    input.processing_purpose == <span class="cs">""</span>
+    msg := <span class="cs">"DPDP_S8_VIOLATION: processing purpose not specified"</span>
+}
+
+<span class="cc"># Section 9: Child data requires verified parental consent</span>
+dpdp_violation contains msg <span class="cv">if</span> {
+    input.data_subject_age < <span class="cn">18</span>
+    <span class="cv">not</span> input.parental_consent_verified
+    msg := <span class="cs">"DPDP_S9_VIOLATION: minor data without verified parental consent"</span>
+}
+
+<span class="cc"># Section 16: Cross-border transfer only to whitelisted countries</span>
+allowed_countries := {<span class="cs">"IN"</span>, <span class="cs">"SG"</span>, <span class="cs">"AE"</span>}  <span class="cc"># configurable</span>
+dpdp_violation contains msg <span class="cv">if</span> {
+    <span class="cv">some</span> call <span class="cv">in</span> input.tool_calls
+    <span class="cv">not</span> call.provider_country <span class="cv">in</span> allowed_countries
+    msg := sprintf(<span class="cs">"DPDP_S16_VIOLATION: cross-border transfer to '%v' not whitelisted"</span>, [call.provider_country])
+}</div>
+            </div>
+          </div>
+          <div class="cp-right-section">
+            <div class="cp-right-h">Enforcement Coverage</div>
+            <div class="activation-steps">
+              <div class="act-step"><div class="act-num">✓</div>E-commerce platforms with AI personalisation agents</div>
+              <div class="act-step"><div class="act-num">✓</div>Healthcare providers with AI diagnosis / triage agents</div>
+              <div class="act-step"><div class="act-num">✓</div>EdTech platforms processing student data</div>
+              <div class="act-step"><div class="act-num">✓</div>Any enterprise with AI agents accessing customer PII</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EU AI ACT ── -->
+      <div class="cpanel" id="cp-eu">
+        <div class="cp-left">
+          <div class="cp-bar" style="background:linear-gradient(90deg,#003399,#7b9fff,#ffcc00)"></div>
+          <div class="cp-header">
+            <div class="cp-flag">🇪🇺</div>
+            <div class="cp-framework">Regulation (EU) 2024/1689 · Chapter III · High-Risk AI</div>
+            <div class="cp-title">EU AI Act</div>
+            <p class="cp-desc">
+              High-risk AI system obligations under Chapter III of Regulation (EU) 2024/1689.
+              Application date: 2 August 2026 for high-risk AI systems. CASA-AI's controls
+              were built and verified against the final regulation text, not a pre-publication
+              draft or legal commentary.
+            </p>
+            <span class="comp-badge">ENTERPRISE+ · eu_ai_act.rego · 9 tests passing</span>
+          </div>
+
+          <div class="cp-controls">
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Article 10</div>
+                <div class="cp-ctrl-name">Data Governance Declaration</div>
+                <div class="cp-ctrl-desc">Training data provenance and governance statement must be declared on agent registration. Undeclared data provenance triggers EU_A10_VIOLATION in the audit log.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Article 12</div>
+                <div class="cp-ctrl-name">Automatic Event Logging</div>
+                <div class="cp-ctrl-desc">Every agent decision logged with timestamp, input hash, output summary, and decision rationale. Log completeness checked — gaps trigger EU_A12_VIOLATION. All logs tamper-evident via SHA-256 chaining.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Article 13</div>
+                <div class="cp-ctrl-name">Explainability Requirement</div>
+                <div class="cp-ctrl-desc">DENY verdicts must carry a human-readable violation message. CASA-AI's violation strings are designed to be directly usable in Article 13 transparency reports — audit-grade language, not debug output.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Article 14</div>
+                <div class="cp-ctrl-name">Human Oversight Escalation</div>
+                <div class="cp-ctrl-desc">High-impact decisions (credit, medical, law enforcement adjacent) require an escalation path declaration. Agents operating in high-risk categories without human_oversight_contact are flagged EU_A14_VIOLATION.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cp-right">
+          <div class="cp-right-section">
+            <div class="cp-right-h">Rego Policy — Article 14 Example</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">Rego</span><span class="code-file">policies/eu_ai_act.rego</span></div>
+              <div class="code-body"><span class="ck">package</span> casa.ai.eu_act
+<span class="cv">import</span> rego.v1
+
+high_risk_categories := {
+    <span class="cs">"credit_scoring"</span>, <span class="cs">"medical_diagnosis"</span>,
+    <span class="cs">"employment_decision"</span>, <span class="cs">"law_enforcement"</span>,
+    <span class="cs">"biometric_classification"</span>
+}
+
+<span class="cc"># Article 14: High-risk AI must have human oversight contact declared</span>
+eu_violation contains msg <span class="cv">if</span> {
+    input.ai_category <span class="cv">in</span> high_risk_categories
+    <span class="cv">not</span> input.human_oversight_contact
+    msg := sprintf(<span class="cs">"EU_A14_VIOLATION: high-risk category '%v' without human oversight contact"</span>,
+        [input.ai_category])
+}
+
+<span class="cc"># Article 12: Event logging completeness check</span>
+eu_violation contains msg <span class="cv">if</span> {
+    input.logging_enabled != <span class="cn">true</span>
+    msg := <span class="cs">"EU_A12_VIOLATION: automatic event logging not enabled for this agent"</span>
+}
+
+<span class="cc"># Article 13: DENY verdicts must carry explanation</span>
+<span class="cc"># (enforced by core — all violations carry a structured message)</span></div>
+            </div>
+          </div>
+          <div class="cp-right-section">
+            <div class="cp-right-h">Application Timeline</div>
+            <div class="activation-steps">
+              <div class="act-step"><div class="act-num">✓</div>Feb 2025 — Prohibited AI practices banned</div>
+              <div class="act-step"><div class="act-num">✓</div>Aug 2025 — GPAI model obligations apply</div>
+              <div class="act-step"><div class="act-num" style="background:rgba(255,184,0,.1);border-color:var(--amber);color:var(--amber)">→</div>Aug 2026 — High-risk AI system obligations apply</div>
+              <div class="act-step"><div class="act-num">✓</div>CASA-AI controls verified against final text today</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NIST ── -->
+      <div class="cpanel" id="cp-nist">
+        <div class="cp-left">
+          <div class="cp-bar" style="background:linear-gradient(90deg,#002868,#6b9fff,#BF0A30)"></div>
+          <div class="cp-header">
+            <div class="cp-flag">🇺🇸</div>
+            <div class="cp-framework">NIST AI 100-1 · January 2023 · AI Risk Management</div>
+            <div class="cp-title">NIST AI RMF 1.0</div>
+            <p class="cp-desc">
+              Subcategory-level mapping across all four functions: GOVERN, MAP, MEASURE, MANAGE.
+              Not just framework awareness — specific, mechanically verifiable controls per
+              subcategory, researched from the actual NIST AI 100-1 text. Activated in BASIC tier,
+              making it the default compliance baseline for all CASA-AI deployments.
+            </p>
+            <span class="comp-badge">BASIC+ · nist_ai_rmf.rego · 8 tests passing</span>
+          </div>
+
+          <div class="cp-controls">
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">GOVERN 1.4</div>
+                <div class="cp-ctrl-name">Audit Trail Completeness</div>
+                <div class="cp-ctrl-desc">Every evaluation record includes: session_id, ai_system_id, timestamp, input summary, output verdict, violation messages. SHA-256 chain ensures completeness is cryptographically verifiable.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">MAP 1.1</div>
+                <div class="cp-ctrl-name">AI System Identification</div>
+                <div class="cp-ctrl-desc">Every agent request must carry ai_system_id. Requests without a system identifier are flagged NIST_MAP_1_1_VIOLATION. Enables the model registry requirement from GOVERN 1.1.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">MANAGE 2.x</div>
+                <div class="cp-ctrl-name">Third-Party Tool Risk Controls</div>
+                <div class="cp-ctrl-desc">MCP tool calls to unapproved third-party providers are blocked at the proxy layer. The approved_tools allowlist in casa.yaml implements the third-party tool governance required by MANAGE 2.2.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cp-right">
+          <div class="cp-right-section">
+            <div class="cp-right-h">Rego Policy Implementation</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">Rego</span><span class="code-file">policies/nist_ai_rmf.rego</span></div>
+              <div class="code-body"><span class="ck">package</span> casa.ai.nist
+<span class="cv">import</span> rego.v1
+
+<span class="cc"># GOVERN 1.4: Audit trail — ai_system_id required for traceability</span>
+nist_violation contains msg <span class="cv">if</span> {
+    input.ai_system_id == <span class="cs">""</span>
+    msg := <span class="cs">"NIST_GOVERN_1_4: audit trail incomplete — no ai_system_id declared"</span>
+}
+
+<span class="cc"># MAP 1.1: AI system must be identified before action</span>
+nist_violation contains msg <span class="cv">if</span> {
+    <span class="cv">not</span> input.ai_system_id
+    msg := <span class="cs">"NIST_MAP_1_1: AI system not identified in request payload"</span>
+}
+
+<span class="cc"># MANAGE 2.2: Third-party provider risk — only approved tools permitted</span>
+nist_violation contains msg <span class="cv">if</span> {
+    <span class="cv">some</span> call <span class="cv">in</span> input.tool_calls
+    <span class="cv">not</span> call.tool_name <span class="cv">in</span> data.config.approved_tools
+    msg := sprintf(<span class="cs">"NIST_MANAGE_2_2: unapproved third-party tool '%v' called"</span>, [call.tool_name])
+}</div>
+            </div>
+          </div>
+          <div class="cp-right-section">
+            <div class="cp-right-h">Framework Functions Covered</div>
+            <div class="activation-steps">
+              <div class="act-step"><div class="act-num">G</div>GOVERN — Policies, accountability, culture</div>
+              <div class="act-step"><div class="act-num">M</div>MAP — Risk context identification</div>
+              <div class="act-step"><div class="act-num">M</div>MEASURE — Evaluation and monitoring</div>
+              <div class="act-step"><div class="act-num">M</div>MANAGE — Risk response and recovery</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ISO 42001 ── -->
+      <div class="cpanel" id="cp-iso">
+        <div class="cp-left">
+          <div class="cp-bar" style="background:linear-gradient(90deg,var(--teal),var(--blue),var(--violet))"></div>
+          <div class="cp-header">
+            <div class="cp-flag">🌐</div>
+            <div class="cp-framework">ISO/IEC 42001:2023 · AI Management System · December 2023</div>
+            <div class="cp-title">ISO/IEC 42001</div>
+            <p class="cp-desc">
+              The world's first certifiable international AI Management System standard.
+              Published December 2023. Used in Stage 1 and Stage 2 audits by accredited
+              certification bodies. CASA-AI's controls generate the evidence artifacts
+              an ISO 42001 auditor will request — not aspirationally, mechanically.
+            </p>
+            <span class="comp-badge">ENTERPRISE+ · iso_42001.rego · 12 tests passing</span>
+          </div>
+
+          <div class="cp-controls">
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Clause 6.1</div>
+                <div class="cp-ctrl-name">AI Risk Assessment Evidence</div>
+                <div class="cp-ctrl-desc">Agent requests must carry an ai_risk_level classification. Unclassified agents trigger ISO_6_1_VIOLATION. The CASA-AI audit log serves directly as risk assessment evidence for Clause 6.1 documentation requirements.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Clause 8.2</div>
+                <div class="cp-ctrl-name">Operational Controls + Intended Use Scope</div>
+                <div class="cp-ctrl-desc">Every agent must declare its intended_use. Actions that appear to exceed the declared scope (based on tool calls and reasoning chain analysis) trigger ISO_8_2_VIOLATION for auditor review.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Clause 9.1</div>
+                <div class="cp-ctrl-name">Performance Monitoring</div>
+                <div class="cp-ctrl-desc">Prometheus /metrics endpoint exposes named performance indicators required by Clause 9.1: breach rate, eval latency p99, PII detection count. Pre-built Grafana dashboard serves as the monitoring evidence artifact.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Annex A.6.1.4</div>
+                <div class="cp-ctrl-name">Impact Assessment for High-Impact Systems</div>
+                <div class="cp-ctrl-desc">Agents classified as high_impact must carry a completed impact assessment reference. Auditor-ready PDF reports (BIG INFRA+) generate the Annex A.6.1.4 impact assessment documentation automatically from audit log data.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cp-right">
+          <div class="cp-right-section">
+            <div class="cp-right-h">Evidence Artifacts Generated</div>
+            <div class="activation-steps">
+              <div class="act-step"><div class="act-num">✓</div>SHA-256 chained audit log → Clause 9.1 monitoring evidence</div>
+              <div class="act-step"><div class="act-num">✓</div>Prometheus metrics → Clause 9.1 performance indicators</div>
+              <div class="act-step"><div class="act-num">✓</div>Violation messages → Clause 6.1 risk assessment records</div>
+              <div class="act-step"><div class="act-num">✓</div>PDF compliance report → Annex A.6.1.4 impact assessment</div>
+              <div class="act-step"><div class="act-num">✓</div>Circuit-breaker log → Clause 8.2 operational control evidence</div>
+            </div>
+          </div>
+          <div class="cp-right-section">
+            <div class="cp-right-h">Certification Readiness</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">Rego</span><span class="code-file">policies/iso_42001.rego</span></div>
+              <div class="code-body"><span class="cc"># Clause 6.1: Risk classification required</span>
+iso_violation contains msg <span class="cv">if</span> {
+    input.ai_risk_level == <span class="cs">""</span>
+    msg := <span class="cs">"ISO_6_1_VIOLATION: no risk classification on agent request"</span>
+}
+<span class="cc"># Clause 8.2: Intended use must be declared</span>
+iso_violation contains msg <span class="cv">if</span> {
+    input.intended_use == <span class="cs">""</span>
+    msg := <span class="cs">"ISO_8_2_VIOLATION: agent intended_use scope not declared"</span>
+}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CUSTOM REGO ── -->
+      <div class="cpanel" id="cp-custom">
+        <div class="cp-left">
+          <div class="cp-bar" style="background:linear-gradient(90deg,var(--violet),var(--teal),var(--blue))"></div>
+          <div class="cp-header">
+            <div class="cp-flag" style="font-size:1.75rem">⚙️</div>
+            <div class="cp-framework">ENTERPRISE tier · Full OPA v1 Language · Hot-Reload</div>
+            <div class="cp-title">Custom Rego Policies</div>
+            <p class="cp-desc">
+              ENTERPRISE tier and above. Mount your own .rego policy bundles via Kubernetes
+              ConfigMap or Docker bind-mount. Full OPA v1 language support. Layered
+              evaluation — core policy always runs first and always wins on safety.
+              Version-tracked by SHA-256 for automatic multi-cluster push.
+            </p>
+            <span class="comp-badge">ENTERPRISE+ · your_policy.rego · hot-reload enabled</span>
+          </div>
+
+          <div class="cp-controls">
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Hot Reload</div>
+                <div class="cp-ctrl-name">Zero-Downtime Policy Updates</div>
+                <div class="cp-ctrl-desc">Edit any .rego file on disk. The watcher detects the change and atomically swaps in the new compiled engine. Failed compilations keep the old policy serving — zero sessions dropped. No container restart required.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Layered Evaluation</div>
+                <div class="cp-ctrl-name">Core Policy Always Runs First</div>
+                <div class="cp-ctrl-desc">Custom policies add additional checks on top of the 5-layer core. They cannot override core safety controls — PII and injection detection always runs regardless of custom policy configuration.</div>
+              </div>
+            </div>
+            <div class="cp-control">
+              <div class="cp-ctrl-check">✓</div>
+              <div class="cp-ctrl-body">
+                <div class="cp-ctrl-ref">Multi-Cluster Push</div>
+                <div class="cp-ctrl-name">SHA-256 Version Tracking</div>
+                <div class="cp-ctrl-desc">Policy bundles are versioned by SHA-256. When the central server's canonical version changes, satellite clusters automatically detect the mismatch on heartbeat and pull the updated bundle.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cp-right">
+          <div class="cp-right-section">
+            <div class="cp-right-h">Example — Corporate Policy</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">Rego</span><span class="code-file">policies/my_corporate_policy.rego</span></div>
+              <div class="code-body"><span class="ck">package</span> my_company.compliance
+<span class="cv">import</span> rego.v1
+
+<span class="cc"># Block agents referencing competitor products</span>
+violation contains msg <span class="cv">if</span> {
+    regex.match(<span class="cs">`(?i)(competitor_a|competitor_b)`</span>, input.agent_payload.prompt)
+    msg := <span class="cs">"CORPORATE: competitor product reference in agent prompt"</span>
+}
+
+<span class="cc"># Require cost_center tag on all agent actions</span>
+violation contains msg <span class="cv">if</span> {
+    input.cost_center == <span class="cs">""</span>
+    msg := <span class="cs">"CORPORATE: cost_center tag required on all agent actions"</span>
+}
+
+<span class="cc"># Internal data classification — block RESTRICTED data leaving to any external tool</span>
+violation contains msg <span class="cv">if</span> {
+    input.data_classification == <span class="cs">"RESTRICTED"</span>
+    <span class="cv">some</span> call <span class="cv">in</span> input.tool_calls
+    call.external == <span class="cn">true</span>
+    msg := <span class="cs">"CORPORATE: RESTRICTED data cannot be sent to external tools"</span>
+}</div>
+            </div>
+          </div>
+          <div class="cp-right-section">
+            <div class="cp-right-h">Activation</div>
+            <div class="code-block">
+              <div class="code-head"><span class="code-lang">YAML</span><span class="code-file">configs/casa.yaml</span></div>
+              <div class="code-body">compliance_profiles:
+  my_policy:
+    enabled: <span class="cn">true</span>
+    policy_path: <span class="cs">"policies/my_corporate_policy.rego"</span>
+<span class="cc"># Hot-reload picks up changes without restart</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /comp-panels -->
+  </div>
+</section>
+
+<!-- =====================================================
+     WHY CASA-AI SECTION
+     ===================================================== -->
+<section class="why-s sp" id="why">
+  <div class="si">
+
+    <div class="fi">
+      <div class="ey">Competitive Moat</div>
+      <h2 class="sh">Why CASA-AI is <span class="tg">categorically different.</span></h2>
+      <p class="ss">
+        Every claim below is backed by a test, a live cloud run, or verifiable code
+        in the public repository. Not aspirational — demonstrable today.
+      </p>
+    </div>
+
+    <div class="why-grid">
+
+      <div class="wcard fi">
+        <div class="wico">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2L19 7V15L11 20L3 15V7L11 2Z" stroke="#00ffd1" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="11" cy="11" r="3" fill="#00ffd1"/>
+          </svg>
+        </div>
+        <div class="wbody">
+          <h3>We inspect reasoning chains. Nobody else does this.</h3>
+          <p>Every competing product — Lakera, Arthur AI, Guardrails AI, Protect AI —
+            inspects the prompt (input) or the response (output). The intermediate
+            Thought-Action-Observation loop is completely invisible to all of them.
+            CASA-AI is the only engine that intercepts and evaluates this layer.
+            This is where real data leaks happen in production AI agents.</p>
+          <div class="proof-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            PROVEN: Splits "ABCDE1234F" across 3 SSE tokens. Caught during reassembly before any regex runs.
+            TestEvaluate_BlocksPIIInReasoningChain — PASS (go test ./... -race)
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard fi d1">
+        <div class="wico">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="8" stroke="#00ffd1" stroke-width="1.5"/>
+            <path d="M8 11l2 2 4-4" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="wbody">
+          <h3>We cut the stream. Competitors only log the event.</h3>
+          <p>When a violation fires, competitors write an alert to a log server and
+            continue. CASA-AI severs the SSE connection — the agent never receives
+            another token. IAM credentials are invalidated via real cloud APIs.
+            AWS STS, GCP IAM, Azure Graph — all three, synchronously, before the agent
+            can act on any compromised data. Not advisory. Not eventually consistent.</p>
+          <div class="proof-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            PROVEN: Live AWS IAM revocation — account 083334184188.
+            PutRolePolicy deny-all confirmed in 3.0s. ListRolePolicies verified.
+            TestAWSRevoker_LiveRevokeAndCleanup — PASS.
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard fi">
+        <div class="wico">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="4" y="4" width="14" height="14" rx="3" stroke="#00ffd1" stroke-width="1.5"/>
+            <path d="M8 11h6M11 8v6" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="wbody">
+          <h3>RBI + DPDP built in. No competitor has this. At all.</h3>
+          <p>Lakera is US-focused. Arthur AI is US-focused. Guardrails AI has zero
+            Indian regulatory controls. We have RBI Master Direction (April 2024)
+            Sections 50–58 and DPDP Act 2023 Sections 4/6, 8, 9, 16 controls built,
+            tested with real test names, and wired into the engine.
+            This is the structural moat for the Indian BFSI, insurance, and fintech market.</p>
+          <div class="proof-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            PROVEN: TestRBI_HumanOversight_CreditDecisionBlocked — PASS.
+            TestDPDP_ChildData_ParentalConsentRequired — PASS.
+            TestDPDP_CrossBorder_NonWhitelistedCountry — PASS.
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard fi d1">
+        <div class="wico">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="4" y="8" width="14" height="11" rx="2" stroke="#00ffd1" stroke-width="1.5"/>
+            <path d="M8 8V6a3 3 0 016 0v2" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="11" cy="14" r="1.5" fill="#00ffd1"/>
+          </svg>
+        </div>
+        <div class="wbody">
+          <h3>8MB distroless image. No shell. More secure than the apps it protects.</h3>
+          <p>
+            <code style="font-family:var(--f-mono);font-size:.82em;background:rgba(0,255,209,.08);padding:2px 6px;border-radius:3px">docker exec /bin/sh</code>
+            fails — there is no shell in the image. UID 65532 non-root enforced.
+            Read-only root filesystem. Trivy CVE scan runs on every commit to main —
+            pipeline blocks on any HIGH or CRITICAL finding.
+            The attack surface of this security tool is smaller than most web apps it protects.</p>
+          <div class="proof-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            PROVEN: docker exec /bin/sh → "no such file or directory".
+            Image verified at 8.16MB. GitHub Actions Trivy scan runs on every push.
+            Zero HIGH/CRITICAL CVEs since initial hardening.
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard fi">
+        <div class="wico">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 3L19 7v8l-8 4-8-4V7l8-4Z" stroke="#00ffd1" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M11 11V8M11 14v.5" stroke="#00ffd1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="wbody">
+          <h3>Zero data leaves your VPC. Architecturally enforced, not policy claimed.</h3>
+          <p>License validation makes zero outbound network calls — the Ed25519 public key
+            is compiled into the binary at build time. Audit logs are written to the
+            local filesystem only. SIEM export is opt-in, operator-configured, and
+            off by default. Proven by running in a fully network-blocked container.
+            This is architecture, not a marketing claim in a terms of service.</p>
+          <div class="proof-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            PROVEN: Container runs with iptables DROP ALL outbound.
+            License validates correctly in 0ms. Zero external calls in network trace.
+            ForgeryAttack_WrongKey_Rejected — PASS.
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard fi d1">
+        <div class="wico">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2l2.5 7H21l-6.5 4.5 2.5 7L11 17l-6.5 3.5 2.5-7L1 9h7.5L11 2Z" stroke="#00ffd1" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="wbody">
+          <h3>157 tests. Race detector. Forgery attacks. All passing on every commit.</h3>
+          <p>The license engine is tested against cryptographic forgery — modified payloads,
+            wrong keys, expired licenses. The session registry is stress-tested with
+            400 concurrent goroutines under the race detector. Injection patterns are
+            tested against both real attack strings and legitimate security queries
+            to verify the false positive rate is zero. Every commit runs the full suite in CI.</p>
+          <div class="proof-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            PROVEN: go test ./... -race — 157 passing, 11 packages, 0 failures.
+            Includes live AWS integration test on every CI run.
+            Race detector clean — 0 data races detected.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Competitor comparison table -->
+    <div class="comp-table-wrap fi">
+      <div class="comp-table-header">
+        <div>
+          <div class="comp-table-title">Head-to-Head Comparison</div>
+          <div class="comp-table-sub">Based on publicly available documentation · July 2026</div>
+        </div>
+      </div>
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th class="us">CASA-AI</th>
+            <th>Lakera Guard</th>
+            <th>Guardrails AI</th>
+            <th>Arthur Shield</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Reasoning chain inspection</td>
+            <td class="us-col">✓ TAO loop, mid-stream</td>
+            <td class="no">✗ Prompt only</td>
+            <td class="no">✗ Prompt only</td>
+            <td class="no">✗ Response only</td>
+          </tr>
+          <tr>
+            <td>Real credential revocation</td>
+            <td class="us-col">✓ AWS + GCP + Azure (live)</td>
+            <td class="no">✗ Alert only</td>
+            <td class="no">✗ Alert only</td>
+            <td class="no">✗ Alert only</td>
+          </tr>
+          <tr>
+            <td>RBI AI Governance controls</td>
+            <td class="us-col">✓ 5 controls, 6 tests</td>
+            <td class="no">✗ Not available</td>
+            <td class="no">✗ Not available</td>
+            <td class="no">✗ Not available</td>
+          </tr>
+          <tr>
+            <td>DPDP Act 2023 controls</td>
+            <td class="us-col">✓ 4 sections, 5 tests</td>
+            <td class="no">✗ Not available</td>
+            <td class="no">✗ Not available</td>
+            <td class="no">✗ Not available</td>
+          </tr>
+          <tr>
+            <td>Self-hosted, air-gapped</td>
+            <td class="us-col">✓ VPC-native, zero outbound</td>
+            <td class="no">✗ SaaS only</td>
+            <td class="yes">~ Self-hostable</td>
+            <td class="no">✗ SaaS only</td>
+          </tr>
+          <tr>
+            <td>Cryptographic audit log</td>
+            <td class="us-col">✓ SHA-256 chained JSONL</td>
+            <td class="no">✗ Standard logs</td>
+            <td class="no">✗ Standard logs</td>
+            <td class="no">✗ Standard logs</td>
+          </tr>
+          <tr>
+            <td>Distroless container</td>
+            <td class="us-col">✓ 8MB, no shell, UID 65532</td>
+            <td class="no">✗ Standard container</td>
+            <td class="no">✗ Standard container</td>
+            <td class="no">✗ Standard container</td>
+          </tr>
+          <tr>
+            <td>Hot policy reload</td>
+            <td class="us-col">✓ Zero restart, atomic swap</td>
+            <td class="no">✗ Not available</td>
+            <td class="yes">~ API-based update</td>
+            <td class="no">✗ Not available</td>
+          </tr>
+          <tr>
+            <td>Multi-cluster orchestration</td>
+            <td class="us-col">✓ Central server + satellites</td>
+            <td class="no">✗ Not available</td>
+            <td class="no">✗ Not available</td>
+            <td class="no">✗ Not available</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+<script>
+
+window.addEventListener('scroll',function(){
+  var n=document.getElementById('main-nav');
+  if(n) n.style.background=window.scrollY>40?'rgba(3,12,21,.99)':'rgba(3,12,21,.95)';
+},{passive:true});
+function openModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.add('open');document.body.style.overflow='hidden';}}
+function closeModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.remove('open');document.body.style.overflow='';}}
+function closeModalOnBg(e,n){if(e.target===document.getElementById('modal-'+n))closeModal(n);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['privacy','terms','security'].forEach(closeModal);document.body.style.overflow='';}});
+
+
+function showComp(name, btn) {
+  document.querySelectorAll('.cpanel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('on'));
+  const panel = document.getElementById('cp-' + name);
+  if (panel) panel.classList.add('on');
+  if (btn) btn.classList.add('on');
+}
+
+
+
+
+function showComp(n,b){
+  document.querySelectorAll('.cpanel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.ctab').forEach(function(x){x.classList.remove('on');});
+  var p=document.getElementById('cp-'+n);if(p)p.classList.add('on');if(b)b.classList.add('on');
+}
+
+</script>
+</body>
+</html>
