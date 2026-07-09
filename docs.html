@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CASA-AI Documentation — Quick Start, Configuration, License Setup, API Reference, Helm Chart, Custom Rego.">
+<title>CASA-AI — Documentation | Quick Start · API Reference · Config</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2300050A'/%3E%3Cpath d='M16 4L28 10V22L16 28L4 22V10Z' stroke='%2300E5C0' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%2300E5C0'/%3E%3Cline x1='12' y1='12' x2='20' y2='20' stroke='%2300050A' stroke-width='2.5'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#00050A;--depth:#040D16;--surface:#081420;--cyan:#00E5C0;--red:#FF3358;--amber:#FFB020;--green:#00D68A;--white:#F0F6FF;--muted:#5B7A94;--faint:#1A2E42;--border:rgba(0,229,192,.1);--border2:rgba(0,229,192,.22);--f-display:'Space Grotesk',sans-serif;--f-mono:'JetBrains Mono',monospace;--f-body:'Inter',sans-serif;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{background:var(--void);color:var(--white);font-family:var(--f-body);line-height:1.6;overflow-x:hidden;padding-top:60px;}
+a{color:inherit;text-decoration:none;}::selection{background:rgba(0,229,192,.2);color:var(--cyan);}
+.wrap{max-width:1160px;margin:0 auto;padding:0 2rem;}
+.eyebrow{font-family:var(--f-mono);font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--cyan);flex-shrink:0;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:6px;font-family:var(--f-display);font-weight:600;font-size:.88rem;line-height:1;cursor:pointer;border:none;transition:all .18s;white-space:nowrap;text-decoration:none;}
+.btn-primary{background:var(--cyan);color:#000;}.btn-primary:hover{background:#1DFFD8;transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-family:var(--f-mono);font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.tag-cyan{background:rgba(0,229,192,.1);color:var(--cyan);}.tag-green{background:rgba(0,214,138,.1);color:var(--green);}.tag-amber{background:rgba(255,176,32,.1);color:var(--amber);}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal.d1{transition-delay:.07s;}.reveal.d2{transition-delay:.14s;}
+
+/* Nav */
+#site-nav{position:fixed;top:0;left:0;right:0;z-index:9999;height:60px;background:rgba(0,5,10,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .2s;}
+#site-nav.scrolled{background:rgba(0,5,10,.98);}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;}
+.nav-logo{display:flex;align-items:center;gap:9px;margin-right:auto;flex-shrink:0;}
+.nav-wordmark{font-family:var(--f-display);font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--white);}
+.nav-wordmark span{color:var(--cyan);}
+.nav-links{display:flex;align-items:center;gap:0;margin:0 20px;}
+.nav-link{padding:6px 11px;font-size:.8rem;font-weight:500;color:var(--muted);transition:color .15s;white-space:nowrap;border-radius:5px;}
+.nav-link:hover{color:var(--white);}.nav-link.active{color:var(--cyan);}
+.nav-actions{flex-shrink:0;}
+.nav-cta{padding:7px 16px;background:var(--cyan);color:#000;border-radius:5px;font-family:var(--f-display);font-weight:700;font-size:.8rem;line-height:1;}
+
+/* Page hero */
+.docs-hero{padding:64px 0 40px;border-bottom:1px solid var(--border);}
+
+/* Docs layout — header tag for nav, NOT nav tag, to avoid sidebar collision */
+.docs-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 60px);align-items:start;}
+
+/* Sidebar uses aside — no tag collision with site nav */
+.docs-sidebar{border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.dsb-section{margin-bottom:1.5rem;}
+.dsb-section-title{font-family:var(--f-mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:0 1.25rem .5rem;}
+.dsb-item{display:flex;align-items:center;gap:8px;padding:.5rem 1.25rem;font-size:.84rem;color:var(--muted);cursor:pointer;transition:all .12s;border-right:2px solid transparent;margin-right:-1px;}
+.dsb-item:hover{color:var(--white);background:rgba(0,229,192,.03);}
+.dsb-item.on{color:var(--cyan);border-right-color:var(--cyan);background:rgba(0,229,192,.05);}
+.dsb-dot{width:5px;height:5px;border-radius:50%;background:var(--faint);flex-shrink:0;}
+.dsb-item.on .dsb-dot{background:var(--cyan);}
+
+/* Doc content */
+.docs-content{padding:2.5rem 3rem;min-width:0;}
+.dpanel{display:none;max-width:780px;animation:docIn .2s ease;}
+.dpanel.on{display:block;}
+@keyframes docIn{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:translateX(0)}}
+.doc-breadcrumb{font-family:var(--f-mono);font-size:.62rem;color:var(--faint);margin-bottom:1.5rem;}
+.doc-breadcrumb span{color:var(--cyan);}
+.doc-h1{font-family:var(--f-display);font-weight:700;font-size:1.75rem;letter-spacing:-.04em;line-height:1.1;margin-bottom:.625rem;}
+.doc-desc{font-size:.95rem;color:#8BA5BC;line-height:1.8;margin-bottom:1.75rem;max-width:560px;}
+.doc-h2{font-family:var(--f-display);font-weight:700;font-size:1.1rem;letter-spacing:-.02em;margin:2rem 0 .75rem;padding-top:1rem;border-top:1px solid var(--border);}
+.doc-h2:first-of-type{border-top:none;padding-top:0;margin-top:0;}
+.doc-p{font-size:.9rem;color:var(--muted);line-height:1.85;margin-bottom:1rem;}
+.doc-p strong{color:var(--white);}
+.doc-p code{font-family:var(--f-mono);font-size:.82em;background:rgba(0,229,192,.07);padding:2px 6px;border-radius:3px;color:var(--cyan);}
+
+/* Code blocks */
+.cb{background:#020C14;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1rem 0;}
+.cb-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;background:var(--surface);border-bottom:1px solid var(--border);}
+.cb-label{font-family:var(--f-mono);font-size:.6rem;color:var(--muted);}
+.cb-copy{font-family:var(--f-mono);font-size:.58rem;color:var(--muted);padding:2px 8px;border:1px solid var(--border);border-radius:3px;background:none;cursor:pointer;transition:all .15s;}
+.cb-copy:hover{color:var(--cyan);border-color:var(--border2);}
+.cb-body{padding:1.1rem 1.4rem;font-family:var(--f-mono);font-size:.72rem;line-height:1.85;overflow-x:auto;white-space:pre;color:#B8D4EE;}
+.c-k{color:var(--cyan);}.c-s{color:var(--green);}.c-c{color:#3A5A72;}.c-n{color:var(--amber);}.c-v{color:#A78BFA;}.c-r{color:var(--red);}
+
+/* Step cards */
+.step-list{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0;}
+.step{display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:flex-start;}
+.step-num{width:32px;height:32px;border-radius:50%;background:rgba(0,229,192,.08);border:1px solid rgba(0,229,192,.2);display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:.68rem;font-weight:700;color:var(--cyan);flex-shrink:0;}
+.step-body{padding-top:6px;}
+.step-title{font-family:var(--f-display);font-size:.9rem;font-weight:700;margin-bottom:.25rem;}
+.step-desc{font-size:.84rem;color:var(--muted);line-height:1.6;}
+.step-desc code{font-family:var(--f-mono);font-size:.82em;background:rgba(0,229,192,.07);padding:1px 5px;border-radius:3px;color:var(--cyan);}
+
+/* Callout */
+.callout{padding:.875rem 1.1rem;border-radius:7px;font-size:.875rem;line-height:1.75;margin:1rem 0;}
+.callout-cyan{background:rgba(0,229,192,.05);border:1px solid rgba(0,229,192,.18);color:#8BA5BC;}
+.callout-amber{background:rgba(255,176,32,.05);border:1px solid rgba(255,176,32,.16);color:#8BA5BC;}
+.callout strong{color:var(--white);}
+
+/* Endpoint docs */
+.endpoint{background:var(--depth);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1rem 0;}
+.ep-head{display:flex;align-items:center;gap:10px;padding:.875rem 1.1rem;border-bottom:1px solid var(--border);}
+.ep-method{padding:3px 8px;border-radius:4px;font-family:var(--f-mono);font-size:.65rem;font-weight:700;}
+.ep-method.post{background:rgba(0,229,192,.1);color:var(--cyan);}
+.ep-method.get{background:rgba(0,214,138,.1);color:var(--green);}
+.ep-path{font-family:var(--f-mono);font-size:.78rem;color:var(--white);}
+.ep-desc{font-size:.84rem;color:var(--muted);}
+.ep-body{padding:1rem 1.1rem;}
+.ep-field{display:grid;grid-template-columns:120px 70px 1fr;gap:.75rem;padding:.5rem 0;border-bottom:1px solid rgba(0,229,192,.05);font-size:.82rem;align-items:start;}
+.ep-field:last-child{border-bottom:none;}
+.ep-fname{font-family:var(--f-mono);color:var(--white);font-size:.72rem;}
+.ep-ftype{font-family:var(--f-mono);font-size:.62rem;color:var(--amber);}
+.ep-fdesc{color:var(--muted);}
+
+/* Config table */
+.config-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:1rem 0;}
+.config-table th{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:.625rem .875rem;text-align:left;border-bottom:1px solid var(--border);}
+.config-table td{padding:.75rem .875rem;border-bottom:1px solid rgba(0,229,192,.05);vertical-align:top;}
+.config-table tr:last-child td{border-bottom:none;}
+.config-table .key{font-family:var(--f-mono);font-size:.7rem;color:var(--cyan);}
+.config-table .type{font-family:var(--f-mono);font-size:.65rem;color:var(--amber);}
+.config-table .default{font-family:var(--f-mono);font-size:.65rem;color:var(--muted);}
+.config-table .desc{color:var(--muted);font-size:.82rem;}
+
+/* Footer */
+.site-footer{border-top:1px solid var(--border);padding:64px 0 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:48px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.footer-col-title{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:1rem;}
+.footer-link{display:block;font-size:.875rem;color:var(--muted);margin-bottom:.45rem;transition:color .15s;cursor:pointer;}.footer-link:hover{color:var(--white);}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-copy{font-family:var(--f-mono);font-size:.65rem;color:var(--faint);}
+.footer-legal{display:flex;gap:1.5rem;font-family:var(--f-mono);font-size:.65rem;color:var(--faint);}
+.footer-legal span{cursor:pointer;}.footer-legal span:hover{color:var(--cyan);}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,5,10,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--depth);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:640px;max-height:82vh;display:flex;flex-direction:column;overflow:hidden;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.75rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-title{font-family:var(--f-display);font-weight:700;font-size:1rem;}
+.modal-close{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}.modal-close:hover{color:var(--white);}
+.modal-body{padding:1.5rem 1.75rem;overflow-y:auto;flex:1;}
+.modal-h2{font-family:var(--f-display);font-size:.88rem;font-weight:700;color:var(--cyan);margin:1.1rem 0 .35rem;}.modal-h2:first-child{margin-top:0;}
+.modal-p{font-size:.84rem;color:var(--muted);line-height:1.8;}.modal-p strong{color:var(--white);}
+@media(max-width:900px){.nav-links{display:none;}.docs-layout{grid-template-columns:1fr;}.docs-sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:1rem 0;display:flex;flex-wrap:wrap;gap:.25rem;padding:1rem 1.25rem;}.dsb-section{margin:0;}.dsb-section-title{display:none;}.dsb-item{border-right:none;border-radius:6px;padding:.4rem .875rem;border:1px solid var(--border);}.dsb-item.on{border-color:var(--cyan);}.docs-content{padding:1.5rem 1.25rem;}.footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}}
+@media(max-width:600px){.footer-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="30" height="30" viewBox="0 0 120 120" fill="none"><polygon points="60,8 104,32 104,88 60,112 16,88 16,32" fill="rgba(0,229,192,.07)" stroke="#00E5C0" stroke-width="2"/><polygon points="60,26 88,41 88,79 60,94 32,79 32,41" fill="rgba(0,229,192,.05)" stroke="rgba(0,229,192,.3)" stroke-width="1.2"/><circle cx="60" cy="60" r="14" fill="#00050A" stroke="#00E5C0" stroke-width="2"/><line x1="51" y1="51" x2="69" y2="69" stroke="#00E5C0" stroke-width="2.5" stroke-linecap="round"/><circle cx="41" cy="60" r="3" fill="#00E5C0" opacity=".9"/><line x1="32" y1="60" x2="18" y2="60" stroke="#00E5C0" stroke-width="1.8" stroke-linecap="round"/><line x1="88" y1="60" x2="102" y2="60" stroke="#00E5C0" stroke-width="1.8" stroke-linecap="round"/><polygon points="102,60 96,57 96,63" fill="#00E5C0"/></svg>
+      <span class="nav-wordmark">CASA<span>-AI</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="architecture.html" class="nav-link">Architecture</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="compliance.html" class="nav-link">Compliance</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="docs.html" class="nav-link active">Docs</a>
+      <a href="test-results.html" class="nav-link">Tests</a>
+    </nav>
+    <div class="nav-actions"><a href="pricing.html" class="nav-cta">Get License →</a></div>
+  </div>
+</header>
+
+<div class="docs-hero">
+  <div class="wrap">
+    <div class="eyebrow">Documentation</div>
+    <h1 style="font-family:var(--f-display);font-weight:700;font-size:2rem;letter-spacing:-.04em;margin-bottom:.25rem;">CASA-AI <em style="font-style:normal;color:var(--cyan)">Reference</em></h1>
+    <p style="font-size:.9rem;color:var(--muted);">Deploy in 60 seconds · No SDK changes · Air-gap compatible</p>
+  </div>
+</div>
+
+<div class="docs-layout">
+  <!-- Sidebar — uses aside, NOT nav, to avoid site-nav CSS collision -->
+  <aside class="docs-sidebar">
+    <div class="dsb-section">
+      <div class="dsb-section-title">Getting Started</div>
+      <div class="dsb-item on" onclick="showDoc('quickstart',this)"><div class="dsb-dot"></div>Quick Start</div>
+      <div class="dsb-item" onclick="showDoc('config',this)"><div class="dsb-dot"></div>Configuration</div>
+      <div class="dsb-item" onclick="showDoc('license',this)"><div class="dsb-dot"></div>License Setup</div>
+    </div>
+    <div class="dsb-section">
+      <div class="dsb-section-title">API Reference</div>
+      <div class="dsb-item" onclick="showDoc('evaluate',this)"><div class="dsb-dot"></div>POST /evaluate</div>
+      <div class="dsb-item" onclick="showDoc('stream',this)"><div class="dsb-dot"></div>GET /stream</div>
+      <div class="dsb-item" onclick="showDoc('health',this)"><div class="dsb-dot"></div>GET /health</div>
+    </div>
+    <div class="dsb-section">
+      <div class="dsb-section-title">Deployment</div>
+      <div class="dsb-item" onclick="showDoc('docker',this)"><div class="dsb-dot"></div>Docker Deploy</div>
+      <div class="dsb-item" onclick="showDoc('helm',this)"><div class="dsb-dot"></div>Kubernetes / Helm</div>
+      <div class="dsb-item" onclick="showDoc('airgap',this)"><div class="dsb-dot"></div>Air-Gap Setup</div>
+    </div>
+    <div class="dsb-section">
+      <div class="dsb-section-title">Compliance</div>
+      <div class="dsb-item" onclick="showDoc('rego',this)"><div class="dsb-dot"></div>Custom Rego Policies</div>
+      <div class="dsb-item" onclick="showDoc('audit',this)"><div class="dsb-dot"></div>Audit Log Format</div>
+    </div>
+  </aside>
+
+  <div class="docs-content">
+
+    <!-- Quick Start -->
+    <div class="dpanel on" id="dp-quickstart">
+      <div class="doc-breadcrumb">Docs / <span>Quick Start</span></div>
+      <div class="doc-h1">Deploy CASA-AI in 60 seconds</div>
+      <p class="doc-desc">CASA-AI is a single Docker container. Point your agent's LLM API base URL at the container. One environment variable change — no SDK modifications, no agent code changes.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.75rem">
+        <span class="tag tag-cyan">Docker 24+ required</span>
+        <span class="tag tag-green">No SDK changes</span>
+        <span class="tag tag-amber">Valid license key required</span>
+      </div>
+
+      <div class="doc-h2">Prerequisites</div>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Docker 24+ or Kubernetes 1.28+</div><div class="step-desc">Running in your private VPC or on-premise cluster. The container requires no internet connectivity after the image is pulled.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Valid <code>CASA_LICENSE_KEY</code></div><div class="step-desc">Issued within minutes of Razorpay payment. Ed25519-signed — validated entirely offline against the embedded public key.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Your LLM provider endpoint</div><div class="step-desc">Any OpenAI-compatible API — OpenAI, Anthropic, AWS Bedrock, Azure OpenAI, local Ollama. CASA-AI acts as a transparent proxy.</div></div></div>
+      </div>
+
+      <div class="doc-h2">Run with Docker</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">bash</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body">docker run -d \
+  --name casa-ai \
+  -p 8088:8088 \
+  -e CASA_LICENSE_KEY="your-ed25519-signed-key" \
+  -e LLM_UPSTREAM="https://api.openai.com" \
+  -e LOG_LEVEL="info" \
+  -v $(pwd)/policies:/policies:ro \
+  ghcr.io/shivangace/casa-ai-core:latest</div>
+      </div>
+
+      <div class="doc-h2">Point your agent at CASA-AI</div>
+      <p class="doc-p">Change one environment variable in your agent application. No code changes required.</p>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">bash — agent application</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body"><span class="c-c"># Before — direct to OpenAI</span>
+OPENAI_API_BASE=https://api.openai.com/v1
+
+<span class="c-c"># After — proxied through CASA-AI</span>
+OPENAI_API_BASE=http://localhost:8088/v1
+
+<span class="c-c"># CASA-AI intercepts, evaluates, and forwards clean traffic.
+# Violated requests are blocked before they reach the LLM.</span></div>
+      </div>
+
+      <div class="doc-h2">Verify it's running</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">bash</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body">curl http://localhost:8088/health
+
+<span class="c-c"># Expected response:</span>
+{
+  "status": "ok",
+  "version": "1.0.0",
+  "license": {
+    "tier": "ENTERPRISE",
+    "tenant_id": "your-org",
+    "max_agents": 15,
+    "expires_at": "2027-07-01T00:00:00Z"
+  },
+  "active_agents": 0,
+  "uptime_seconds": 12
+}</div>
+      </div>
+
+      <div class="callout callout-cyan">
+        <strong>That's it.</strong> Your AI agents are now fully governed at runtime. Every reasoning chain is intercepted, every tool call validated, every violation blocked before it reaches production.
+      </div>
+    </div>
+
+    <!-- Config -->
+    <div class="dpanel" id="dp-config">
+      <div class="doc-breadcrumb">Docs / <span>Configuration</span></div>
+      <div class="doc-h1">Configuration Reference</div>
+      <p class="doc-desc">CASA-AI is configured via environment variables and an optional <code>casa.yaml</code> file mounted into the container. The YAML file hot-reloads — changes take effect within 2 seconds without restart.</p>
+
+      <div class="doc-h2">Environment Variables</div>
+      <table class="config-table">
+        <thead><tr><th>Variable</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="key">CASA_LICENSE_KEY</td><td class="type">string</td><td class="default">required</td><td class="desc">Ed25519-signed license payload. Validated offline against embedded public key.</td></tr>
+          <tr><td class="key">LLM_UPSTREAM</td><td class="type">string</td><td class="default">required</td><td class="desc">Base URL of your LLM provider (e.g., https://api.openai.com). CASA-AI proxies to this endpoint.</td></tr>
+          <tr><td class="key">LOG_LEVEL</td><td class="type">string</td><td class="default">info</td><td class="desc">Logging verbosity: debug, info, warn, error. All logs go to stdout.</td></tr>
+          <tr><td class="key">POLICY_DIR</td><td class="type">string</td><td class="default">/policies</td><td class="desc">Path to Rego policy files inside the container. Mount your policy directory here.</td></tr>
+          <tr><td class="key">CONFIG_PATH</td><td class="type">string</td><td class="default">/configs/casa.yaml</td><td class="desc">Path to the YAML configuration file. Hot-reloaded on change.</td></tr>
+          <tr><td class="key">WEBHOOK_URL</td><td class="type">string</td><td class="default">—</td><td class="desc">ENTERPRISE+. HMAC-SHA256 signed JSON webhook dispatched on every compliance violation.</td></tr>
+          <tr><td class="key">WEBHOOK_SECRET</td><td class="type">string</td><td class="default">—</td><td class="desc">ENTERPRISE+. Secret used to sign the webhook payload for verification by your endpoint.</td></tr>
+          <tr><td class="key">AUDIT_LOG_PATH</td><td class="type">string</td><td class="default">/var/log/casa-ai/audit.jsonl</td><td class="desc">Path for the SHA-256 chained audit log. Mount a persistent volume here.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h2">casa.yaml — Full Reference</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">yaml</span><span class="cb-label">configs/casa.yaml</span></div>
+        <div class="cb-body"><span class="c-c"># CASA-AI Configuration — full annotated reference</span>
+
+compliance:
+  profile: enterprise          <span class="c-c"># basic | enterprise | big_infra | custom</span>
+  strict_sovereignty: true     <span class="c-c"># enforce provider_country == "IN"</span>
+  frameworks:
+    - nist_ai_rmf              <span class="c-c"># always active on BASIC+</span>
+    - rbi_ai_governance        <span class="c-c"># ENTERPRISE+</span>
+    - dpdp_act_2023            <span class="c-c"># ENTERPRISE+</span>
+    - eu_ai_act                <span class="c-c"># ENTERPRISE+</span>
+    - iso_42001                <span class="c-c"># ENTERPRISE+</span>
+
+tools:
+  approved_tools:              <span class="c-c"># only these MCP tool names are allowed</span>
+    - read_file
+    - search_web
+    - execute_sql_readonly
+    - send_slack_message
+  <span class="c-c"># Any tool call NOT in this list → BLOCK + circuit-breaker</span>
+
+agent:
+  idle_timeout_seconds: 300    <span class="c-c"># auto-evict idle sessions</span>
+  max_reasoning_steps: 50      <span class="c-c"># cap TAO loop depth</span>
+
+audit:
+  enabled: true
+  path: /var/log/casa-ai/audit.jsonl
+  export:                      <span class="c-c"># BIG INFRA+ — export to your cloud storage</span>
+    enabled: false
+    provider: s3               <span class="c-c"># s3 | gcs | azure_blob</span>
+    bucket: your-audit-bucket
+    prefix: casa-ai/logs/</div>
+      </div>
+    </div>
+
+    <!-- License -->
+    <div class="dpanel" id="dp-license">
+      <div class="doc-breadcrumb">Docs / <span>License Setup</span></div>
+      <div class="doc-h1">License Key Setup</div>
+      <p class="doc-desc">CASA-AI uses Ed25519-signed license payloads validated entirely offline. No outbound calls, no license servers, no internet dependency. Air-gap compatible by architecture.</p>
+
+      <div class="doc-h2">Getting your license key</div>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Purchase a plan</div><div class="step-desc">Visit <a href="pricing.html" style="color:var(--cyan)">pricing page</a> and select your tier. Pay via Razorpay — UPI, netbanking, card all accepted.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Receive key via email</div><div class="step-desc">Ed25519-signed JWT delivered to your email within minutes of payment confirmation. Contains your <code>tenant_id</code>, tier, <code>max_agents</code>, and expiry.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Set environment variable</div><div class="step-desc">Pass the key as <code>CASA_LICENSE_KEY</code> environment variable to the container. Never commit it to source control.</div></div></div>
+      </div>
+
+      <div class="doc-h2">License payload structure</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">json — decoded license payload (example)</span></div>
+        <div class="cb-body">{
+  "tenant_id":  "acme-corp-india",
+  "tier":       "ENTERPRISE",
+  "max_agents": 15,
+  "features": [
+    "rbi_ai_governance",
+    "dpdp_act_2023",
+    "eu_ai_act",
+    "custom_rego",
+    "webhook_alerts"
+  ],
+  "issued_at":  "2026-07-01T00:00:00Z",
+  "expires_at": "2027-07-01T00:00:00Z"
+  <span class="c-c">// Signed with Ed25519 — tamper = instant rejection</span>
+}</div>
+      </div>
+
+      <div class="callout callout-amber">
+        <strong>Agent limit enforcement:</strong> Attempting to register agent N+1 past your tier limit returns <code>HTTP 429 Too Many Requests</code> immediately. The limit is enforced in Go code at the session registry level — there is no UI bypass.
+      </div>
+    </div>
+
+    <!-- POST /evaluate -->
+    <div class="dpanel" id="dp-evaluate">
+      <div class="doc-breadcrumb">Docs / API / <span>POST /evaluate</span></div>
+      <div class="doc-h1">POST /evaluate</div>
+      <p class="doc-desc">Evaluate a single agent prompt + reasoning chain snapshot against all active compliance policies. Returns a verdict synchronously in under 2ms.</p>
+
+      <div class="endpoint">
+        <div class="ep-head"><span class="ep-method post">POST</span><span class="ep-path">/v1/evaluate</span></div>
+        <div class="ep-body">
+          <div style="font-family:var(--f-mono);font-size:.6rem;color:var(--faint);margin-bottom:.75rem;letter-spacing:.1em">REQUEST BODY — application/json</div>
+          <div class="ep-field"><span class="ep-fname">session_id</span><span class="ep-ftype">string</span><span class="ep-fdesc">Unique identifier for this agent session. Used to enforce per-session agent limits.</span></div>
+          <div class="ep-field"><span class="ep-fname">agent_payload</span><span class="ep-ftype">object</span><span class="ep-fdesc">Contains <code>prompt</code> (string) — the surface-level user prompt sent to the agent.</span></div>
+          <div class="ep-field"><span class="ep-fname">reasoning_chain</span><span class="ep-ftype">array</span><span class="ep-fdesc">Array of <code>{type: "Thought|Action|Observation", content: string}</code> steps captured so far.</span></div>
+          <div class="ep-field"><span class="ep-fname">tool_calls</span><span class="ep-ftype">array</span><span class="ep-fdesc">Array of <code>{tool_name, provider_country, resource_path}</code> MCP tool calls to validate.</span></div>
+          <div class="ep-field"><span class="ep-fname">compliance_profile</span><span class="ep-ftype">object</span><span class="ep-fdesc">Override profile for this request. <code>strict_sovereignty: bool</code>, <code>risk_threshold: float</code>.</span></div>
+        </div>
+      </div>
+
+      <div class="cb" style="margin-top:1.25rem">
+        <div class="cb-bar"><span class="cb-label">bash — example request</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body">curl -X POST http://localhost:8088/v1/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "agent-prod-41",
+    "agent_payload": {
+      "prompt": "Translate this customer document."
+    },
+    "reasoning_chain": [
+      {"type": "Thought", "content": "I need to extract the customer name first."},
+      {"type": "Observation", "content": "Customer: Rahul Sharma, PAN: ABCDE1234F"}
+    ],
+    "tool_calls": [
+      {"tool_name": "translate_text", "provider_country": "US"}
+    ],
+    "compliance_profile": {"strict_sovereignty": true}
+  }'</div>
+      </div>
+
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">json — BLOCK response</span></div>
+        <div class="cb-body">{
+  "allow": false,
+  "violations": [
+    "PII_LEAK_IN_REASONING: PAN pattern in Observation step",
+    "SOVEREIGNTY_VIOLATION: provider_country US != IN"
+  ],
+  "circuit_breaker_fired": true,
+  "eval_latency_ms": 1.28,
+  "audit_entry_id": 47
+}</div>
+      </div>
+    </div>
+
+    <!-- GET /stream -->
+    <div class="dpanel" id="dp-stream">
+      <div class="doc-breadcrumb">Docs / API / <span>GET /stream</span></div>
+      <div class="doc-h1">GET /stream (SSE Proxy)</div>
+      <p class="doc-desc">The primary interception endpoint. CASA-AI acts as a transparent SSE proxy between your agent and the LLM provider. Token chunks are intercepted, reassembled, classified, and evaluated mid-stream.</p>
+
+      <div class="endpoint">
+        <div class="ep-head"><span class="ep-method get">GET</span><span class="ep-path">/v1/chat/completions (SSE)</span></div>
+        <div class="ep-body">
+          <div style="font-family:var(--f-mono);font-size:.6rem;color:var(--faint);margin-bottom:.75rem;letter-spacing:.1em">BEHAVIOR</div>
+          <div class="ep-field"><span class="ep-fname">Clean traffic</span><span class="ep-ftype"></span><span class="ep-fdesc">Token chunks pass through with under 2ms overhead. The agent receives responses normally.</span></div>
+          <div class="ep-field"><span class="ep-fname">On violation</span><span class="ep-ftype"></span><span class="ep-fdesc">Stream severed mid-chunk. Agent receives no further output. Circuit-breaker fires synchronously.</span></div>
+          <div class="ep-field"><span class="ep-fname">Headers</span><span class="ep-ftype"></span><span class="ep-fdesc">Pass all OpenAI-compatible headers including <code>Authorization: Bearer sk-...</code>. CASA-AI forwards them to your upstream.</span></div>
+        </div>
+      </div>
+
+      <div class="callout callout-cyan" style="margin-top:1.25rem">
+        <strong>Zero SDK changes required.</strong> Set <code>OPENAI_API_BASE=http://localhost:8088/v1</code> in your agent environment. All SDKs (LangChain, LlamaIndex, AutoGen, raw openai-python) work without modification.
+      </div>
+    </div>
+
+    <!-- GET /health -->
+    <div class="dpanel" id="dp-health">
+      <div class="doc-breadcrumb">Docs / API / <span>GET /health</span></div>
+      <div class="doc-h1">GET /health</div>
+      <p class="doc-desc">Returns engine status, license information, active agent count, and uptime. Use for liveness and readiness probes in Kubernetes.</p>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">json — health response</span></div>
+        <div class="cb-body">{
+  "status":   "ok",
+  "version":  "1.0.0",
+  "license": {
+    "tier":       "ENTERPRISE",
+    "tenant_id":  "your-org",
+    "max_agents": 15,
+    "used_agents": 7,
+    "expires_at": "2027-07-01T00:00:00Z"
+  },
+  "active_agents":    7,
+  "evaluations_total": 12847,
+  "violations_total":  23,
+  "eval_latency_p99":  "1.28ms",
+  "uptime_seconds":    86400
+}</div>
+      </div>
+    </div>
+
+    <!-- Docker -->
+    <div class="dpanel" id="dp-docker">
+      <div class="doc-breadcrumb">Docs / Deployment / <span>Docker</span></div>
+      <div class="doc-h1">Docker Deployment</div>
+      <p class="doc-desc">The recommended way to run CASA-AI in production. Uses the hardened distroless image — no shell, no package manager, UID 65532 non-root, 8MB total size.</p>
+
+      <div class="doc-h2">Production docker-compose.yml</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">yaml</span><span class="cb-label">docker-compose.yml</span></div>
+        <div class="cb-body">version: '3.8'
+services:
+  casa-ai:
+    image: ghcr.io/shivangace/casa-ai-core:latest
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+    environment:
+      CASA_LICENSE_KEY: "${CASA_LICENSE_KEY}"
+      LLM_UPSTREAM: "https://api.openai.com"
+      LOG_LEVEL: "info"
+      WEBHOOK_URL: "${WEBHOOK_URL}"
+      WEBHOOK_SECRET: "${WEBHOOK_SECRET}"
+    volumes:
+      - ./policies:/policies:ro        <span class="c-c"># your Rego policy files</span>
+      - ./configs/casa.yaml:/configs/casa.yaml:ro
+      - audit-log:/var/log/casa-ai     <span class="c-c"># persist audit log</span>
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8088/health | grep ok"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  audit-log:</div>
+      </div>
+
+      <div class="callout callout-cyan">
+        <strong>Security note:</strong> <code>read_only: true</code> and <code>cap_drop: ALL</code> are strongly recommended. The distroless runtime has no shell — <code>docker exec /bin/sh</code> returns "no such file or directory".
+      </div>
+    </div>
+
+    <!-- Helm -->
+    <div class="dpanel" id="dp-helm">
+      <div class="doc-breadcrumb">Docs / Deployment / <span>Kubernetes / Helm</span></div>
+      <div class="doc-h1">Kubernetes / Helm Deployment</div>
+      <p class="doc-desc">The included Helm chart deploys CASA-AI as a Kubernetes service. The chart handles RBAC, secret mounting, liveness/readiness probes, and optional HPA.</p>
+
+      <div class="doc-h2">Install via Helm</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">bash</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body"><span class="c-c"># Add the CASA-AI Helm repository</span>
+helm repo add casa-ai https://charts.casa-ai.in
+helm repo update
+
+<span class="c-c"># Create secret from your license key</span>
+kubectl create secret generic casa-ai-license \
+  --from-literal=CASA_LICENSE_KEY="your-signed-key"
+
+<span class="c-c"># Install with your values</span>
+helm install casa-ai casa-ai/casa-engine \
+  --namespace casa-ai \
+  --create-namespace \
+  --set licenseSecretName=casa-ai-license \
+  --set llmUpstream=https://api.openai.com \
+  --set replicaCount=2</div>
+      </div>
+
+      <div class="doc-h2">Kubernetes liveness and readiness probes</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">yaml — deployment snippet</span></div>
+        <div class="cb-body">livenessProbe:
+  httpGet:
+    path: /health
+    port: 8088
+  initialDelaySeconds: 5
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8088
+  initialDelaySeconds: 2
+  periodSeconds: 10
+  failureThreshold: 3</div>
+      </div>
+    </div>
+
+    <!-- Air-Gap -->
+    <div class="dpanel" id="dp-airgap">
+      <div class="doc-breadcrumb">Docs / Deployment / <span>Air-Gap Setup</span></div>
+      <div class="doc-h1">Air-Gap Deployment</div>
+      <p class="doc-desc">CASA-AI is air-gap compatible by architecture. The license validation uses an embedded Ed25519 public key — zero outbound calls. Verified with <code>iptables DROP ALL outbound</code>.</p>
+
+      <div class="doc-h2">Verify air-gap operation</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">bash — test air-gap mode</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body"><span class="c-c"># Block all outbound traffic</span>
+iptables -I OUTPUT -j DROP
+iptables -I OUTPUT -d 127.0.0.1 -j ACCEPT
+iptables -I OUTPUT -d ::1 -j ACCEPT
+
+<span class="c-c"># Start CASA-AI — should start, validate license, and operate normally</span>
+docker run -d \
+  -e CASA_LICENSE_KEY="your-key" \
+  -e LLM_UPSTREAM="http://your-internal-ollama:11434" \
+  ghcr.io/shivangace/casa-ai-core:latest
+
+<span class="c-c"># Confirm health — proves zero outbound calls needed</span>
+curl http://localhost:8088/health
+<span class="c-c"># Expected: {"status":"ok", "license":{"tier":"..."}, ...}</span>
+
+<span class="c-c"># Clean up iptables rules</span>
+iptables -D OUTPUT -j DROP</div>
+      </div>
+
+      <div class="callout callout-cyan">
+        <strong>CUSTOM tier only:</strong> For highly regulated environments requiring machine fingerprint binding (the license key is cryptographically tied to your specific hardware), contact <a href="mailto:shivangace001@gmail.com" style="color:var(--cyan)">shivangace001@gmail.com</a> for a CUSTOM quote.
+      </div>
+    </div>
+
+    <!-- Custom Rego -->
+    <div class="dpanel" id="dp-rego">
+      <div class="doc-breadcrumb">Docs / Compliance / <span>Custom Rego Policies</span></div>
+      <div class="doc-h1">Custom Rego Policies</div>
+      <p class="doc-desc">Write your own compliance rules in Open Policy Agent's Rego language. Mount your <code>.rego</code> files into <code>/policies/</code> — the engine hot-reloads changes atomically without restart. ENTERPRISE+ tier.</p>
+
+      <div class="doc-h2">Input schema available in policy</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">json — input object available to Rego</span></div>
+        <div class="cb-body">{
+  "agent_payload": {
+    "prompt": "string — the user's input prompt"
+  },
+  "reasoning_chain": [
+    {"type": "Thought|Action|Observation", "content": "string"}
+  ],
+  "tool_calls": [
+    {
+      "tool_name": "string",
+      "provider_country": "IN|US|EU|...",
+      "resource_path": "string"
+    }
+  ],
+  "session": {
+    "user_role": "string",
+    "dual_approval_obtained": "bool"
+  },
+  "compliance_profile": {
+    "strict_sovereignty": "bool",
+    "risk_threshold": "float"
+  },
+  "policy": {
+    "approved_tools": ["string"]
+  }
+}</div>
+      </div>
+
+      <div class="doc-h2">Custom policy example</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">rego</span><span class="cb-label">policies/custom_sebi.rego</span></div>
+        <div class="cb-body"><span class="c-k">package</span> <span class="c-s">casa.ai.custom.sebi</span>
+
+<span class="c-c"># Block trade execution without dual approval</span>
+<span class="c-k">default</span> unapproved_tool_call := <span class="c-n">false</span>
+
+unapproved_tool_call <span class="c-v">if</span> {
+    <span class="c-v">some</span> call <span class="c-v">in</span> input.tool_calls
+    call.tool_name == <span class="c-s">"execute_trade"</span>
+    <span class="c-v">not</span> input.session.dual_approval_obtained
+}
+
+<span class="c-c"># Block access to contracts unless legal_team role</span>
+unapproved_tool_call <span class="c-v">if</span> {
+    <span class="c-v">some</span> call <span class="c-v">in</span> input.tool_calls
+    startswith(call.resource_path, <span class="c-s">"/contracts/"</span>)
+    input.session.user_role != <span class="c-s">"legal_team"</span>
+}
+
+<span class="c-c"># Add custom PII — internal employee IDs</span>
+pii_detected <span class="c-v">if</span> {
+    regex.match(
+        <span class="c-s">`EMP-[0-9]{6}`</span>,
+        input.agent_payload.prompt,
+    )
+}</div>
+      </div>
+    </div>
+
+    <!-- Audit Log -->
+    <div class="dpanel" id="dp-audit">
+      <div class="doc-breadcrumb">Docs / Compliance / <span>Audit Log Format</span></div>
+      <div class="doc-h1">Audit Log Format</div>
+      <p class="doc-desc">Every evaluation verdict is written to a SHA-256 chained JSONL file. Each entry includes the previous entry's hash — making any tampering immediately detectable. One line per evaluation.</p>
+
+      <div class="doc-h2">Entry format</div>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">json — single audit entry (ALLOW)</span></div>
+        <div class="cb-body">{
+  "entry_id":          44,
+  "timestamp":         "2026-07-07T18:46:43.847Z",
+  "session_id":        "agent-prod-41",
+  "verdict":           "ALLOW",
+  "violations":        [],
+  "eval_latency_ms":   0.847,
+  "circuit_breaker":   false,
+  "framework":         "NIST_AI_RMF",
+  "entry_hash":        "a7f3b2c1e4d9f823...",
+  "prev_hash":         "3d9e1a2f8b4c7e12..."
+}</div>
+      </div>
+
+      <div class="cb" style="margin-top:.75rem">
+        <div class="cb-bar"><span class="cb-label">json — single audit entry (BLOCK)</span></div>
+        <div class="cb-body">{
+  "entry_id":          46,
+  "timestamp":         "2026-07-07T18:46:45.123Z",
+  "session_id":        "agent-prod-43",
+  "verdict":           "BLOCK",
+  "violations": [
+    "PII_LEAK_IN_REASONING: PAN pattern in Observation step",
+    "SOVEREIGNTY_VIOLATION: provider_country US != IN"
+  ],
+  "eval_latency_ms":   1.28,
+  "circuit_breaker":   true,
+  "remediation": [
+    "STREAM_SEVERED",
+    "AWS_IAM_REVOKED: arn:aws:iam::083334184188:role/agent-role"
+  ],
+  "framework":         "RBI_AI_GOVERNANCE",
+  "entry_hash":        "2b8f5e1d9a3c6f47...",
+  "prev_hash":         "e9d4c7a3f1b2e856..."
+}</div>
+      </div>
+
+      <div class="doc-h2">Tamper detection</div>
+      <p class="doc-p">Each entry's <code>entry_hash</code> is <code>SHA256(entry_data + prev_hash)</code>. To verify chain integrity:</p>
+      <div class="cb">
+        <div class="cb-bar"><span class="cb-label">bash — verify chain integrity</span><button class="cb-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="cb-body"><span class="c-c"># CASA-AI includes a built-in verifier</span>
+docker exec casa-ai /casa-ai-engine verify-audit \
+  --file /var/log/casa-ai/audit.jsonl
+
+<span class="c-c"># Output on clean chain:</span>
+Verified 12,847 entries. Chain integrity: OK.
+
+<span class="c-c"># Output on tampered chain:</span>
+Chain integrity FAILED at entry #46.
+Expected hash: 2b8f5e1d... Got: 9f3a1c2d...
+This entry has been modified or an entry has been deleted.</div>
+      </div>
+    </div>
+
+  </div><!-- /docs-content -->
+</div><!-- /docs-layout -->
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div><div style="display:flex;align-items:center;gap:9px;margin-bottom:.5rem"><svg width="22" height="22" viewBox="0 0 120 120" fill="none"><polygon points="60,8 104,32 104,88 60,112 16,88 16,32" fill="rgba(0,229,192,.07)" stroke="#00E5C0" stroke-width="2"/><circle cx="60" cy="60" r="14" fill="#00050A" stroke="#00E5C0" stroke-width="2"/><line x1="51" y1="51" x2="69" y2="69" stroke="#00E5C0" stroke-width="2.5" stroke-linecap="round"/></svg><span style="font-family:var(--f-display);font-weight:700;font-size:.95rem;">CASA<span style="color:var(--cyan)">-AI</span></span></div><p style="font-size:.875rem;color:var(--muted);line-height:1.75;max-width:280px;margin:.75rem 0 1rem;">Self-hosted runtime compliance for autonomous AI agents. Zero data leaves your VPC.</p></div>
+      <div><div class="footer-col-title">Product</div><a href="index.html" class="footer-link">Home</a><a href="architecture.html" class="footer-link">Architecture</a><a href="features.html" class="footer-link">Features</a><a href="pricing.html" class="footer-link">Pricing</a><a href="test-results.html" class="footer-link">Tests</a></div>
+      <div><div class="footer-col-title">Compliance</div><a href="compliance.html" class="footer-link">🇮🇳 RBI AI Governance</a><a href="compliance.html" class="footer-link">🇮🇳 DPDP Act 2023</a><a href="compliance.html" class="footer-link">🇪🇺 EU AI Act</a><a href="compliance.html" class="footer-link">🇺🇸 NIST AI RMF</a><a href="compliance.html" class="footer-link">🌐 ISO/IEC 42001</a></div>
+      <div><div class="footer-col-title">Legal</div><span class="footer-link" onclick="openModal('privacy')">Privacy Policy</span><span class="footer-link" onclick="openModal('terms')">Terms of Service</span><span class="footer-link" onclick="openModal('security')">Security Policy</span><a href="mailto:shivangace001@gmail.com" class="footer-link">Contact Sales</a></div>
+    </div>
+    <div class="footer-bottom"><div class="footer-copy">© 2026 CASA-AI · casa-ai.in · All rights reserved</div><div class="footer-legal"><span onclick="openModal('privacy')">Privacy</span><span onclick="openModal('terms')">Terms</span><span onclick="openModal('security')">Security</span></div></div>
+  </div>
+</footer>
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOnBg(event,'privacy')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Privacy Policy</div><button class="modal-close" onclick="closeModal('privacy')">✕</button></div><div class="modal-body"><div class="modal-h2">Zero Data Exfiltration</div><p class="modal-p"><strong>No data leaves your VPC.</strong></p><div class="modal-h2">Contact</div><p class="modal-p"><strong>shivangace001@gmail.com</strong></p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOnBg(event,'terms')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Terms of Service</div><button class="modal-close" onclick="closeModal('terms')">✕</button></div><div class="modal-body"><div class="modal-h2">License</div><p class="modal-p">Non-exclusive. <strong>Forging license key = material breach.</strong> Law: India.</p></div></div></div>
+<div class="modal-overlay" id="modal-security" onclick="closeModalOnBg(event,'security')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Security</div><button class="modal-close" onclick="closeModal('security')">✕</button></div><div class="modal-body"><div class="modal-h2">Hardening</div><p class="modal-p">Distroless · UID 65532 · <strong>0 CVEs</strong> · Trivy on every commit.</p></div></div></div>
+
+<script>
+window.addEventListener('scroll',function(){var n=document.getElementById('site-nav');if(n)n.classList.toggle('scrolled',window.scrollY>20);},{passive:true});
+(function(){function check(){document.querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight-30)el.classList.add('visible');});}check();window.addEventListener('scroll',check,{passive:true});})();
+function openModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.add('open');document.body.style.overflow='hidden';}}
+function closeModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.remove('open');document.body.style.overflow='';}}
+function closeModalOnBg(e,n){if(e.target===document.getElementById('modal-'+n))closeModal(n);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['privacy','terms','security'].forEach(closeModal);document.body.style.overflow='';}});
+function showDoc(name, el) {
+  document.querySelectorAll('.dpanel').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.dsb-item').forEach(function(b){ b.classList.remove('on'); });
+  var p = document.getElementById('dp-' + name);
+  if(p) p.classList.add('on');
+  if(el) el.classList.add('on');
+  var c = document.querySelector('.docs-content');
+  if(c) c.scrollTop = 0;
+}
+function copyCode(btn) {
+  var code = btn.closest('.cb').querySelector('.cb-body').textContent;
+  navigator.clipboard.writeText(code).then(function(){
+    btn.textContent = 'copied!';
+    setTimeout(function(){ btn.textContent = 'copy'; }, 2000);
+  });
+}
+</script>
+</body>
+</html>

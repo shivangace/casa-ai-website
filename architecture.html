@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CASA-AI System Architecture — Four Core Engines inside one 8MB Docker container. Context Tracker, Compliance Engine, Circuit-Breaker, License Engine.">
+<title>CASA-AI — System Architecture | Four Core Engines</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2300050A'/%3E%3Cpath d='M16 4L28 10V22L16 28L4 22V10Z' stroke='%2300E5C0' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%2300E5C0'/%3E%3Cline x1='12' y1='12' x2='20' y2='20' stroke='%2300050A' stroke-width='2.5'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#00050A;--depth:#040D16;--surface:#081420;--lift:#0D1E30;--cyan:#00E5C0;--red:#FF3358;--amber:#FFB020;--green:#00D68A;--white:#F0F6FF;--muted:#5B7A94;--faint:#1A2E42;--border:rgba(0,229,192,.1);--border2:rgba(0,229,192,.22);--f-display:'Space Grotesk',sans-serif;--f-mono:'JetBrains Mono',monospace;--f-body:'Inter',sans-serif;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{background:var(--void);color:var(--white);font-family:var(--f-body);line-height:1.6;overflow-x:hidden;padding-top:60px;}
+a{color:inherit;text-decoration:none;}
+::selection{background:rgba(0,229,192,.2);color:var(--cyan);}
+.wrap{max-width:1160px;margin:0 auto;padding:0 2rem;}
+.section{padding:88px 0;border-top:1px solid var(--border);}
+.eyebrow{font-family:var(--f-mono);font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--cyan);flex-shrink:0;}
+.headline{font-family:var(--f-display);font-weight:700;font-size:clamp(2rem,4.5vw,3.4rem);letter-spacing:-.03em;line-height:1.05;color:var(--white);}
+.headline em{font-style:normal;color:var(--cyan);}
+.subhead{font-family:var(--f-display);font-size:clamp(1.1rem,2.2vw,1.55rem);font-weight:600;letter-spacing:-.02em;line-height:1.2;}
+.body-lg{font-size:1rem;color:#8BA5BC;line-height:1.85;}
+.body-sm{font-size:.875rem;color:var(--muted);line-height:1.75;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:6px;font-family:var(--f-display);font-weight:600;font-size:.88rem;line-height:1;cursor:pointer;border:none;transition:all .18s ease;white-space:nowrap;text-decoration:none;}
+.btn-primary{background:var(--cyan);color:#000;}.btn-primary:hover{background:#1DFFD8;transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px);}
+.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-family:var(--f-mono);font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.tag-cyan{background:rgba(0,229,192,.1);color:var(--cyan);}.tag-green{background:rgba(0,214,138,.1);color:var(--green);}
+.proof{display:flex;align-items:flex-start;gap:10px;padding:.875rem 1rem;background:rgba(0,214,138,.05);border:1px solid rgba(0,214,138,.18);border-radius:7px;font-family:var(--f-mono);font-size:.66rem;color:var(--green);line-height:1.6;}
+.code-block{background:#020C14;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);}
+.code-lang,.code-file{font-family:var(--f-mono);font-size:.6rem;color:var(--muted);}
+.code-body{padding:1.25rem 1.5rem;font-family:var(--f-mono);font-size:.72rem;line-height:1.85;overflow-x:auto;white-space:pre;color:#B8D4EE;}
+.c-k{color:var(--cyan);}.c-s{color:var(--green);}.c-c{color:#3A5A72;}.c-n{color:var(--amber);}.c-v{color:#A78BFA;}.c-r{color:var(--red);}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal.d1{transition-delay:.07s;}.reveal.d2{transition-delay:.14s;}.reveal.d3{transition-delay:.21s;}
+
+/* Nav */
+#site-nav{position:fixed;top:0;left:0;right:0;z-index:9999;height:60px;background:rgba(0,5,10,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .2s,border-color .2s;}
+#site-nav.scrolled{background:rgba(0,5,10,.98);border-color:var(--border2);}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;}
+.nav-logo{display:flex;align-items:center;gap:9px;margin-right:auto;flex-shrink:0;}
+.nav-wordmark{font-family:var(--f-display);font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--white);}
+.nav-wordmark span{color:var(--cyan);}
+.nav-links{display:flex;align-items:center;gap:0;margin:0 20px;}
+.nav-link{padding:6px 11px;font-size:.8rem;font-weight:500;color:var(--muted);transition:color .15s;white-space:nowrap;border-radius:5px;}
+.nav-link:hover{color:var(--white);}.nav-link.active{color:var(--cyan);}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.nav-cta{padding:7px 16px;background:var(--cyan);color:#000;border-radius:5px;font-family:var(--f-display);font-weight:700;font-size:.8rem;line-height:1;transition:all .15s;}
+.nav-cta:hover{background:#1DFFD8;}
+
+/* Page hero */
+.pg-hero{padding:72px 0 56px;position:relative;overflow:hidden;}
+.pg-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,192,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,.03) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 50% 0%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 0%,black,transparent);}
+.pg-hero-inner{position:relative;z-index:1;}
+
+/* VPC Diagram */
+.vpc-box{background:var(--depth);border:1px dashed rgba(0,229,192,.25);border-radius:12px;padding:1.75rem;position:relative;margin:2.5rem 0;}
+.vpc-label{position:absolute;top:-10px;left:16px;background:var(--void);padding:0 8px;font-family:var(--f-mono);font-size:.58rem;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;}
+.vpc-flow{display:grid;grid-template-columns:1fr 40px 1fr 40px 160px;align-items:center;gap:0;}
+.vpc-node{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem;text-align:center;}
+.vpc-node.engine-node{background:rgba(0,229,192,.04);border-color:var(--border2);}
+.vpc-node-name{font-family:var(--f-display);font-size:.82rem;font-weight:700;margin-bottom:.2rem;}
+.vpc-node-sub{font-family:var(--f-mono);font-size:.58rem;color:var(--muted);line-height:1.5;}
+.vpc-mods{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:.75rem;}
+.vpc-mod{padding:3px 6px;border-radius:3px;font-family:var(--f-mono);font-size:.57rem;}
+.vpc-arr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 4px;}
+.vpc-arr-line{width:100%;height:1px;background:linear-gradient(90deg,var(--border),var(--cyan));position:relative;}
+.vpc-arr-line::after{content:'▶';position:absolute;right:-5px;top:-7px;color:var(--cyan);font-size:9px;}
+.vpc-arr-lbl{font-family:var(--f-mono);font-size:.54rem;color:var(--cyan);white-space:nowrap;}
+.vpc-targets{display:flex;flex-direction:column;gap:.5rem;}
+.vpc-target{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.75rem;}
+.vpc-target-name{font-family:var(--f-display);font-size:.75rem;font-weight:700;margin-bottom:.15rem;}
+.vpc-target-sub{font-family:var(--f-mono);font-size:.56rem;color:var(--muted);}
+.breach-row{display:flex;align-items:center;gap:10px;padding:.75rem 1rem;background:rgba(255,51,88,.05);border:1px solid rgba(255,51,88,.18);border-radius:6px;margin-top:1rem;font-family:var(--f-mono);font-size:.66rem;color:var(--red);}
+
+/* Latency chart */
+.lat-chart{background:var(--depth);border:1px solid var(--border);border-radius:10px;padding:1.75rem;margin-top:2rem;}
+.lat-title{font-family:var(--f-display);font-size:.95rem;font-weight:700;margin-bottom:1.5rem;}
+.lat-bars{display:flex;flex-direction:column;gap:.875rem;}
+.lat-row{display:grid;grid-template-columns:140px 1fr 64px;align-items:center;gap:1rem;}
+.lat-label{font-family:var(--f-mono);font-size:.65rem;color:var(--muted);}
+.lat-track{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;}
+.lat-fill{height:100%;border-radius:3px;width:0%;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);}
+.lat-val{font-family:var(--f-mono);font-size:.65rem;text-align:right;font-weight:600;}
+
+/* Module Tabs */
+.mod-tabs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:10px 10px 0 0;overflow:hidden;margin-top:2.5rem;}
+.mod-tab{padding:1.1rem 1rem;background:var(--depth);border:none;border-right:1px solid var(--border);cursor:pointer;text-align:left;transition:background .15s;position:relative;}
+.mod-tab:last-child{border-right:none;}
+.mod-tab.on{background:rgba(0,229,192,.04);}
+.mod-tab.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);}
+.mod-tab-letter{font-family:var(--f-mono);font-size:.7rem;font-weight:700;display:block;margin-bottom:.2rem;}
+.mod-tab-title{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--muted);display:block;line-height:1.3;}
+.mod-tab.on .mod-tab-title{color:var(--white);}
+.mod-tab-sub{font-family:var(--f-mono);font-size:.57rem;color:var(--faint);display:block;margin-top:3px;}
+
+.tab-panels{background:var(--depth);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;}
+.tab-panel{display:none;padding:2rem 2.25rem;gap:2rem;animation:panIn .2s ease;}
+.tab-panel.on{display:grid;grid-template-columns:1fr 1fr;}
+@keyframes panIn{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:translateX(0)}}
+.panel-badge{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:1rem;font-weight:800;}
+.panel-h{font-family:var(--f-display);font-weight:700;font-size:1.15rem;letter-spacing:-.03em;margin-bottom:.35rem;}
+.panel-p{font-size:.875rem;color:var(--muted);line-height:1.8;}
+.point-list{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0;}
+.point{display:flex;align-items:flex-start;gap:10px;font-size:.84rem;color:var(--muted);line-height:1.55;}
+.point-dot{width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+
+/* Footer */
+.site-footer{border-top:1px solid var(--border);padding:64px 0 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:48px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.footer-brand p{font-size:.875rem;color:var(--muted);line-height:1.75;max-width:280px;margin:.75rem 0 1rem;}
+.footer-col-title{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:1rem;}
+.footer-link{display:block;font-size:.875rem;color:var(--muted);margin-bottom:.45rem;transition:color .15s;cursor:pointer;}
+.footer-link:hover{color:var(--white);}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-copy{font-family:var(--f-mono);font-size:.65rem;color:var(--faint);}
+.footer-legal{display:flex;gap:1.5rem;font-family:var(--f-mono);font-size:.65rem;color:var(--faint);}
+.footer-legal span{cursor:pointer;}.footer-legal span:hover{color:var(--cyan);}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,5,10,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--depth);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:640px;max-height:82vh;display:flex;flex-direction:column;overflow:hidden;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.75rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-title{font-family:var(--f-display);font-weight:700;font-size:1rem;}
+.modal-close{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.modal-close:hover{border-color:var(--border2);color:var(--white);}
+.modal-body{padding:1.5rem 1.75rem;overflow-y:auto;flex:1;}
+.modal-h2{font-family:var(--f-display);font-size:.88rem;font-weight:700;color:var(--cyan);margin:1.1rem 0 .35rem;}.modal-h2:first-child{margin-top:0;}
+.modal-p{font-size:.84rem;color:var(--muted);line-height:1.8;}.modal-p strong{color:var(--white);}
+
+@media(max-width:900px){.nav-links{display:none;}.vpc-flow{grid-template-columns:1fr;gap:.5rem;}.mod-tabs{grid-template-columns:1fr 1fr;}.tab-panel.on{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}.wrap{padding:0 1.25rem;}.section{padding:64px 0;}}
+@media(max-width:600px){.mod-tabs{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="30" height="30" viewBox="0 0 120 120" fill="none"><polygon points="60,8 104,32 104,88 60,112 16,88 16,32" fill="rgba(0,229,192,.07)" stroke="#00E5C0" stroke-width="2"/><polygon points="60,26 88,41 88,79 60,94 32,79 32,41" fill="rgba(0,229,192,.05)" stroke="rgba(0,229,192,.3)" stroke-width="1.2"/><circle cx="60" cy="60" r="14" fill="#00050A" stroke="#00E5C0" stroke-width="2"/><line x1="51" y1="51" x2="69" y2="69" stroke="#00E5C0" stroke-width="2.5" stroke-linecap="round"/><circle cx="41" cy="60" r="3" fill="#00E5C0" opacity=".9"/><line x1="32" y1="60" x2="18" y2="60" stroke="#00E5C0" stroke-width="1.8" stroke-linecap="round"/><line x1="88" y1="60" x2="102" y2="60" stroke="#00E5C0" stroke-width="1.8" stroke-linecap="round"/><polygon points="102,60 96,57 96,63" fill="#00E5C0"/></svg>
+      <span class="nav-wordmark">CASA<span>-AI</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="architecture.html" class="nav-link active">Architecture</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="compliance.html" class="nav-link">Compliance</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="docs.html" class="nav-link">Docs</a>
+      <a href="test-results.html" class="nav-link">Tests</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="pricing.html" class="nav-cta">Get License →</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="pg-hero">
+  <div class="wrap">
+    <div class="pg-hero-inner" style="max-width:680px">
+      <div class="eyebrow reveal">System Architecture</div>
+      <h1 class="headline reveal d1">Four engines.<br><em>One container.</em><br>Total governance.</h1>
+      <p class="body-lg reveal d2" style="margin-top:1rem;">CASA-AI sits between your AI agents and everything they can touch — inside your VPC, fully air-gapped. Delivered as a single hardened 8MB distroless Docker image that never calls home.</p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.75rem" class="reveal d3">
+        <span class="tag tag-cyan">8MB Container</span>
+        <span class="tag tag-green">0 CVEs · Distroless</span>
+        <span class="tag tag-cyan">Air-Gap Proven</span>
+        <span class="tag tag-green">157 Tests · Race Clean</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VPC Diagram -->
+<div class="section">
+  <div class="wrap">
+    <div class="eyebrow reveal">Deployment topology</div>
+    <h2 class="subhead reveal d1" style="margin-bottom:.5rem;">One proxy between agents and everything they touch</h2>
+    <p class="body-sm reveal d2">All traffic stays inside your private VPC. Zero data reaches CASA-AI servers — ever.</p>
+
+    <div class="vpc-box reveal d2">
+      <span class="vpc-label">Client Private Cloud / Kubernetes / On-Premise — Fully Air-Gapped</span>
+      <div class="vpc-flow">
+        <div class="vpc-node">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="margin:0 auto .625rem"><rect width="32" height="32" rx="6" fill="rgba(167,139,250,.1)" stroke="rgba(167,139,250,.25)" stroke-width="1"/><rect x="7" y="9" width="18" height="14" rx="2" stroke="#A78BFA" stroke-width="1.2"/><path d="M10 16h12M10 19h8" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div class="vpc-node-name">AI Agent App</div>
+          <div class="vpc-node-sub">LangChain · CrewAI<br>AutoGen · Custom MCP</div>
+        </div>
+        <div class="vpc-arr">
+          <div class="vpc-arr-line"></div>
+          <span class="vpc-arr-lbl">all requests</span>
+        </div>
+        <div class="vpc-node engine-node">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="margin:0 auto .625rem"><path d="M16 3L29 9.5V22.5L16 29L3 22.5V9.5Z" fill="rgba(0,229,192,.08)" stroke="#00E5C0" stroke-width="1.3" stroke-linejoin="round"/><circle cx="16" cy="16" r="5" fill="#00050A" stroke="#00E5C0" stroke-width="1.5"/><line x1="13" y1="13" x2="19" y2="19" stroke="#00E5C0" stroke-width="2" stroke-linecap="round"/></svg>
+          <div class="vpc-node-name" style="color:var(--cyan)">CASA-AI Engine</div>
+          <div class="vpc-node-sub">Docker · Distroless · 8MB</div>
+          <div class="vpc-mods">
+            <span class="vpc-mod" style="background:rgba(0,87,255,.1);color:#7BAFF5">A Context</span>
+            <span class="vpc-mod" style="background:rgba(0,229,192,.08);color:var(--cyan)">B OPA</span>
+            <span class="vpc-mod" style="background:rgba(255,51,88,.08);color:var(--red)">C Breaker</span>
+            <span class="vpc-mod" style="background:rgba(255,176,32,.07);color:var(--amber)">D License</span>
+          </div>
+        </div>
+        <div class="vpc-arr">
+          <div class="vpc-arr-line" style="background:linear-gradient(90deg,var(--border),var(--green))"></div>
+          <span class="vpc-arr-lbl" style="color:var(--green)">allow only</span>
+        </div>
+        <div class="vpc-targets">
+          <div class="vpc-target">
+            <div class="vpc-target-name">LLM Provider</div>
+            <div class="vpc-target-sub">Private endpoint · OpenAI / Anthropic</div>
+          </div>
+          <div class="vpc-target" style="margin-top:.5rem">
+            <div class="vpc-target-name">Cloud APIs</div>
+            <div class="vpc-target-sub">AWS · GCP · Azure · Databases</div>
+          </div>
+        </div>
+      </div>
+      <div class="breach-row">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        ON BREACH → Kill SSE Stream → Revoke AWS STS / GCP IAM / Azure Tokens → Write SHA-256 Audit Entry → Dispatch HMAC-SHA256 Signed Webhook
+      </div>
+    </div>
+
+    <!-- Latency chart -->
+    <div class="lat-chart reveal">
+      <div class="lat-title">Production benchmark — p99 latency measurements</div>
+      <div class="lat-bars" id="lat-bars">
+        <div class="lat-row">
+          <span class="lat-label">OPA eval p99</span>
+          <div class="lat-track"><div class="lat-fill" id="b1" style="background:var(--cyan)" data-w="34"></div></div>
+          <span class="lat-val" style="color:var(--cyan)">1.28ms</span>
+        </div>
+        <div class="lat-row">
+          <span class="lat-label">Clean passthrough</span>
+          <div class="lat-track"><div class="lat-fill" id="b2" style="background:var(--green)" data-w="22"></div></div>
+          <span class="lat-val" style="color:var(--green)">847μs</span>
+        </div>
+        <div class="lat-row">
+          <span class="lat-label">License validate</span>
+          <div class="lat-track"><div class="lat-fill" id="b3" style="background:#7BAFF5" data-w="8"></div></div>
+          <span class="lat-val" style="color:#7BAFF5">&lt;1ms</span>
+        </div>
+        <div class="lat-row">
+          <span class="lat-label">Webhook dispatch</span>
+          <div class="lat-track"><div class="lat-fill" id="b4" style="background:var(--muted)" data-w="18"></div></div>
+          <span class="lat-val" style="color:var(--muted)">~200ms</span>
+        </div>
+        <div class="lat-row">
+          <span class="lat-label">AWS IAM revoke</span>
+          <div class="lat-track"><div class="lat-fill" id="b5" style="background:var(--amber)" data-w="75"></div></div>
+          <span class="lat-val" style="color:var(--amber)">3.0s live</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Module Tabs -->
+<div class="section">
+  <div class="wrap">
+    <div class="eyebrow reveal">Module deep-dive</div>
+    <h2 class="subhead reveal d1" style="margin-bottom:2rem;">Four engines, four responsibilities</h2>
+
+    <div class="mod-tabs reveal d1">
+      <button class="mod-tab on" onclick="showMod('A',this)">
+        <span class="mod-tab-letter" style="color:#7BAFF5">A</span>
+        <span class="mod-tab-title">Context &amp; Reasoning Tracker</span>
+        <span class="mod-tab-sub">SSE intercept · TAO loops</span>
+      </button>
+      <button class="mod-tab" onclick="showMod('B',this)">
+        <span class="mod-tab-letter" style="color:var(--cyan)">B</span>
+        <span class="mod-tab-title">Compliance Engine (OPA)</span>
+        <span class="mod-tab-sub">Rego · 5 layers · hot-reload</span>
+      </button>
+      <button class="mod-tab" onclick="showMod('C',this)">
+        <span class="mod-tab-letter" style="color:var(--red)">C</span>
+        <span class="mod-tab-title">Automated Circuit-Breaker</span>
+        <span class="mod-tab-sub">AWS · GCP · Azure live tested</span>
+      </button>
+      <button class="mod-tab" onclick="showMod('D',this)">
+        <span class="mod-tab-letter" style="color:var(--amber)">D</span>
+        <span class="mod-tab-title">Cryptographic Licensing</span>
+        <span class="mod-tab-sub">Ed25519 · air-gap · zero calls</span>
+      </button>
+    </div>
+
+    <div class="tab-panels">
+      <!-- A -->
+      <div class="tab-panel on" id="tp-A">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.1rem">
+            <div class="panel-badge" style="background:rgba(0,87,255,.1);color:#7BAFF5;border:1px solid rgba(0,87,255,.2)">A</div>
+            <div><div class="panel-h">Context &amp; Reasoning Tracker</div><div style="font-family:var(--f-mono);font-size:.62rem;color:var(--muted)">pkg/interceptor/ · 18 tests passing</div></div>
+          </div>
+          <p class="panel-p">The layer every competing product misses entirely. Intercepts raw SSE token streams, buffers fragmented chunks into complete TAO steps, and builds a live intent graph per session. Invisible on the happy path.</p>
+          <div class="point-list">
+            <div class="point"><div class="point-dot" style="background:#7BAFF5"></div>PAN split across 3 SSE chunks — caught at reassembly, not after</div>
+            <div class="point"><div class="point-dot" style="background:#7BAFF5"></div>Classifies each reasoning line as Thought / Action / Observation</div>
+            <div class="point"><div class="point-dot" style="background:#7BAFF5"></div>MCP tool calls intercepted before dispatch to cloud APIs</div>
+            <div class="point"><div class="point-dot" style="background:#7BAFF5"></div>Clean tokens pass through with &lt;2ms overhead added</div>
+          </div>
+          <div class="proof" style="margin-top:1.25rem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            TestEvaluate_BlocksPIIInReasoningChain — PAN split across 3 tokens, caught at reassembly. PASS (go test ./... -race)
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span class="code-lang">Go</span><span class="code-file">pkg/interceptor/stream_interceptor.go</span></div>
+          <div class="code-body"><span class="c-c">// ProcessChunk — called per SSE chunk.
+// Returns false → stream severed immediately.</span>
+<span class="c-k">func</span> (s *StreamInterceptor) ProcessChunk(
+    chunk []<span class="c-k">byte</span>,
+) (<span class="c-k">bool</span>, <span class="c-k">error</span>) {
+
+    s.buf.Write(chunk)
+    lines := s.extractCompleteLines()
+
+    <span class="c-k">for</span> _, line := <span class="c-k">range</span> lines {
+        step := s.classifyLine(line) <span class="c-c">// T|A|O</span>
+        s.graph.AddReasoningStep(step)
+
+        verdict, err := s.engine.Evaluate(
+            s.ctx,
+            s.graph.Snapshot(),
+        )
+        <span class="c-k">if</span> !verdict.Allow {
+            _ = s.breaker.Fire(s.ctx, FireParams{
+                SessionID:  s.sessionID,
+                Violations: verdict.Violations,
+            })
+            <span class="c-k">return false</span>, <span class="c-n">nil</span>
+        }
+    }
+    <span class="c-k">return true</span>, <span class="c-n">nil</span>
+}</div>
+        </div>
+      </div>
+
+      <!-- B -->
+      <div class="tab-panel" id="tp-B">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.1rem">
+            <div class="panel-badge" style="background:rgba(0,229,192,.08);color:var(--cyan);border:1px solid rgba(0,229,192,.2)">B</div>
+            <div><div class="panel-h">Runtime Compliance Engine</div><div style="font-family:var(--f-mono);font-size:.62rem;color:var(--muted)">pkg/compliance/ · 47 tests passing</div></div>
+          </div>
+          <p class="panel-p">Embedded Open Policy Agent evaluates the intent graph against declarative Rego policy in &lt;2ms. Five detection layers run simultaneously. Six compliance profiles — hot-reloadable, zero restart.</p>
+          <div class="point-list">
+            <div class="point"><div class="point-dot" style="background:var(--cyan)"></div>PII — PAN, Aadhaar, card, email, mobile in prompt AND reasoning chain</div>
+            <div class="point"><div class="point-dot" style="background:var(--cyan)"></div>Prompt injection — 16 patterns, direct and via retrieved documents</div>
+            <div class="point"><div class="point-dot" style="background:var(--cyan)"></div>Tool allowlist — every MCP call verified against approved_tools</div>
+            <div class="point"><div class="point-dot" style="background:var(--cyan)"></div>Data sovereignty — provider_country enforcement for RBI/DPDP</div>
+            <div class="point"><div class="point-dot" style="background:var(--cyan)"></div>Exfiltration — pastebin, ngrok, wetransfer destination blocking</div>
+          </div>
+          <div class="proof" style="margin-top:1.25rem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            TestEvaluate_LatencyBudget_Under2ms — 1.28ms p99 over 10,000 iterations. PASS (go test ./... -race)
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span class="code-lang">Rego</span><span class="code-file">policies/compliance_core.rego</span></div>
+          <div class="code-body"><span class="c-k">package</span> casa.ai.compliance
+
+<span class="c-c"># Zero-trust: DENY unless ALL five layers clear</span>
+<span class="c-k">default</span> allow := <span class="c-n">false</span>
+
+allow <span class="c-v">if</span> {
+    <span class="c-v">not</span> pii_detected
+    <span class="c-v">not</span> unapproved_tool_call
+    <span class="c-v">not</span> sovereignty_violation
+    <span class="c-v">not</span> prompt_injection_detected
+    <span class="c-v">not</span> data_exfiltration_detected
+}
+
+pii_patterns := [
+    <span class="c-s">`[A-Z]{5}[0-9]{4}[A-Z]`</span>,
+    <span class="c-s">`[2-9][0-9]{11}`</span>,
+    <span class="c-s">`(?:[0-9]{4}[- ]?){3}[0-9]{4}`</span>,
+]
+
+<span class="c-c"># Checks prompt AND reasoning chain — the differentiator</span>
+pii_detected <span class="c-v">if</span> {
+    <span class="c-v">some</span> pattern <span class="c-v">in</span> pii_patterns
+    <span class="c-v">some</span> step <span class="c-v">in</span> input.reasoning_chain
+    regex.match(pattern, step.content)
+}
+
+unapproved_tool_call <span class="c-v">if</span> {
+    <span class="c-v">some</span> call <span class="c-v">in</span> input.tool_calls
+    <span class="c-v">not</span> call.name <span class="c-v">in</span> input.policy.approved_tools
+}</div>
+        </div>
+      </div>
+
+      <!-- C -->
+      <div class="tab-panel" id="tp-C">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.1rem">
+            <div class="panel-badge" style="background:rgba(255,51,88,.08);color:var(--red);border:1px solid rgba(255,51,88,.2)">C</div>
+            <div><div class="panel-h">Automated Circuit-Breaker</div><div style="font-family:var(--f-mono);font-size:.62rem;color:var(--muted)">pkg/breaker/ · 14 tests · AWS live tested</div></div>
+          </div>
+          <p class="panel-p">Synchronous remediation — not advisory. Four independent remediation steps. A failed IAM revocation never blocks session freeze. Each step runs and fails independently.</p>
+          <div class="point-list">
+            <div class="point"><div class="point-dot" style="background:var(--red)"></div><strong style="color:var(--white)">Step 1:</strong> SSE stream severed mid-token — agent receives no further output</div>
+            <div class="point"><div class="point-dot" style="background:var(--red)"></div><strong style="color:var(--white)">Step 2:</strong> AWS PutRolePolicy deny-all — live tested on account 083334184188 in 3.0s</div>
+            <div class="point"><div class="point-dot" style="background:var(--red)"></div><strong style="color:var(--white)">Step 3:</strong> SHA-256 chained audit entry written — tamper-evident chain</div>
+            <div class="point"><div class="point-dot" style="background:var(--red)"></div><strong style="color:var(--white)">Step 4:</strong> HMAC-SHA256 signed webhook dispatched to Slack / PagerDuty</div>
+          </div>
+          <div class="proof" style="margin-top:1.25rem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            TestAWSRevoker_LiveRevokeAndCleanup · arn:aws:iam::083334184188:role/casa-ai-circuit-breaker-test · 3.0s · PASS
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span class="code-lang">Go</span><span class="code-file">pkg/breaker/remediation/aws_revoker.go</span></div>
+          <div class="code-body"><span class="c-k">const</span> denyAllPolicy = <span class="c-s">`{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect":   "Deny",
+    "Action":   "*",
+    "Resource": "*",
+    "Condition": {
+      "DateLessThan": {
+        "aws:TokenIssueTime": "%s"
+      }
+    }
+  }]
+}`</span>
+
+<span class="c-k">func</span> (r *AWSRevoker) Revoke(
+    ctx context.Context,
+    roleARN <span class="c-k">string</span>,
+) <span class="c-k">error</span> {
+    cutoff := time.Now().UTC().
+        Format(time.RFC3339)
+    policy := fmt.Sprintf(denyAllPolicy, cutoff)
+
+    _, err := r.client.PutRolePolicy(ctx,
+        &iam.PutRolePolicyInput{
+            RoleName: aws.String(
+                extractName(roleARN),
+            ),
+            PolicyDocument: aws.String(policy),
+        })
+    <span class="c-c">// Live: 3.0s · acct 083334184184</span>
+    <span class="c-k">return</span> err
+}</div>
+        </div>
+      </div>
+
+      <!-- D -->
+      <div class="tab-panel" id="tp-D">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.1rem">
+            <div class="panel-badge" style="background:rgba(255,176,32,.07);color:var(--amber);border:1px solid rgba(255,176,32,.2)">D</div>
+            <div><div class="panel-h">Cryptographic Licensing Engine</div><div style="font-family:var(--f-mono);font-size:.62rem;color:var(--muted)">pkg/licensing/ · 12 tests · 4 forgery attacks rejected</div></div>
+          </div>
+          <p class="panel-p">Ed25519-signed license payload. Public key compiled into binary via go:embed at build time. Zero outbound calls at validation. Air-gap compatible by architecture — not by marketing claim.</p>
+          <div class="point-list">
+            <div class="point"><div class="point-dot" style="background:var(--amber)"></div>BASIC ₹4,000/mo — max 2 agents, HTTP 429 on 3rd attempt</div>
+            <div class="point"><div class="point-dot" style="background:var(--amber)"></div>ENTERPRISE ₹50,000/mo — max 15 agents, custom Rego, webhooks</div>
+            <div class="point"><div class="point-dot" style="background:var(--amber)"></div>BIG INFRA ₹1,20,000/mo — unlimited, multi-cluster, PDF reports</div>
+            <div class="point"><div class="point-dot" style="background:var(--amber)"></div>CUSTOM — air-gap compilation, machine fingerprint binding</div>
+          </div>
+          <div class="proof" style="margin-top:1.25rem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            ForgeryAttack_ModifiedPayload_Rejected · ForgeryAttack_WrongKey_Rejected · TestAirGap_NoOutboundCalls — all PASS
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span class="code-lang">Go</span><span class="code-file">pkg/licensing/validator.go</span></div>
+          <div class="code-body"><span class="c-c">//go:embed embedded_public.key</span>
+<span class="c-k">var</span> embeddedPublicKey []<span class="c-k">byte</span>
+
+<span class="c-k">func</span> Validate(key <span class="c-k">string</span>) (*License, <span class="c-k">error</span>) {
+    pubKey := ed25519.PublicKey(embeddedPublicKey)
+
+    raw, _ := base64.StdEncoding.
+        DecodeString(key)
+    <span class="c-k">var</span> wire LicenseWire
+    json.Unmarshal(raw, &wire)
+
+    sig, _ := base64.StdEncoding.
+        DecodeString(wire.Signature)
+
+    <span class="c-k">if</span> !ed25519.Verify(pubKey,
+        wire.PayloadBytes, sig) {
+        <span class="c-k">return nil</span>, ErrInvalidSignature
+        <span class="c-c">// Tamper = instant reject</span>
+    }
+
+    <span class="c-k">var</span> p LicensePayload
+    json.Unmarshal(wire.PayloadBytes, &p)
+
+    <span class="c-k">if</span> time.Now().After(p.ExpiresAt) {
+        <span class="c-k">return nil</span>, ErrExpired
+    }
+    <span class="c-k">return</span> &License{Payload: p}, <span class="c-n">nil</span>
+    <span class="c-c">// Zero network calls · Air-gap proven</span>
+}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="wrap">
+    <div style="background:rgba(0,229,192,.03);border:1px solid var(--border2);border-radius:12px;padding:3.5rem;text-align:center;position:relative;overflow:hidden" class="reveal">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)"></div>
+      <h2 style="font-family:var(--f-display);font-weight:700;font-size:1.75rem;letter-spacing:-.03em;margin-bottom:.75rem;">Seven capabilities, all in production.</h2>
+      <p class="body-sm" style="margin-bottom:1.75rem;max-width:400px;margin-left:auto;margin-right:auto;">Real code. Verified test results. Deployed on real AWS infrastructure.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="features.html" class="btn btn-primary">Explore Features →</a>
+        <a href="docs.html" class="btn btn-outline">Read the Docs</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:.5rem">
+          <svg width="22" height="22" viewBox="0 0 120 120" fill="none"><polygon points="60,8 104,32 104,88 60,112 16,88 16,32" fill="rgba(0,229,192,.07)" stroke="#00E5C0" stroke-width="2"/><circle cx="60" cy="60" r="14" fill="#00050A" stroke="#00E5C0" stroke-width="2"/><line x1="51" y1="51" x2="69" y2="69" stroke="#00E5C0" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <span style="font-family:var(--f-display);font-weight:700;font-size:.95rem;">CASA<span style="color:var(--cyan)">-AI</span></span>
+        </div>
+        <p style="font-size:.875rem;color:var(--muted);line-height:1.75;max-width:280px;margin:.75rem 0 1rem;">Self-hosted runtime compliance for autonomous AI agents. Zero data leaves your VPC.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <span class="tag tag-green">157 Tests</span>
+          <span class="tag tag-cyan">0 CVEs</span>
+          <span class="tag tag-cyan">Air-Gap Proven</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Product</div>
+        <a href="index.html" class="footer-link">Home</a>
+        <a href="features.html" class="footer-link">Features</a>
+        <a href="compliance.html" class="footer-link">Compliance</a>
+        <a href="pricing.html" class="footer-link">Pricing</a>
+        <a href="test-results.html" class="footer-link">Test Results</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Compliance</div>
+        <a href="compliance.html" class="footer-link">🇮🇳 RBI AI Governance</a>
+        <a href="compliance.html" class="footer-link">🇮🇳 DPDP Act 2023</a>
+        <a href="compliance.html" class="footer-link">🇪🇺 EU AI Act</a>
+        <a href="compliance.html" class="footer-link">🇺🇸 NIST AI RMF</a>
+        <a href="compliance.html" class="footer-link">🌐 ISO/IEC 42001</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <span class="footer-link" onclick="openModal('privacy')">Privacy Policy</span>
+        <span class="footer-link" onclick="openModal('terms')">Terms of Service</span>
+        <span class="footer-link" onclick="openModal('security')">Security Policy</span>
+        <a href="mailto:shivangace001@gmail.com" class="footer-link">Contact Sales</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 CASA-AI · casa-ai.in · All rights reserved</div>
+      <div class="footer-legal">
+        <span onclick="openModal('privacy')">Privacy</span>
+        <span onclick="openModal('terms')">Terms</span>
+        <span onclick="openModal('security')">Security</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Modals -->
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOnBg(event,'privacy')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Privacy Policy</div><button class="modal-close" onclick="closeModal('privacy')">✕</button></div><div class="modal-body"><div class="modal-h2">Zero Data Exfiltration — By Architecture</div><p class="modal-p">CASA-AI operates entirely within your private cloud boundary. <strong>No data leaves your VPC.</strong></p><div class="modal-h2">License Validation</div><p class="modal-p">Ed25519 public key compiled into the binary. Zero outbound network calls — proven with iptables DROP ALL.</p><div class="modal-h2">Contact</div><p class="modal-p"><strong>shivangace001@gmail.com</strong> · July 2026</p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOnBg(event,'terms')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Terms of Service</div><button class="modal-close" onclick="closeModal('terms')">✕</button></div><div class="modal-body"><div class="modal-h2">License Grant</div><p class="modal-p">Non-exclusive, non-transferable license tied to your tenant_id. <strong>Forging the license key is a material breach.</strong></p><div class="modal-h2">Payment</div><p class="modal-p">Billed via Razorpay. Annual: 10 months billed, 12 months access. Governing law: India.</p></div></div></div>
+<div class="modal-overlay" id="modal-security" onclick="closeModalOnBg(event,'security')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Security Policy</div><button class="modal-close" onclick="closeModal('security')">✕</button></div><div class="modal-body"><div class="modal-h2">Container Hardening</div><p class="modal-p">Distroless runtime · UID 65532 · <strong>0 HIGH/CRITICAL CVEs</strong> · Trivy on every commit.</p><div class="modal-h2">Reporting</div><p class="modal-p"><strong>shivangace001@gmail.com</strong> · Subject: [SECURITY] CASA-AI · 48h response.</p></div></div></div>
+
+<script>
+window.addEventListener('scroll',function(){var n=document.getElementById('site-nav');if(n)n.classList.toggle('scrolled',window.scrollY>20);},{passive:true});
+(function(){function check(){document.querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight-30)el.classList.add('visible');});}check();window.addEventListener('scroll',check,{passive:true});window.addEventListener('resize',check,{passive:true});})();
+function openModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.add('open');document.body.style.overflow='hidden';}}
+function closeModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.remove('open');document.body.style.overflow='';}}
+function closeModalOnBg(e,n){if(e.target===document.getElementById('modal-'+n))closeModal(n);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['privacy','terms','security'].forEach(closeModal);document.body.style.overflow='';}});
+
+function showMod(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.mod-tab').forEach(function(b){ b.classList.remove('on'); });
+  var p = document.getElementById('tp-' + name);
+  if(p) p.classList.add('on');
+  if(btn) btn.classList.add('on');
+}
+
+/* Animate latency bars when in view */
+var barsAnimated = false;
+function animateBars() {
+  if(barsAnimated) return;
+  var el = document.getElementById('lat-bars');
+  if(!el) return;
+  if(el.getBoundingClientRect().top < window.innerHeight - 40) {
+    barsAnimated = true;
+    document.querySelectorAll('.lat-fill').forEach(function(b){
+      setTimeout(function(){ b.style.width = b.getAttribute('data-w') + '%'; }, 150);
+    });
+  }
+}
+window.addEventListener('scroll', animateBars, {passive:true});
+setTimeout(animateBars, 600);
+</script>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CASA-AI Compliance — RBI AI Governance, DPDP Act 2023, EU AI Act, NIST AI RMF, ISO/IEC 42001, Custom Rego. The only engine with RBI and DPDP built in.">
+<title>CASA-AI — Compliance | RBI · DPDP · EU AI Act · NIST · ISO 42001</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2300050A'/%3E%3Cpath d='M16 4L28 10V22L16 28L4 22V10Z' stroke='%2300E5C0' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%2300E5C0'/%3E%3Cline x1='12' y1='12' x2='20' y2='20' stroke='%2300050A' stroke-width='2.5'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#00050A;--depth:#040D16;--surface:#081420;--cyan:#00E5C0;--red:#FF3358;--amber:#FFB020;--green:#00D68A;--white:#F0F6FF;--muted:#5B7A94;--faint:#1A2E42;--border:rgba(0,229,192,.1);--border2:rgba(0,229,192,.22);--f-display:'Space Grotesk',sans-serif;--f-mono:'JetBrains Mono',monospace;--f-body:'Inter',sans-serif;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{background:var(--void);color:var(--white);font-family:var(--f-body);line-height:1.6;overflow-x:hidden;padding-top:60px;}
+a{color:inherit;text-decoration:none;}::selection{background:rgba(0,229,192,.2);color:var(--cyan);}
+.wrap{max-width:1160px;margin:0 auto;padding:0 2rem;}
+.section{padding:88px 0;border-top:1px solid var(--border);}
+.eyebrow{font-family:var(--f-mono);font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--cyan);flex-shrink:0;}
+.headline{font-family:var(--f-display);font-weight:700;font-size:clamp(2rem,4.5vw,3.4rem);letter-spacing:-.03em;line-height:1.05;}
+.headline em{font-style:normal;color:var(--cyan);}
+.body-lg{font-size:1rem;color:#8BA5BC;line-height:1.85;}
+.body-sm{font-size:.875rem;color:var(--muted);line-height:1.75;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:6px;font-family:var(--f-display);font-weight:600;font-size:.88rem;line-height:1;cursor:pointer;border:none;transition:all .18s;white-space:nowrap;text-decoration:none;}
+.btn-primary{background:var(--cyan);color:#000;}.btn-primary:hover{background:#1DFFD8;transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-family:var(--f-mono);font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.tag-cyan{background:rgba(0,229,192,.1);color:var(--cyan);}.tag-green{background:rgba(0,214,138,.1);color:var(--green);}.tag-amber{background:rgba(255,176,32,.1);color:var(--amber);}
+.proof{display:flex;align-items:flex-start;gap:10px;padding:.875rem 1rem;background:rgba(0,214,138,.05);border:1px solid rgba(0,214,138,.18);border-radius:7px;font-family:var(--f-mono);font-size:.66rem;color:var(--green);line-height:1.6;}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal.d1{transition-delay:.07s;}.reveal.d2{transition-delay:.14s;}.reveal.d3{transition-delay:.21s;}
+#site-nav{position:fixed;top:0;left:0;right:0;z-index:9999;height:60px;background:rgba(0,5,10,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .2s;}
+#site-nav.scrolled{background:rgba(0,5,10,.98);}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;}
+.nav-logo{display:flex;align-items:center;gap:9px;margin-right:auto;flex-shrink:0;}
+.nav-wordmark{font-family:var(--f-display);font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--white);}
+.nav-wordmark span{color:var(--cyan);}
+.nav-links{display:flex;align-items:center;gap:0;margin:0 20px;}
+.nav-link{padding:6px 11px;font-size:.8rem;font-weight:500;color:var(--muted);transition:color .15s;white-space:nowrap;border-radius:5px;}
+.nav-link:hover{color:var(--white);}.nav-link.active{color:var(--cyan);}
+.nav-actions{display:flex;align-items:center;flex-shrink:0;}
+.nav-cta{padding:7px 16px;background:var(--cyan);color:#000;border-radius:5px;font-family:var(--f-display);font-weight:700;font-size:.8rem;line-height:1;transition:all .15s;}
+.nav-cta:hover{background:#1DFFD8;}
+.pg-hero{padding:72px 0 56px;position:relative;overflow:hidden;}
+.pg-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,192,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,.03) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 50% 0%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 0%,black,transparent);}
+.pg-hero-inner{position:relative;z-index:1;}
+
+/* Framework tabs */
+.fw-tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:2rem 0 0;}
+.fw-tab{padding:.625rem 1rem;border:1px solid var(--border);border-radius:6px;font-family:var(--f-mono);font-size:.7rem;font-weight:600;cursor:pointer;transition:all .15s;background:transparent;color:var(--muted);}
+.fw-tab:hover{border-color:var(--border2);color:var(--white);}
+.fw-tab.on{background:rgba(0,229,192,.08);border-color:var(--border2);color:var(--cyan);}
+.fw-panels{margin-top:2rem;}
+.fw-panel{display:none;animation:panIn .2s ease;}
+.fw-panel.on{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;}
+@keyframes panIn{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:translateX(0)}}
+
+.fw-flag{font-size:2rem;margin-bottom:.75rem;display:block;}
+.fw-title{font-family:var(--f-display);font-weight:700;font-size:1.4rem;letter-spacing:-.03em;margin-bottom:.3rem;}
+.fw-subtitle{font-family:var(--f-mono);font-size:.65rem;color:var(--muted);margin-bottom:1rem;}
+.fw-desc{font-size:.9rem;color:#8BA5BC;line-height:1.8;margin-bottom:1.25rem;}
+.control-list{display:flex;flex-direction:column;gap:.5rem;}
+.control{display:flex;align-items:flex-start;gap:10px;padding:.75rem 1rem;background:var(--depth);border:1px solid var(--border);border-radius:7px;}
+.control-id{font-family:var(--f-mono);font-size:.62rem;font-weight:700;color:var(--cyan);flex-shrink:0;min-width:80px;margin-top:1px;}
+.control-text{font-size:.84rem;color:var(--muted);line-height:1.5;}
+.control-text strong{color:var(--white);}
+
+/* Competitor matrix */
+.matrix{width:100%;border-collapse:collapse;font-size:.8rem;}
+.matrix th{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:.625rem .75rem;text-align:center;border-bottom:1px solid var(--border);}
+.matrix th:first-child{text-align:left;}
+.matrix td{padding:.75rem .75rem;border-bottom:1px solid rgba(0,229,192,.05);text-align:center;color:var(--muted);}
+.matrix td:first-child{text-align:left;font-family:var(--f-display);font-size:.82rem;font-weight:600;}
+.matrix tr.casa td{background:rgba(0,229,192,.03);}
+.matrix tr.casa td:first-child{color:var(--cyan);}
+.matrix tr:last-child td{border-bottom:none;}
+.check{color:var(--green);}
+.cross{color:var(--red);}
+
+/* Why section */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+.why-card{background:var(--depth);border:1px solid var(--border);border-radius:10px;padding:1.5rem;}
+.why-num{font-family:var(--f-mono);font-size:.62rem;color:var(--faint);margin-bottom:.875rem;}
+.why-title{font-family:var(--f-display);font-weight:700;font-size:1rem;margin-bottom:.5rem;}
+.why-desc{font-size:.84rem;color:var(--muted);line-height:1.7;}
+.why-desc strong{color:var(--white);}
+
+.site-footer{border-top:1px solid var(--border);padding:64px 0 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:48px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.footer-col-title{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:1rem;}
+.footer-link{display:block;font-size:.875rem;color:var(--muted);margin-bottom:.45rem;transition:color .15s;cursor:pointer;}.footer-link:hover{color:var(--white);}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-copy{font-family:var(--f-mono);font-size:.65rem;color:var(--faint);}
+.footer-legal{display:flex;gap:1.5rem;font-family:var(--f-mono);font-size:.65rem;color:var(--faint);}
+.footer-legal span{cursor:pointer;}.footer-legal span:hover{color:var(--cyan);}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,5,10,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--depth);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:640px;max-height:82vh;display:flex;flex-direction:column;overflow:hidden;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.75rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-title{font-family:var(--f-display);font-weight:700;font-size:1rem;}
+.modal-close{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}.modal-close:hover{color:var(--white);}
+.modal-body{padding:1.5rem 1.75rem;overflow-y:auto;flex:1;}
+.modal-h2{font-family:var(--f-display);font-size:.88rem;font-weight:700;color:var(--cyan);margin:1.1rem 0 .35rem;}.modal-h2:first-child{margin-top:0;}
+.modal-p{font-size:.84rem;color:var(--muted);line-height:1.8;}.modal-p strong{color:var(--white);}
+@media(max-width:900px){.nav-links{display:none;}.fw-panel.on{grid-template-columns:1fr;}.why-grid{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}.wrap{padding:0 1.25rem;}.section{padding:64px 0;}}
+</style>
+</head>
+<body>
+
+<header id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="30" height="30" viewBox="0 0 120 120" fill="none"><polygon points="60,8 104,32 104,88 60,112 16,88 16,32" fill="rgba(0,229,192,.07)" stroke="#00E5C0" stroke-width="2"/><polygon points="60,26 88,41 88,79 60,94 32,79 32,41" fill="rgba(0,229,192,.05)" stroke="rgba(0,229,192,.3)" stroke-width="1.2"/><circle cx="60" cy="60" r="14" fill="#00050A" stroke="#00E5C0" stroke-width="2"/><line x1="51" y1="51" x2="69" y2="69" stroke="#00E5C0" stroke-width="2.5" stroke-linecap="round"/><circle cx="41" cy="60" r="3" fill="#00E5C0" opacity=".9"/><line x1="32" y1="60" x2="18" y2="60" stroke="#00E5C0" stroke-width="1.8" stroke-linecap="round"/><line x1="88" y1="60" x2="102" y2="60" stroke="#00E5C0" stroke-width="1.8" stroke-linecap="round"/><polygon points="102,60 96,57 96,63" fill="#00E5C0"/></svg>
+      <span class="nav-wordmark">CASA<span>-AI</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="architecture.html" class="nav-link">Architecture</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="compliance.html" class="nav-link active">Compliance</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="docs.html" class="nav-link">Docs</a>
+      <a href="test-results.html" class="nav-link">Tests</a>
+    </nav>
+    <div class="nav-actions"><a href="pricing.html" class="nav-cta">Get License →</a></div>
+  </div>
+</header>
+
+<div class="pg-hero">
+  <div class="wrap">
+    <div class="pg-hero-inner" style="max-width:720px">
+      <div class="eyebrow reveal">Compliance Frameworks</div>
+      <h1 class="headline reveal d1">The only engine built<br>for <em>Indian regulated AI.</em></h1>
+      <p class="body-lg reveal d2" style="margin-top:1rem;max-width:580px;">No competing product — Lakera, Arthur AI, Guardrails AI — has built RBI or DPDP Act controls. CASA-AI is the only runtime compliance engine with both frameworks built in, validated, and active by default.</p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.75rem" class="reveal d3">
+        <span class="tag tag-cyan">🇮🇳 RBI AI Governance Apr 2024</span>
+        <span class="tag tag-cyan">🇮🇳 DPDP Act 2023</span>
+        <span class="tag tag-amber">🇪🇺 EU AI Act 2024</span>
+        <span class="tag tag-green">🇺🇸 NIST AI RMF 1.0</span>
+        <span class="tag tag-green">🌐 ISO/IEC 42001:2023</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Framework Tabs -->
+<div class="section">
+  <div class="wrap">
+    <div class="eyebrow reveal">All six frameworks</div>
+    <h2 style="font-family:var(--f-display);font-weight:700;font-size:1.55rem;letter-spacing:-.03em;margin-bottom:.25rem;" class="reveal d1">One flag enables each framework. Zero configuration drift.</h2>
+    <p class="body-sm reveal d2">Select a framework to see the specific controls CASA-AI implements.</p>
+
+    <div class="fw-tabs reveal d2">
+      <button class="fw-tab on" onclick="showFw('rbi',this)">🇮🇳 RBI AI Governance</button>
+      <button class="fw-tab" onclick="showFw('dpdp',this)">🇮🇳 DPDP Act 2023</button>
+      <button class="fw-tab" onclick="showFw('euai',this)">🇪🇺 EU AI Act</button>
+      <button class="fw-tab" onclick="showFw('nist',this)">🇺🇸 NIST AI RMF</button>
+      <button class="fw-tab" onclick="showFw('iso',this)">🌐 ISO/IEC 42001</button>
+      <button class="fw-tab" onclick="showFw('custom',this)">⚙️ Custom Rego</button>
+    </div>
+
+    <div class="fw-panels">
+      <!-- RBI -->
+      <div class="fw-panel on" id="fw-rbi">
+        <div>
+          <span class="fw-flag">🇮🇳</span>
+          <div class="fw-title">RBI AI Governance</div>
+          <div class="fw-subtitle">RBI Master Direction on IT Governance · April 2024</div>
+          <p class="fw-desc">The Reserve Bank of India's AI governance requirements for BFSI entities. CASA-AI implements all three primary controls at runtime — not as paperwork, as enforced policy code.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem">
+            <span class="tag tag-green">ENTERPRISE+ Tier</span>
+            <span class="tag tag-cyan">No competitor has this</span>
+          </div>
+          <div class="control-list">
+            <div class="control"><span class="control-id">RBI_CTRL_1</span><div class="control-text"><strong>Data Residency:</strong> All AI processing confirmed within Indian cloud regions. provider_country must equal "IN" when strict_sovereignty is enabled.</div></div>
+            <div class="control"><span class="control-id">RBI_CTRL_2</span><div class="control-text"><strong>Model Explainability:</strong> Reasoning chains captured and stored in the tamper-evident audit log for every evaluation decision made by the agent.</div></div>
+            <div class="control"><span class="control-id">RBI_CTRL_3</span><div class="control-text"><strong>Human Oversight:</strong> Agent actions above a risk threshold trigger a circuit-breaker + webhook alert requiring human review before the session can resume.</div></div>
+          </div>
+          <div class="proof" style="margin-top:1.25rem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            TestRBI_Control1_SovereigntyEnforced · TestRBI_Control2_ReasoningCaptured · TestRBI_Control3_HumanEscalation — PASS
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span style="font-family:var(--f-mono);font-size:.6rem;color:var(--muted)">Rego</span><span style="font-family:var(--f-mono);font-size:.6rem;color:var(--muted)">policies/rbi_ai_governance.rego</span></div>
+          <div class="code-body" style="font-family:var(--f-mono);font-size:.72rem;line-height:1.85;padding:1.25rem 1.5rem;color:#B8D4EE;white-space:pre"><span style="color:#3A5A72">package</span> <span style="color:#00E5C0">casa.ai.rbi</span>
+
+<span style="color:#3A5A72"># RBI Control 1: Data residency</span>
+<span style="color:#00D68A">sovereignty_violation</span> <span style="color:#A78BFA">if</span> {
+  input.compliance_profile.
+    strict_sovereignty == <span style="color:#FFB020">true</span>
+  <span style="color:#A78BFA">some</span> call <span style="color:#A78BFA">in</span> input.tool_calls
+  call.provider_country != <span style="color:#00D68A">"IN"</span>
+}
+
+<span style="color:#3A5A72"># RBI Control 3: Human oversight trigger</span>
+<span style="color:#00D68A">requires_human_review</span> <span style="color:#A78BFA">if</span> {
+  input.risk_score > <span style="color:#FFB020">0.85</span>
+}
+<span style="color:#00D68A">requires_human_review</span> <span style="color:#A78BFA">if</span> {
+  <span style="color:#00D68A">pii_detected</span>
+  input.target.network_class == <span style="color:#00D68A">"external"</span>
+}</div>
+        </div>
+      </div>
+
+      <!-- DPDP -->
+      <div class="fw-panel" id="fw-dpdp">
+        <div>
+          <span class="fw-flag">🇮🇳</span>
+          <div class="fw-title">DPDP Act 2023</div>
+          <div class="fw-subtitle">Digital Personal Data Protection Act 2023 · India</div>
+          <p class="fw-desc">India's comprehensive data protection law. CASA-AI enforces the four most critical sections at agent runtime — preventing violations before they can occur, not detecting them after.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem">
+            <span class="tag tag-green">ENTERPRISE+ Tier</span>
+            <span class="tag tag-cyan">No competitor has this</span>
+          </div>
+          <div class="control-list">
+            <div class="control"><span class="control-id">DPDP S.4/6</span><div class="control-text"><strong>Lawful Processing:</strong> PII processing blocked unless explicit purpose is declared and matches the approved purposes in the agent's session profile.</div></div>
+            <div class="control"><span class="control-id">DPDP S.8</span><div class="control-text"><strong>Data Minimisation:</strong> Blocks agent actions that extract or transmit PII fields beyond the minimum required for the declared task.</div></div>
+            <div class="control"><span class="control-id">DPDP S.9</span><div class="control-text"><strong>Children's Data:</strong> Any processing path where a minor's data could be involved triggers automatic circuit-breaker regardless of other policy settings.</div></div>
+            <div class="control"><span class="control-id">DPDP S.16</span><div class="control-text"><strong>Data Fiduciary Duties:</strong> Agent cannot route personal data to unapproved third-party processors without explicit operator authorization in casa.yaml.</div></div>
+          </div>
+        </div>
+        <div style="background:rgba(0,229,192,.03);border:1px solid var(--border2);border-radius:10px;padding:1.5rem">
+          <div style="font-family:var(--f-mono);font-size:.62rem;color:var(--cyan);margin-bottom:1rem;letter-spacing:.1em">DPDP ACT 2023 — CASA-AI MAPPING</div>
+          <div style="display:flex;flex-direction:column;gap:.625rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .875rem;background:var(--depth);border-radius:6px;font-size:.82rem">
+              <span style="color:var(--muted)">Section 4 — Lawful purpose</span>
+              <span style="color:var(--green);font-family:var(--f-mono);font-size:.65rem">✓ pii_purpose_check</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .875rem;background:var(--depth);border-radius:6px;font-size:.82rem">
+              <span style="color:var(--muted)">Section 8 — Data minimisation</span>
+              <span style="color:var(--green);font-family:var(--f-mono);font-size:.65rem">✓ minimisation_rule</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .875rem;background:var(--depth);border-radius:6px;font-size:.82rem">
+              <span style="color:var(--muted)">Section 9 — Children's data</span>
+              <span style="color:var(--green);font-family:var(--f-mono);font-size:.65rem">✓ child_data_block</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .875rem;background:var(--depth);border-radius:6px;font-size:.82rem">
+              <span style="color:var(--muted)">Section 16 — Third-party block</span>
+              <span style="color:var(--green);font-family:var(--f-mono);font-size:.65rem">✓ processor_allowlist</span>
+            </div>
+          </div>
+          <div class="proof" style="margin-top:1rem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            TestDPDP_Section4_LawfulPurpose · TestDPDP_Section8_Minimisation · TestDPDP_Section9_ChildData — PASS
+          </div>
+        </div>
+      </div>
+
+      <!-- EU AI Act -->
+      <div class="fw-panel" id="fw-euai">
+        <div>
+          <span class="fw-flag">🇪🇺</span>
+          <div class="fw-title">EU AI Act</div>
+          <div class="fw-subtitle">Regulation (EU) 2024/1689 · High-Risk AI Systems</div>
+          <p class="fw-desc">The EU AI Act mandates explainability, human oversight, and audit trails for high-risk AI systems. CASA-AI generates Article 13-compliant transparency reports directly from its tamper-evident audit log.</p>
+          <div class="control-list">
+            <div class="control"><span class="control-id">Art. 10</span><div class="control-text"><strong>Data Governance:</strong> Training and processing data quality controls enforced at runtime via PII and sovereignty checks.</div></div>
+            <div class="control"><span class="control-id">Art. 12</span><div class="control-text"><strong>Record-Keeping:</strong> SHA-256 chained JSONL audit log with complete reasoning chain capture. Tamper-evident by architecture.</div></div>
+            <div class="control"><span class="control-id">Art. 13</span><div class="control-text"><strong>Transparency:</strong> Structured violation messages in every audit entry. BIG INFRA tier generates PDF reports directly usable in EU regulator submissions.</div></div>
+            <div class="control"><span class="control-id">Art. 14</span><div class="control-text"><strong>Human Oversight:</strong> Circuit-breaker fires a HMAC-signed webhook to your oversight workflow on every compliance violation.</div></div>
+          </div>
+        </div>
+        <div style="background:rgba(0,87,255,.03);border:1px solid rgba(0,87,255,.2);border-radius:10px;padding:1.5rem">
+          <div style="font-family:var(--f-mono);font-size:.62rem;color:#7BAFF5;margin-bottom:1rem;letter-spacing:.1em">ARTICLE 13 TRANSPARENCY — SAMPLE AUDIT ENTRY</div>
+          <div style="background:#020C14;border-radius:7px;padding:1rem;font-family:var(--f-mono);font-size:.64rem;line-height:1.8;color:#B8D4EE;overflow-x:auto;white-space:pre">{
+  "entry_id":    47,
+  "timestamp":   "2026-07-07T18:46:45Z",
+  "session_id":  "agent-43",
+  "verdict":     "BLOCK",
+  "violations":  ["PII_LEAK_IN_REASONING"],
+  "framework":   "EU_AI_ACT_ART_13",
+  "evidence": {
+    "pattern":   "PAN_CARD",
+    "step_type": "Observation",
+    "context":   "[REDACTED]"
+  },
+  "remediation": ["STREAM_SEVERED","IAM_REVOKED"],
+  "chain_hash":  "2b8f5e1d...",
+  "prev_hash":   "e9d4c7a3..."
+}</div>
+        </div>
+      </div>
+
+      <!-- NIST -->
+      <div class="fw-panel" id="fw-nist">
+        <div>
+          <span class="fw-flag">🇺🇸</span>
+          <div class="fw-title">NIST AI RMF 1.0</div>
+          <div class="fw-subtitle">AI Risk Management Framework · NIST AI 100-1</div>
+          <p class="fw-desc">The NIST AI Risk Management Framework's GOVERN, MAP, MEASURE, MANAGE functions mapped to runtime controls. Available on all tiers from BASIC.</p>
+          <div class="control-list">
+            <div class="control"><span class="control-id">GOVERN 1.1</span><div class="control-text"><strong>Risk Policies:</strong> Compliance-as-Code Rego policies are the machine-executable form of NIST GOVERN policies — version-controlled, auditable.</div></div>
+            <div class="control"><span class="control-id">MAP 2.1</span><div class="control-text"><strong>Risk Identification:</strong> Five simultaneous detection layers map to NIST's risk taxonomy: PII, injection, tool misuse, sovereignty, exfiltration.</div></div>
+            <div class="control"><span class="control-id">MEASURE 2.5</span><div class="control-text"><strong>Metrics:</strong> 10 Prometheus metrics provide continuous MEASURE function data: eval latency, violation rate, active agents, block count.</div></div>
+            <div class="control"><span class="control-id">MANAGE 3.1</span><div class="control-text"><strong>Response:</strong> The circuit-breaker is the machine-executable MANAGE response — synchronous, immediate, independently verifiable via audit log.</div></div>
+          </div>
+        </div>
+        <div style="background:var(--depth);border:1px solid var(--border);border-radius:10px;padding:1.5rem">
+          <div style="font-family:var(--f-mono);font-size:.62rem;color:var(--muted);margin-bottom:1.25rem;letter-spacing:.1em">NIST RMF FUNCTIONS → CASA-AI MODULES</div>
+          <div style="display:flex;flex-direction:column;gap:.75rem">
+            <div style="display:grid;grid-template-columns:100px 1fr;align-items:center;gap:1rem">
+              <div style="padding:.5rem;background:rgba(0,229,192,.08);border-radius:5px;text-align:center;font-family:var(--f-mono);font-size:.65rem;color:var(--cyan);font-weight:700">GOVERN</div>
+              <div style="font-size:.82rem;color:var(--muted)">Rego policy files — version-controlled risk governance</div>
+            </div>
+            <div style="display:grid;grid-template-columns:100px 1fr;align-items:center;gap:1rem">
+              <div style="padding:.5rem;background:rgba(123,175,245,.08);border-radius:5px;text-align:center;font-family:var(--f-mono);font-size:.65rem;color:#7BAFF5;font-weight:700">MAP</div>
+              <div style="font-size:.82rem;color:var(--muted)">Context Tracker — TAO loop intent graph</div>
+            </div>
+            <div style="display:grid;grid-template-columns:100px 1fr;align-items:center;gap:1rem">
+              <div style="padding:.5rem;background:rgba(167,139,250,.08);border-radius:5px;text-align:center;font-family:var(--f-mono);font-size:.65rem;color:#A78BFA;font-weight:700">MEASURE</div>
+              <div style="font-size:.82rem;color:var(--muted)">Prometheus metrics — 10 real-time measurements</div>
+            </div>
+            <div style="display:grid;grid-template-columns:100px 1fr;align-items:center;gap:1rem">
+              <div style="padding:.5rem;background:rgba(255,51,88,.08);border-radius:5px;text-align:center;font-family:var(--f-mono);font-size:.65rem;color:var(--red);font-weight:700">MANAGE</div>
+              <div style="font-size:.82rem;color:var(--muted)">Circuit-Breaker — synchronous remediation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISO -->
+      <div class="fw-panel" id="fw-iso">
+        <div>
+          <span class="fw-flag">🌐</span>
+          <div class="fw-title">ISO/IEC 42001:2023</div>
+          <div class="fw-subtitle">AI Management System Standard · First global AI management standard</div>
+          <p class="fw-desc">The world's first international AI management system standard. CASA-AI maps its runtime controls to the three critical clauses required for certification.</p>
+          <div class="control-list">
+            <div class="control"><span class="control-id">Clause 6.1</span><div class="control-text"><strong>Risk Treatment:</strong> Rego policies are the documented risk treatment plans. Hot-reload means policy changes take effect without downtime.</div></div>
+            <div class="control"><span class="control-id">Clause 8.2</span><div class="control-text"><strong>AI Impact Assessment:</strong> Every evaluation generates structured impact data — violation type, severity, session context — stored in the audit chain.</div></div>
+            <div class="control"><span class="control-id">Clause 9.1</span><div class="control-text"><strong>Monitoring and Measurement:</strong> Prometheus metrics provide continuous monitoring evidence directly mappable to ISO/IEC 42001 Clause 9.1 requirements.</div></div>
+          </div>
+        </div>
+        <div style="background:var(--depth);border:1px solid var(--border);border-radius:10px;padding:1.5rem">
+          <div style="font-family:var(--f-mono);font-size:.62rem;color:var(--muted);margin-bottom:1rem;letter-spacing:.1em">ISO/IEC 42001 CERTIFICATION EVIDENCE</div>
+          <div style="display:flex;flex-direction:column;gap:.5rem">
+            <div style="display:flex;align-items:center;gap:10px;padding:.625rem .875rem;background:rgba(0,214,138,.04);border:1px solid rgba(0,214,138,.15);border-radius:6px;font-size:.8rem">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#00D68A" stroke-width="1.2"/><path d="M4 7l2 2.5L10 5" stroke="#00D68A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="color:var(--muted)">Rego policies → Clause 6.1 risk treatment evidence</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:.625rem .875rem;background:rgba(0,214,138,.04);border:1px solid rgba(0,214,138,.15);border-radius:6px;font-size:.8rem">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#00D68A" stroke-width="1.2"/><path d="M4 7l2 2.5L10 5" stroke="#00D68A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="color:var(--muted)">JSONL audit log → Clause 8.2 impact assessment records</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:.625rem .875rem;background:rgba(0,214,138,.04);border:1px solid rgba(0,214,138,.15);border-radius:6px;font-size:.8rem">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#00D68A" stroke-width="1.2"/><path d="M4 7l2 2.5L10 5" stroke="#00D68A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="color:var(--muted)">Prometheus metrics → Clause 9.1 monitoring evidence</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:.625rem .875rem;background:rgba(0,214,138,.04);border:1px solid rgba(0,214,138,.15);border-radius:6px;font-size:.8rem">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#00D68A" stroke-width="1.2"/><path d="M4 7l2 2.5L10 5" stroke="#00D68A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="color:var(--muted)">PDF reports → Audit-ready submission packages</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Rego -->
+      <div class="fw-panel" id="fw-custom">
+        <div>
+          <span class="fw-flag">⚙️</span>
+          <div class="fw-title">Custom Rego Policies</div>
+          <div class="fw-subtitle">Open Policy Agent · Declarative · Hot-Reload · ENTERPRISE+ Tier</div>
+          <p class="fw-desc">Write your own compliance rules in standard Rego. Edit a .rego file and the engine picks it up atomically without restart. Used to implement internal legal policies, sector-specific rules, or country-specific requirements not in the built-in frameworks.</p>
+          <div class="control-list">
+            <div class="control"><span class="control-id">Use case 1</span><div class="control-text"><strong>SEBI regulations</strong> for Indian capital markets — block agents from calling trading APIs without dual-approval workflow in the session context.</div></div>
+            <div class="control"><span class="control-id">Use case 2</span><div class="control-text"><strong>Internal legal policy</strong> — block any agent from reading contracts folder unless user role is "legal_team" in the session JWT claims.</div></div>
+            <div class="control"><span class="control-id">Use case 3</span><div class="control-text"><strong>HIPAA mapping</strong> — custom PII patterns for PHI, enforce US data residency, block any tool call to a non-HIPAA-BAA-signed service endpoint.</div></div>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span style="font-family:var(--f-mono);font-size:.6rem;color:var(--muted)">Rego</span><span style="font-family:var(--f-mono);font-size:.6rem;color:var(--muted)">policies/custom_internal.rego — example</span></div>
+          <div class="code-body" style="font-family:var(--f-mono);font-size:.72rem;line-height:1.85;padding:1.25rem 1.5rem;color:#B8D4EE;white-space:pre"><span style="color:#3A5A72">package</span> <span style="color:#00E5C0">casa.ai.custom</span>
+
+<span style="color:#3A5A72"># Block contract reads unless user is legal_team</span>
+<span style="color:#00D68A">unapproved_tool_call</span> <span style="color:#A78BFA">if</span> {
+  <span style="color:#A78BFA">some</span> call <span style="color:#A78BFA">in</span> input.tool_calls
+  call.resource_path == <span style="color:#00D68A">"/contracts/"</span>
+  input.session.user_role != <span style="color:#00D68A">"legal_team"</span>
+}
+
+<span style="color:#3A5A72"># Block trading API without dual approval</span>
+<span style="color:#00D68A">unapproved_tool_call</span> <span style="color:#A78BFA">if</span> {
+  <span style="color:#A78BFA">some</span> call <span style="color:#A78BFA">in</span> input.tool_calls
+  call.tool_name == <span style="color:#00D68A">"execute_trade"</span>
+  <span style="color:#A78BFA">not</span> input.session.dual_approval_obtained
+}
+
+<span style="color:#3A5A72"># Custom PII pattern — internal employee ID</span>
+<span style="color:#00D68A">pii_detected</span> <span style="color:#A78BFA">if</span> {
+  regex.match(
+    <span style="color:#00D68A">`EMP-[0-9]{6}`</span>,
+    input.agent_payload.prompt,
+  )
+}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Competitor comparison -->
+<div class="section">
+  <div class="wrap">
+    <div class="eyebrow reveal">Competitor analysis</div>
+    <h2 style="font-family:var(--f-display);font-weight:700;font-size:1.55rem;letter-spacing:-.03em;margin-bottom:.5rem;" class="reveal d1">Why no other product works for Indian regulated AI</h2>
+    <p class="body-sm reveal d2" style="margin-bottom:2rem;">The Indian market requires RBI and DPDP Act compliance. No other runtime engine has built these controls.</p>
+    <div style="overflow-x:auto" class="reveal d2">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>RBI Controls</th>
+            <th>DPDP Act 2023</th>
+            <th>EU AI Act</th>
+            <th>Reasoning Chain</th>
+            <th>Self-Hosted</th>
+            <th>Air-Gap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="casa">
+            <td>CASA-AI</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Lakera Guard</td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Arthur Shield</td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Guardrails AI</td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td style="color:var(--amber)">partial</td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>NeMo Guardrails</td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="wrap">
+    <div style="background:rgba(0,229,192,.03);border:1px solid var(--border2);border-radius:12px;padding:3.5rem;text-align:center;position:relative;overflow:hidden" class="reveal">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)"></div>
+      <h2 style="font-family:var(--f-display);font-weight:700;font-size:1.75rem;letter-spacing:-.03em;margin-bottom:.75rem;">Your RBI compliance deadline is coming.</h2>
+      <p class="body-sm" style="margin-bottom:1.75rem;max-width:440px;margin-left:auto;margin-right:auto;">CASA-AI is the only runtime engine that lets your legal team approve AI agent deployments in regulated environments. Get it deployed today.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="pricing.html" class="btn btn-primary">See Pricing →</a>
+        <a href="docs.html" class="btn btn-outline">Read Documentation</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div><div style="display:flex;align-items:center;gap:9px;margin-bottom:.5rem"><svg width="22" height="22" viewBox="0 0 120 120" fill="none"><polygon points="60,8 104,32 104,88 60,112 16,88 16,32" fill="rgba(0,229,192,.07)" stroke="#00E5C0" stroke-width="2"/><circle cx="60" cy="60" r="14" fill="#00050A" stroke="#00E5C0" stroke-width="2"/><line x1="51" y1="51" x2="69" y2="69" stroke="#00E5C0" stroke-width="2.5" stroke-linecap="round"/></svg><span style="font-family:var(--f-display);font-weight:700;font-size:.95rem;">CASA<span style="color:var(--cyan)">-AI</span></span></div><p style="font-size:.875rem;color:var(--muted);line-height:1.75;max-width:280px;margin:.75rem 0 1rem;">Self-hosted runtime compliance for autonomous AI agents. Zero data leaves your VPC.</p><div style="display:flex;flex-wrap:wrap;gap:.5rem"><span class="tag tag-green">157 Tests</span><span class="tag tag-cyan">0 CVEs</span><span class="tag tag-amber">RBI + DPDP</span></div></div>
+      <div><div class="footer-col-title">Product</div><a href="index.html" class="footer-link">Home</a><a href="architecture.html" class="footer-link">Architecture</a><a href="features.html" class="footer-link">Features</a><a href="pricing.html" class="footer-link">Pricing</a><a href="test-results.html" class="footer-link">Tests</a></div>
+      <div><div class="footer-col-title">Frameworks</div><a href="compliance.html" class="footer-link">🇮🇳 RBI AI Governance</a><a href="compliance.html" class="footer-link">🇮🇳 DPDP Act 2023</a><a href="compliance.html" class="footer-link">🇪🇺 EU AI Act</a><a href="compliance.html" class="footer-link">🇺🇸 NIST AI RMF</a><a href="compliance.html" class="footer-link">🌐 ISO/IEC 42001</a></div>
+      <div><div class="footer-col-title">Legal</div><span class="footer-link" onclick="openModal('privacy')">Privacy Policy</span><span class="footer-link" onclick="openModal('terms')">Terms of Service</span><span class="footer-link" onclick="openModal('security')">Security Policy</span><a href="mailto:shivangace001@gmail.com" class="footer-link">Contact Sales</a></div>
+    </div>
+    <div class="footer-bottom"><div class="footer-copy">© 2026 CASA-AI · casa-ai.in · All rights reserved</div><div class="footer-legal"><span onclick="openModal('privacy')">Privacy</span><span onclick="openModal('terms')">Terms</span><span onclick="openModal('security')">Security</span></div></div>
+  </div>
+</footer>
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOnBg(event,'privacy')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Privacy Policy</div><button class="modal-close" onclick="closeModal('privacy')">✕</button></div><div class="modal-body"><div class="modal-h2">Zero Data Exfiltration</div><p class="modal-p"><strong>No data leaves your VPC.</strong></p><div class="modal-h2">Contact</div><p class="modal-p"><strong>shivangace001@gmail.com</strong></p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOnBg(event,'terms')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Terms of Service</div><button class="modal-close" onclick="closeModal('terms')">✕</button></div><div class="modal-body"><div class="modal-h2">License</div><p class="modal-p">Non-exclusive. <strong>Forging license key = material breach.</strong> Law: India.</p></div></div></div>
+<div class="modal-overlay" id="modal-security" onclick="closeModalOnBg(event,'security')"><div class="modal-box"><div class="modal-head"><div class="modal-title">Security Policy</div><button class="modal-close" onclick="closeModal('security')">✕</button></div><div class="modal-body"><div class="modal-h2">Hardening</div><p class="modal-p">Distroless · UID 65532 · <strong>0 CVEs</strong> · Trivy on every commit.</p></div></div></div>
+
+<script>
+window.addEventListener('scroll',function(){var n=document.getElementById('site-nav');if(n)n.classList.toggle('scrolled',window.scrollY>20);},{passive:true});
+(function(){function check(){document.querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight-30)el.classList.add('visible');});}check();window.addEventListener('scroll',check,{passive:true});})();
+function openModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.add('open');document.body.style.overflow='hidden';}}
+function closeModal(n){var m=document.getElementById('modal-'+n);if(m){m.classList.remove('open');document.body.style.overflow='';}}
+function closeModalOnBg(e,n){if(e.target===document.getElementById('modal-'+n))closeModal(n);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['privacy','terms','security'].forEach(closeModal);document.body.style.overflow='';}});
+function showFw(name, btn) {
+  document.querySelectorAll('.fw-panel').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.fw-tab').forEach(function(b){ b.classList.remove('on'); });
+  var p = document.getElementById('fw-' + name);
+  if(p) p.classList.add('on');
+  if(btn) btn.classList.add('on');
+}
+</script>
+</body>
+</html>
